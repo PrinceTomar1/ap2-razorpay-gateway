@@ -14,7 +14,10 @@ from ap2_min.roles import (
     ROLE_SHOPPING_AGENT,
     ROLE_USER,
 )
+from gateway.ledger import InMemoryLedgerView
 from gateway.mandates import KeyRing, Signer, generate_keypair
+
+from .factories import Scenario
 
 
 def make_signer(kid: str, role: str) -> Signer:
@@ -53,3 +56,13 @@ def keyring(
     for signer in (user_signer, agent_signer, merchant_signer, mpp_signer):
         ring.register_signer(signer)
     return ring
+
+
+@pytest.fixture
+def scenario(user_signer: Signer, agent_signer: Signer, merchant_signer: Signer) -> Scenario:
+    return Scenario(user=user_signer, agent=agent_signer, merchant=merchant_signer)
+
+
+@pytest.fixture
+def ledger_view() -> InMemoryLedgerView:
+    return InMemoryLedgerView()
