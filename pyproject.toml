@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ap2-razorpay-gateway"
+version = "0.2.0"
+description = "An AP2 v0.2 Merchant + Merchant Payment Processor backed by Razorpay test mode."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Prince Tomar" }]
+
+[tool.setuptools]
+packages = ["ap2_min", "gateway", "merchant", "llm", "shopping_agent", "demo"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["."]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "C4",  # comprehensions
+    "RUF", # ruff-specific
+]
+ignore = [
+    "E501",   # line length is enforced by the formatter, not the linter
+    "B008",   # FastAPI's Depends(...) in defaults is idiomatic
+    "RUF012", # ClassVar annotations not required for our small mutable defaults
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ap2_min", "gateway", "merchant", "llm", "shopping_agent", "demo"]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["ap2_min", "gateway", "merchant", "llm", "shopping_agent", "demo", "tests"]
+plugins = ["pydantic.mypy"]
+
+# Strict on our own code.
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = false
+warn_no_return = true
+warn_unreachable = false
+strict_equality = true
+show_error_codes = true
+
+# Third-party packages ship partial or no type information.
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["razorpay.*", "fastmcp.*", "yaml.*", "jwt.*", "anthropic.*"]
+ignore_missing_imports = true
+follow_imports = "skip"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = ["ignore::DeprecationWarning"]
+addopts = "-q --strict-markers"

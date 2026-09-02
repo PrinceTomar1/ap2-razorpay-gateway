@@ -1,0 +1,82 @@
+# ---------------------------------------------------------------------------
+# Declarative bounds for the gateway.
+#
+# Everything that limits money movement lives here, in data, so it is auditable
+# and reviewable without reading code. Nothing in this file is interpreted by a
+# language model; gateway/verify.py, gateway/payments.py and gateway/recovery.py
+# read it as plain configuration.
+#
+# All money in this file is in RUPEES for human readability. It is converted to
+# integer paise exactly once, at load time, in gateway/policy.py. All arithmetic
+# downstream is integer paise — there is no float money anywhere in the gateway.
+# ---------------------------------------------------------------------------
+
+# The standing authorisation a simulated user signs at startup. These become the
+# constraints inside the user-signed OPEN Payment Mandate
+# (vct = mandate.payment.open.1).
+standing_authorisation:
+  # payment.budget — cumulative ceiling across every closed mandate presented
+  # under this open mandate.
+  daily_budget_inr: 5000
+  # payment.amount_range — per-transaction floor and ceiling.
+  per_txn_min_inr: 1
+  per_txn_max_inr: 1500
+  # payment.allowed_payees — merchant ids the agent may pay at all.
+  allowed_payees:
+    - m_stridefit
+    - m_lumen
+    - m_pixelbyte
+  # payment.execution_date — how long the standing authorisation lives.
+  validity_hours: 24
+  # Where the goods may be shipped. Constrains the OPEN Checkout Mandate.
+  ship_to_pincode: "560001"
+
+# Mandate lifetimes. Short-lived by design: a merchant's signed cart guarantee
+# should expire long before a stale price can be replayed.
+mandates:
+  checkout_ttl_seconds: 900   # 15 min — merchant's signed price/stock guarantee
+  payment_ttl_seconds: 600    # 10 min — agent's closed per-transaction mandate
+  clock_skew_seconds: 30      # tolerance when comparing exp / not_before
+
+# Bounded recovery. The playbook may never exceed these.
+recovery:
+  # Hard cap on total payment attempts for one Payment Mandate, INCLUDING the
+  # first. 3 means: primary + at most 2 fallbacks. This is the stopping rule.
+  max_attempts: 3
+  # Ordered instrument fallback. Recovery may only move DOWN this list; it never
+  # changes the amount, the payee, or the cart.
+  method_fallback:
+    - upi
+    - payment_link
+    - card
+  # Exponential backoff between attempts: base * (factor ** attempt_index).
+  # 0.0 in this repo so the offline demo and the test suite never sleep. Set to
+  # 0.5 or higher for a real deployment.
+  backoff_base_seconds: 0.0
+  backoff_factor: 2.0
+  backoff_max_seconds: 8.0
+
+# Circuit breaker in front of the payment rail. Protects the rail from a retry
+# storm and, more importantly, guarantees a mandate is left UNSPENT rather than
+# repeatedly hammered when the rail is unreachable.
+circuit_breaker:
+  # Consecutive rail transport failures (timeouts / connection drops) that trip
+  # the breaker. Declines do NOT count — a decline is a valid answer.
+  failure_threshold: 2
+  # How long the breaker stays open before a probe is allowed through.
+  reset_after_seconds: 30
+
+# Where a language model is allowed to run, and where it is forbidden. The
+# forbidden list is enforced by a test (tests/test_failure_modes.py) and by the
+# grep in the acceptance checklist, not merely by this comment.
+llm:
+  allowed:
+    - audit_narration      # the human_reason column of the audit log
+    - product_selection    # which SKU the shopping agent looks at
+  forbidden:
+    - mandate_verification
+    - amount_checks
+    - budget_evaluation
+    - fund_release
+    - idempotency
+    - recovery_decisions

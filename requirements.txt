@@ -1,0 +1,33 @@
+# Pinned. Resolved and verified on Python 3.13.5 / macOS, 2026-09-03.
+# Minimum supported interpreter is 3.11.
+
+# --- Contracts ---------------------------------------------------------------
+pydantic==2.13.5
+
+# --- AP2 mandates & receipts: ES256 compact JWS -----------------------------
+PyJWT[crypto]==2.13.0
+cryptography==50.0.1
+
+# --- Merchant role: MCP server ----------------------------------------------
+fastmcp==4.0.1
+
+# --- Gateway service: webhooks + Trusted Surface -----------------------------
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+httpx==0.28.1
+
+# --- Merchant Payment Processor: the real rail ------------------------------
+razorpay==2.0.1
+
+# --- Narration only. Never on the money path. --------------------------------
+anthropic==1.3.0
+
+# --- Policy ------------------------------------------------------------------
+PyYAML==6.0.3
+
+# --- Dev ---------------------------------------------------------------------
+pytest==9.1.1
+pytest-asyncio==1.4.0
+ruff==0.16.5
+mypy==2.3.1
+types-PyYAML==6.0.12.20260815
