@@ -7,10 +7,13 @@ Three things live here, all in SQLite:
    from the mandate alone, and this is the "accumulated total" its evaluation
    algorithm refers to.
 2. **Nonce registry.** Every closed mandate carries a single-use nonce. Once a
-   nonce has been accepted it is burned, and a second presentation of it is a
-   replay.
-3. **Idempotency store.** ``sha256(payment_mandate.id)`` → the terminal receipt.
-   This is the thing that makes a duplicate submit safe.
+   nonce has been accepted it is burned *and attributed to the mandate that burned
+   it*, so that re-presenting the same mandate is an idempotent retry while a
+   different mandate reusing that nonce is a replay.
+3. **Idempotency store.** ``sha256(payment_mandate.id)`` → the terminal receipt,
+   plus a short-lived *attempt lease*. The receipt makes a duplicate submit safe
+   after the fact; the lease makes two *simultaneous* submits safe, which the
+   receipt alone cannot — both would read "no receipt yet" and both would charge.
 
 The read/write split matters. :class:`LedgerView` is the read-only protocol
 gateway/verify.py depends on, so the verifier is a *pure function of its inputs
@@ -24,6 +27,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from dataclasses import dataclass
+from datetime import timedelta
 from typing import Any, Protocol
 
 from gateway.db import Database
@@ -55,6 +59,10 @@ CREATE TABLE IF NOT EXISTS idempotency (
     receipt_json       TEXT,
     order_ids          TEXT NOT NULL DEFAULT '[]',
     attempts           INTEGER NOT NULL DEFAULT 0,
+    -- Attempt lease. Held for the duration of one payment attempt so that two
+    -- concurrent presentations of the same mandate cannot both create an order.
+    -- Expiry-based, so a crashed holder does not wedge the key forever.
+    lease_expires      TEXT,
     created_ts         TEXT NOT NULL,
     updated_ts         TEXT NOT NULL
 );
@@ -73,8 +81,14 @@ class LedgerView(Protocol):
         """Total paise already committed under this open Payment Mandate."""
         ...
 
-    def nonce_seen(self, nonce: str) -> bool:
-        """Has this single-use nonce already been accepted?"""
+    def nonce_owner(self, nonce: str) -> str | None:
+        """Which Payment Mandate burned this nonce, if any.
+
+        Ownership rather than mere presence, because "the same mandate again" and
+        "a different mandate reusing a burned token" are opposite situations. The
+        first is an idempotent retry we must allow; the second is a replay we must
+        refuse. A boolean cannot tell them apart.
+        """
         ...
 
 
@@ -109,10 +123,14 @@ class Ledger:
         )
         return int(row["total"]) if row else 0
 
-    def nonce_seen(self, nonce: str) -> bool:
-        return (
-            self.db.query_one("SELECT 1 FROM nonce_registry WHERE nonce = ?", (nonce,)) is not None
+    def nonce_owner(self, nonce: str) -> str | None:
+        row = self.db.query_one(
+            "SELECT payment_mandate_id FROM nonce_registry WHERE nonce = ?", (nonce,)
         )
+        return str(row["payment_mandate_id"]) if row else None
+
+    def nonce_seen(self, nonce: str) -> bool:
+        return self.nonce_owner(nonce) is not None
 
     # -- mutations ----------------------------------------------------------
 
@@ -181,13 +199,12 @@ class Ledger:
         """Claim an idempotency key, or return the existing record for it.
 
         One immediate transaction so two concurrent presentations of the same
-        mandate cannot both create a fresh ``in_flight`` row and then both go on
-        to create an order.
+        mandate cannot both create a fresh ``in_flight`` row.
         """
         now = utcnow().isoformat()
         with self.db.transaction() as conn:
             existing = conn.execute(
-                "SELECT * FROM idempotency WHERE idempotency_key = ?", (key,)
+                "SELECT 1 FROM idempotency WHERE idempotency_key = ?", (key,)
             ).fetchone()
             if existing is None:
                 conn.execute(
@@ -199,6 +216,37 @@ class Ledger:
         record = self.get_idempotency(key)
         assert record is not None  # just inserted or already present
         return record
+
+    def acquire_attempt_lease(self, key: str, *, lease_seconds: float) -> bool:
+        """Take exclusive right to attempt this key. Returns False if held elsewhere.
+
+        Claiming the key is not enough on its own. Two requests arriving at the
+        same instant both find a non-terminal record, and without this both would
+        go on to create an order — one mandate, two charges. The conditional
+        UPDATE inside a ``BEGIN IMMEDIATE`` transaction is what serialises them,
+        and it does so across *processes*, not merely across threads.
+
+        The lease expires so that a holder that crashes mid-attempt does not wedge
+        the key permanently. A successor that takes over an expired lease still
+        runs the capture probe before creating anything, so the takeover cannot
+        double-charge either.
+        """
+        now = utcnow()
+        expiry = (now + timedelta(seconds=lease_seconds)).isoformat()
+        with self.db.transaction() as conn:
+            cursor = conn.execute(
+                "UPDATE idempotency SET lease_expires = ?, updated_ts = ?"
+                " WHERE idempotency_key = ? AND status = 'in_flight'"
+                " AND (lease_expires IS NULL OR lease_expires <= ?)",
+                (expiry, now.isoformat(), key, now.isoformat()),
+            )
+            return cursor.rowcount == 1
+
+    def release_attempt_lease(self, key: str) -> None:
+        """Give up the lease. Always in a ``finally``."""
+        self.db.execute(
+            "UPDATE idempotency SET lease_expires = NULL WHERE idempotency_key = ?", (key,)
+        )
 
     def note_order(self, key: str, order_id: str) -> None:
         """Record an order created under this idempotency key.
@@ -257,12 +305,17 @@ class InMemoryLedgerView:
     database, which keeps the verifier's tests about the verifier.
     """
 
-    def __init__(self, spent: dict[str, int] | None = None, nonces: set[str] | None = None) -> None:
+    def __init__(
+        self, spent: dict[str, int] | None = None, nonces: dict[str, str] | None = None
+    ) -> None:
         self._spent = dict(spent or {})
-        self._nonces = set(nonces or set())
+        self._nonces = dict(nonces or {})
 
     def spent_under(self, open_mandate_id: str) -> int:
         return self._spent.get(open_mandate_id, 0)
+
+    def nonce_owner(self, nonce: str) -> str | None:
+        return self._nonces.get(nonce)
 
     def nonce_seen(self, nonce: str) -> bool:
         return nonce in self._nonces
@@ -270,7 +323,7 @@ class InMemoryLedgerView:
     def burn_nonce(self, nonce: str, payment_mandate_id: str) -> bool:
         if nonce in self._nonces:
             return False
-        self._nonces.add(nonce)
+        self._nonces[nonce] = payment_mandate_id
         return True
 
     def add_spend(self, open_mandate_id: str, amount: int) -> None:
