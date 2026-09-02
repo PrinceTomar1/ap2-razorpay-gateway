@@ -58,12 +58,17 @@ class RecoveryPolicy(_Frozen):
     backoff_factor: float = Field(..., ge=1)
     backoff_max_seconds: float = Field(..., ge=0)
 
-    def backoff_for(self, attempt_index: int) -> float:
-        """Seconds to wait before attempt ``attempt_index`` (0-based), capped."""
+    def backoff_for(self, retry_index: int) -> float:
+        """Seconds to wait before retry ``retry_index`` (0-based), capped.
+
+        Retry 0 is the *second* attempt overall — the first attempt is never
+        delayed. So retry 0 waits ``backoff_base_seconds``, retry 1 waits
+        ``base * factor``, and so on up to ``backoff_max_seconds``.
+        """
         if self.backoff_base_seconds <= 0:
             return 0.0
         return min(
-            self.backoff_base_seconds * (self.backoff_factor**attempt_index),
+            self.backoff_base_seconds * (self.backoff_factor**retry_index),
             self.backoff_max_seconds,
         )
 
