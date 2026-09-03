@@ -241,9 +241,9 @@ def test_the_breaker_goes_half_open_after_its_reset_window() -> None:
         clock=lambda: now["t"],
     )
     breaker.record_transport_failure()
-    assert breaker.state is BreakerState.OPEN
+    assert breaker.state.value == "open"
     now["t"] = 31.0
-    assert breaker.state is BreakerState.HALF_OPEN
+    assert breaker.state.value == "half_open"
     assert not breaker.is_open(), "a half-open breaker lets one probe through"
 
 

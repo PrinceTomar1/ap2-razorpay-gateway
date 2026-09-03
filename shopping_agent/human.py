@@ -17,7 +17,7 @@ follows from it is computed.
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from typing import Any, Protocol
 
 from gateway.trusted_surface import HeldRequest, TrustedSurface
@@ -38,6 +38,39 @@ class HumanGate(Protocol):
 #: ``(held request) -> approve?``. In the demo this is a scripted rule; in
 #: reality it is somebody reading the page and clicking.
 ApprovalPolicy = Callable[[HeldRequest], bool]
+
+#: The bound coroutine a :class:`GateView` wraps.
+DecisionFn = Callable[..., Awaitable[dict[str, Any]]]
+
+
+class GateView:
+    """The narrowed handle the agent is actually given.
+
+    :class:`SimulatedShopper` holds the Trusted Surface, and through it the
+    buyer's signing key. Handing that object straight to the agent would put an
+    ``.surface`` attribute — and therefore ``decide()`` — one dot away from code
+    whose whole safety story is that it cannot approve its own payments. A test
+    in tests/test_failure_modes.py caught exactly that.
+
+    So the agent gets this instead: one method, one slot, nothing else on it.
+
+    Python cannot make that a hard capability boundary — a determined caller can
+    still walk ``__self__`` off a bound method — and pretending otherwise would be
+    dishonest. The *hard* boundaries are elsewhere and are tested: the Merchant
+    MCP server exposes no tool that approves anything, the agent's keyring
+    contains a shopping-agent key and not the buyer's, and the Trusted Surface's
+    ``decide()`` is reachable over HTTP only by a form POST from a browser. This
+    class is the seam that makes the intent legible in the type signature, so
+    that crossing it has to be deliberate rather than accidental.
+    """
+
+    __slots__ = ("_decide",)
+
+    def __init__(self, decide: DecisionFn) -> None:
+        self._decide = decide
+
+    async def await_decision(self, hold_id: str, *, approval_url: str) -> dict[str, Any]:
+        return await self._decide(hold_id, approval_url=approval_url)
 
 
 def always_approve(_request: HeldRequest) -> bool:
@@ -74,6 +107,10 @@ class SimulatedShopper:
         self.decisions.append((hold_id, approved))
         decided = self.surface.decide(hold_id, approve=approved)
         return decided.as_dict()
+
+    def gate_view(self) -> GateView:
+        """The narrowed handle to give the agent. Never pass ``self``."""
+        return GateView(self.await_decision)
 
     def rendered_page(self, hold_id: str) -> str:
         """The approval page HTML, for the demo to print or a test to assert on."""

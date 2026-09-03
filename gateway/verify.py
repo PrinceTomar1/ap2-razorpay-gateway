@@ -609,23 +609,28 @@ def check_checkout_reference(
 def check_nonce_unused(closed: PaymentMandateContents, ledger: LedgerView) -> CheckResult:
     """Replay: a mandate's single-use nonce must not have been accepted before.
 
-    The nonce is burned when a mandate is accepted, not when it is paid, so a
-    second *distinct* mandate reusing a seen nonce is refused. A re-presentation
-    of the *same* mandate never reaches this check — the idempotency store in
-    gateway/payments.py answers it first with the original receipt. The two
-    mechanisms answer different questions: idempotency asks "have I already
-    answered this exact request?", replay detection asks "is someone reusing a
-    token that was only good once?".
+    The nonce is burned when a mandate is accepted, and attributed to the mandate
+    that burned it. A *different* mandate presenting a burned nonce is a replay
+    and is refused. The *same* mandate presenting it again is not: that is a
+    retry, and refusing it would break recovery — when the circuit breaker defers
+    a payment, the mandate must remain presentable on the next tick.
+
+    Idempotency and replay detection answer different questions. Idempotency asks
+    "have I already answered this exact request?" and is settled by the store in
+    gateway/payments.py. Replay detection asks "is someone reusing a token that
+    was only good once?" and is settled here.
     """
-    if ledger.nonce_seen(closed.nonce):
+    owner = ledger.nonce_owner(closed.nonce)
+    if owner is not None and owner != closed.mandate_id:
         return _fail(
             "nonce",
             Code.REPLAYED_NONCE,
-            "This authorisation token has already been used.",
+            "This authorisation token was already used by a different mandate.",
             nonce=closed.nonce,
             payment_mandate_id=closed.mandate_id,
+            burned_by=owner,
         )
-    return _ok("nonce", nonce=closed.nonce)
+    return _ok("nonce", nonce=closed.nonce, first_use=owner is None)
 
 
 # ---------------------------------------------------------------------------

@@ -6,6 +6,8 @@ network, reads a real API key, or depends on wall-clock timing.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+
 import pytest
 
 from ap2_min.models import CheckoutMandateContents
@@ -16,6 +18,7 @@ from ap2_min.roles import (
     ROLE_USER,
 )
 from gateway.audit import AuditLog
+from gateway.bootstrap import Gateway, build_gateway
 from gateway.db import Database
 from gateway.ledger import InMemoryLedgerView, Ledger
 from gateway.mandates import KeyRing, Signer, generate_keypair, load_checkout_mandate
@@ -24,6 +27,7 @@ from gateway.policy import Policy, load_policy
 from gateway.razorpay_client import FakeRail
 from gateway.recovery import CircuitBreaker, RecoveryPlaybook
 from gateway.verify import Decision, verify_payment_mandate
+from shopping_agent.human import SimulatedShopper, always_approve
 
 from .factories import Scenario
 
@@ -147,3 +151,34 @@ def allow(scenario: Scenario, keyring: KeyRing, ledger: Ledger) -> Decision:
 def checkout_contents(scenario: Scenario, keyring: KeyRing) -> CheckoutMandateContents:
     contents, _ = load_checkout_mandate(scenario.checkout_jws, keyring)
     return contents
+
+
+# ---------------------------------------------------------------------------
+# A whole gateway, wired the way the demo wires it.
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def wired() -> Iterator[Gateway]:
+    """A complete system: catalogue, merchant, verifier, processor, gate, audit.
+
+    Offline and deterministic — the fake rail, no language model, an in-memory
+    database, and a no-op sleep so bounded recovery never actually waits.
+    """
+    gateway = build_gateway(use_llm=False, sleep=lambda _seconds: None)
+    try:
+        yield gateway
+    finally:
+        gateway.close()
+
+
+@pytest.fixture
+def fake_rail(wired: Gateway) -> FakeRail:
+    assert isinstance(wired.rail, FakeRail)
+    return wired.rail
+
+
+@pytest.fixture
+def shopper(wired: Gateway) -> SimulatedShopper:
+    """A simulated buyer who approves. Override `.policy` to make them decline."""
+    return SimulatedShopper(wired.trusted_surface, policy=always_approve)

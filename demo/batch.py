@@ -237,7 +237,7 @@ async def run_batch(
             open_payment_jws=gateway.open_payment_jws,
             open_payment=gateway.open_payment_contents,
             audit=gateway.audit,
-            human=shopper,
+            human=shopper.gate_view(),
             llm=gateway.llm if mode == "llm" else None,
             mode=mode,
             ship_to_pincode=gateway.policy.standing_authorisation.ship_to_pincode,
