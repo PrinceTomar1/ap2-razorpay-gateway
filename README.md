@@ -14,6 +14,11 @@ tamper-evident audit trail.
 That line is printed by `make demo`. Every number in it is measured, not written —
 see [DEMO.md](DEMO.md).
 
+```bash
+git clone https://github.com/PrinceTomar1/ap2-razorpay-gateway.git
+cd ap2-razorpay-gateway && cp .env.example .env && make setup && make demo
+```
+
 ---
 
 ## The problem
