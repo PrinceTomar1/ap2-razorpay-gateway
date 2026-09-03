@@ -81,4 +81,6 @@ else
   exit 1
 fi
 
-echo "✓ smoke test passed with zero network access"
+echo "✓ fresh-clone smoke test passed"
+echo "  (make setup fetches pinned wheels from PyPI; make demo itself opens no sockets —"
+echo "   proved by tests/test_demo.py::test_the_batch_opens_no_sockets)"

@@ -299,3 +299,31 @@ def test_the_report_line_format_is_exact() -> None:
         actions_explained="6/6",
     )
     assert report.line() == EXPECTED_LINE
+
+
+# ---------------------------------------------------------------------------
+# The offline claim, proved rather than asserted
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_the_batch_opens_no_sockets(
+    demo_gateway: Gateway, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """ "Zero network" is a claim worth breaking the process over.
+
+    Sabotage `socket.socket` so that constructing one raises, then run the whole
+    batch. Six purchases, a human gate, a recovery, an audit chain — and not one
+    socket. This is what makes the demo runnable on a plane, in a review, or on a
+    machine that has never had an API key.
+    """
+    import socket
+
+    class NoNetwork(socket.socket):  # type: ignore[misc]
+        def __init__(self, *args: object, **kwargs: object) -> None:
+            raise AssertionError("the demo opened a socket; it is supposed to be offline")
+
+    monkeypatch.setattr(socket, "socket", NoNetwork)
+
+    results, _ = await run_batch(demo_gateway, quiet=True)
+    assert measure(demo_gateway, results).line() == EXPECTED_LINE
