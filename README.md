@@ -21,6 +21,34 @@ cd ap2-razorpay-gateway && cp .env.example .env && make setup && make demo
 
 ---
 
+## For reviewers — 90 seconds
+
+```bash
+git clone https://github.com/PrinceTomar1/ap2-razorpay-gateway.git \
+  && cd ap2-razorpay-gateway && make setup && make demo
+```
+
+No API key, no Razorpay account, no internet after `make setup`. Prints the line
+below and writes `demo/audit_chain.html` — open it, that is the whole run.
+
+```
+6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+```
+
+Three more commands, each a gate that exits non-zero rather than a document:
+
+| | | Proof |
+|---|---|---|
+| `make redteam` | 21 attacks on the money path | **21/21 blocked, ₹0 unauthorised, 0 orders created** → [REDTEAM.md](REDTEAM.md) |
+| `make bench` | 500 mandates through the verifier | **0 false accepts, p99 0.67 ms, ~3,400/sec** → [BENCHMARK.md](BENCHMARK.md) |
+| `make interop` | an AP2 agent that imports none of this code | **purchase completed** → [transcript](scenarios/ap2_reference/transcript.md) |
+
+If you only read one file: [CONFORMANCE.md](CONFORMANCE.md) — every AP2
+requirement mapped to code and test, including the eleven that are PARTIAL or
+NOT IMPLEMENTED and why.
+
+---
+
 ## The problem
 
 An AI agent that holds a payment credential is unbounded liability.
@@ -240,6 +268,14 @@ tests/          18 files, 516 tests; every failure mode asserts an outcome
 
 - [ARCHITECTURE.md](ARCHITECTURE.md) — roles, the full request lifecycle, the trust
   model, and *where we deliberately do not use an LLM*
+- [CONFORMANCE.md](CONFORMANCE.md) — every AP2 requirement → code → test → PASS /
+  PARTIAL / NOT IMPLEMENTED, honestly scored
+- [WHY.md](WHY.md) — why not Reserve Pay, ACP, x402, or an LLM policy agent; the
+  smallest real deployment; what breaks at 10,000 merchants
+- [POSITION.md](POSITION.md) — where Indian agentic payments goes, and the
+  merchant-side gap this fills
+- [REDTEAM.md](REDTEAM.md) · [BENCHMARK.md](BENCHMARK.md) — generated evidence
+- [STANDOUT.md](STANDOUT.md) — the six things that are unusual here
 - [SECURITY.md](SECURITY.md) — ten threats, each mitigation, and the test that
   proves it; plus what is deliberately **not** defended
 - [VERIFICATION_REPORT.md](VERIFICATION_REPORT.md) — the adversarial review pass,

@@ -128,6 +128,60 @@ make demo
 > Six. Another buyer takes the last cap between the signed checkout and the payment.
 > Stock is re-read live, clean decline, nothing charged.
 
+*(Open `demo/audit_chain.html` in a browser — it was just written by that run.)*
+
+> Every run also writes this. A hundred and thirty-two audit rows, in order, each
+> with the reason a person can read. Tick "show only decisions, payments and
+> gates" — now it is fourteen lines and you can see the whole story: verified,
+> declined, fell back, captured, once.
+>
+> It is self-contained. No CDN, no fonts, one inline script. It opens from a file
+> on a machine with no network, because that is where somebody will open it.
+
+---
+
+## 2:30 — Interop, red team, benchmark
+
+*(Terminal.)*
+
+```bash
+make interop
+```
+
+> This is the one I would look at if I were judging. That agent imports *nothing*
+> from this project — not my models, not my signing code, not my client. It builds
+> its mandate claims by hand from the field names in the spec and signs them with
+> plain PyJWT.
+>
+> It just bought a pair of shoes. Fourteen checks passed on a mandate my own code
+> never built. My agent working proves my code agrees with itself; this proves the
+> gateway implements AP2 for somebody who has never read my source.
+
+```bash
+make redteam
+```
+
+> Twenty-one attacks. Forged signatures, `alg:none`, HMAC-with-the-public-key,
+> payee substitution, nonce replay, a model that returns "DROP TABLE audit_log".
+>
+> Twenty-one blocked. And the bar is not "it returned an error" — it is zero
+> rupees moved **and** zero orders created, because an attack you refuse after
+> creating an order has already cost the merchant something. This exits non-zero
+> if any attack lands, and there is a test that plants a fake breach to prove the
+> report can come back red.
+
+```bash
+make bench
+```
+
+> And the number behind the whole design. Five hundred mandates, forty percent
+> adversarial, each with a known expected outcome. **Zero false accepts.** p99
+> under a millisecond.
+>
+> A model call on this path is three hundred to eight hundred milliseconds and a
+> network dependency. That is four orders of magnitude — so "no LLM on the money
+> path" is not a preference, it is the faster answer as well as the safe one.
+
 ---
 
 ## 3:30 — The measured result
@@ -163,7 +217,7 @@ make demo
 
 ---
 
-## 4:00 — Role mapping and what's next
+## 4:10 — Role mapping and what's next
 
 *(Screen: the AP2 role table in README.md.)*
 
@@ -179,7 +233,9 @@ make demo
 > reserve-then-capture. Multi-merchant routing. And an external anchor for the audit
 > chain, to close the one tamper a self-contained chain can't catch.
 >
-> Three hundred–plus tests, ruff and mypy clean, and it runs offline in one command.
+> Five hundred and forty-two tests, ruff and mypy strict clean, and it runs offline
+> in one command. CONFORMANCE.md scores every AP2 requirement honestly — twenty-four
+> pass, eleven do not, and each one says why.
 
 **Stop at 4:45.**
 

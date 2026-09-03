@@ -474,3 +474,100 @@ is useless. The offending commit was amended out.
 **`SECURITY.md` names what is deliberately not defended.** No auth on the HTTP
 surface, no rate limiting, no CSRF token, in-memory keys, single-process
 guarantees. Absence should not be mistaken for coverage.
+
+---
+
+# Standout layers pass
+
+## Triage found no defects, and that is what was recorded
+
+The brief said the project "has many errors and does not work properly". Every
+gate was run before anything was touched: 519 tests, ruff clean, mypy strict
+clean, demo deterministic, fresh clone working. `TRIAGE.md` records the real
+output. Manufacturing bugs to look diligent would have been the wrong response to
+a premise that turned out not to hold.
+
+The one genuine error was `mypy --strict … verify demo`, which names a path that
+has never existed — the verifier is `gateway/verify.py` and is already covered.
+Renaming a module to match a typo in an instruction is not a repair.
+
+## `make redteam` measures charge AND orders, not just refusals
+
+A test that asserts "an error was returned" would pass even if the gateway
+created an order first. An attack refused *after* an order exists has already
+cost the merchant something. The bar is `charged == 0 AND orders == 0`.
+
+Two attacks are *supposed* to end with money moving — duplicate submit and prompt
+injection both involve a genuine authorised purchase. What is measured for those
+is the **excess** over the one legitimate charge. Reporting them as breaches
+would be dishonest; excluding them silently would be worse.
+
+`test_the_red_team_would_report_a_breach` plants a fake successful attack and
+asserts the report renders it under a warning heading, because a red-team report
+that cannot come back red is marketing.
+
+## The benchmark generates cases with known expected outcomes
+
+Throughput alone is close to meaningless for a verifier. What matters is whether
+it is *correct* under volume, so every generated mandate carries `should_allow`
+and FALSE ACCEPTS is countable. It is the first line of `BENCHMARK.md` rather
+than a footnote, and `make bench` exits non-zero if it is ever above zero.
+
+A "valid" case can legitimately be refused once the budget is spent or its nonce
+is reused, so false *rejects* exclude those two exhaustion codes. Counting them
+would have produced a scary number describing correct behaviour.
+
+## The interop agent imports nothing from this project
+
+Google's reference Shopping Agent is built on A2A and google-adk, which this
+project deliberately does not depend on. Vendoring a transport stack to prove a
+point about a mandate format would be the wrong trade.
+
+So the agent is written from the spec alone: mandate claims by hand from the
+published field names, signed with plain PyJWT, talking over a real MCP client.
+That constraint is the entire value — a bug in our signing helper cannot be
+cancelled out by a matching bug in our verification, because the agent does not
+use our helper. An AST test enforces the independence.
+
+Honest framing in `transcript.md`: "an independent implementation of the spec
+interoperates", not "certified against the reference implementation".
+
+## `Gateway.delegate_to` — onboarding must not widen a bound
+
+Interop needed the buyer to delegate to an agent they did not write. The buyer
+does not hand over their key and the merchant does not lower a limit: the buyer
+re-signs the *same* constraints with a new `cnf`.
+`test_delegation_grants_exactly_the_same_authority_and_no_more` asserts every
+constraint is unchanged and only the bound key differs.
+
+This also required splitting `public_jwk` into `jwk_from_public_key`, because
+binding to a third party means the public half is all anybody has. Requiring a
+private key to name a public one was simply wrong.
+
+## `demo/audit_chain.html` is self-contained on purpose
+
+No CDN, no web fonts, one inline script. It has to open from a `file://` URL on a
+machine with no network, because that is where it will be opened — in a review,
+on a video, on a phone. A test asserts there is no external resource load.
+
+Everything interpolated is `html.escape`d, and the escaping test writes hostile
+content straight into an audit row rather than hoping a hostile product name
+reaches a payload — a test that depends on incidental data flow silently stops
+testing anything the day that flow changes.
+
+## `CONFORMANCE.md` is not all-green
+
+24 PASS, 6 PARTIAL, 5 NOT IMPLEMENTED, 4 N/A. An all-green conformance table from
+a project this size is not credible, and the PARTIAL rows are the interesting
+ones. Two are deliberate deviations argued on the merits: budget consumed on
+capture rather than approval, and payees matched on `id` rather than name.
+
+## Two bugs found while building these layers
+
+The red-team harness leaked `signer` into the mandate builder, so three attacks
+were reported as "ATTACK CRASHED THE GATEWAY" when the fault was mine. Worth
+recording because the first instinct on seeing that output is to go looking in
+the gateway.
+
+`public_jwk` accepted only a private key — fine until binding to a third party,
+which is exactly what interop needed.
