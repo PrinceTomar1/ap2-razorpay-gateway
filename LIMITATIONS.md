@@ -43,6 +43,37 @@ Merchant Payment Processor talks to Razorpay directly, so the buyer's instrument
 effectively Razorpay's test rail. A production deployment would want the CP role so
 the instrument is held by a party that is neither the agent nor the merchant.
 
+### The Checkout Mandate's shape, and two extension constraints
+
+The spec defines two Checkout Mandate constraints. We implement
+`checkout.allowed_merchants` exactly — same `type` string, same `allowed` array
+of merchant objects. We do **not** implement `checkout.line_items`: the
+merchant's own signed cart already pins every SKU and quantity, so a per-item
+constraint would restate what the signature already guarantees.
+
+A buyer's standing checkout authorisation also needs a spend ceiling and a
+delivery address, and AP2 defines neither. Rather than smuggle those in as
+untyped fields, they are two constraints under an `x-` prefix —
+`x-checkout.amount_ceiling` and `x-checkout.ship_to` — each carrying the schema
+and evaluation algorithm the spec requires of anyone defining a new constraint
+type. The prefix means no future AP2 constraint can ever collide with them, and a
+reader can tell at a glance which two are ours.
+
+### `delegate_chain`, not `delegate_payload`
+
+The spec's `delegate_payload` carries `{"...": digest}` entries, a shape that only
+has meaning inside an SD-JWT. We sign plain JWS, so our `delegate_chain` is a
+list of sha-256 hashes. The binding it expresses — this closed mandate was
+assembled under that open one — is identical; the encoding is not.
+
+### `payment.allowed_payees` entries match on `id`
+
+The spec's `allowed` array holds merchant objects with a name and a website. Ours
+holds the same objects plus a required stable `id`, and matching is performed on
+`id` alone. Names are not identifiers, and a look-alike merchant name is exactly
+the attack an allow-list exists to stop. A bare string is accepted as shorthand
+for `{"id": ...}`.
+
 ### Three constraint types not implemented
 
 The specification documents eight Payment Mandate constraints. Five are implemented

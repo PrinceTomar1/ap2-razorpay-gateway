@@ -190,8 +190,9 @@ class ShoppingAgent:
 
     @property
     def allowed_payees(self) -> list[str] | None:
+        """The merchant ids this agent may pay, read from the buyer's mandate."""
         constraint = self.open_payment.constraint("payment.allowed_payees")
-        return constraint.allowed if isinstance(constraint, AllowedPayeesConstraint) else None
+        return constraint.ids if isinstance(constraint, AllowedPayeesConstraint) else None
 
     def is_within_standing_scope(self, *, amount: int, merchant_id: str) -> bool:
         """Can the agent authorise this purchase on its own?

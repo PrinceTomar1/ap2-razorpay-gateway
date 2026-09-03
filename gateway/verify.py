@@ -399,14 +399,14 @@ def check_payee_allowed(
         return _ok("allowed_payees", constrained=False)
     assert isinstance(constraint, AllowedPayeesConstraint)
     payee = closed.payee or ""
-    if payee in constraint.allowed:
-        return _ok("allowed_payees", payee=payee, allowed=constraint.allowed)
+    if constraint.permits(payee):
+        return _ok("allowed_payees", payee=payee, allowed=constraint.ids)
     return _fail(
         "allowed_payees",
         Code.PAYEE_NOT_ALLOWED,
         f"{payee} is not one of the merchants this authorisation covers.",
         payee=payee,
-        allowed=constraint.allowed,
+        allowed=constraint.ids,
     )
 
 

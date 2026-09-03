@@ -413,7 +413,7 @@ class MerchantService:
         # (An earlier version had an unreachable `!= VCT_CHECKOUT_OPEN` branch here,
         # carrying a `# pragma: no cover` that hid the fact it was dead. Strict
         # mypy found it.)
-        if cart.merchant_id not in (mandate.allowed_merchants or []):
+        if cart.merchant_id not in mandate.allowed_merchant_ids:
             return (
                 "checkout.merchant_outside_standing_scope",
                 f"{cart.merchant_name} is not one of the shops this standing authorisation "

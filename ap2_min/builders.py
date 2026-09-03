@@ -12,11 +12,15 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from ap2_min.models import (
+    AllowedMerchantsConstraint,
     AllowedPayeesConstraint,
     AmountRangeConstraint,
     BudgetConstraint,
     Cart,
+    CheckoutAmountCeilingConstraint,
+    CheckoutConstraint,
     CheckoutMandateContents,
+    CheckoutShipToConstraint,
     ExecutionDateConstraint,
     PaymentConstraint,
     PaymentMandateContents,
@@ -50,13 +54,21 @@ def open_checkout_mandate(
     cnf: dict[str, Any] | None = None,
     mandate_id: str | None = None,
 ) -> CheckoutMandateContents:
-    """The user's standing checkout authorisation: where, how much, ship to where."""
+    """The user's standing checkout authorisation: where, how much, ship to where.
+
+    Built as a typed ``constraints`` array per docs/ap2/checkout_mandate.md —
+    ``checkout.allowed_merchants`` is the spec's own; the ceiling and the
+    delivery pincode are documented extensions (see the models module).
+    """
+    constraints: list[CheckoutConstraint] = [
+        AllowedMerchantsConstraint(allowed=list(allowed_merchants)),
+        CheckoutAmountCeilingConstraint(max=max_amount),
+        CheckoutShipToConstraint(pincode=ship_to_pincode),
+    ]
     return CheckoutMandateContents(
         vct=VCT_CHECKOUT_OPEN,
         mandate_id=mandate_id or _new_id("cmo"),
-        allowed_merchants=allowed_merchants,
-        max_amount=max_amount,
-        ship_to_pincode=ship_to_pincode,
+        constraints=constraints,
         cnf=cnf,
     )
 

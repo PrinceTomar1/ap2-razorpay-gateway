@@ -149,7 +149,7 @@ def test_approval_mints_a_mandate_scoped_to_exactly_this_purchase(wired: Gateway
 
     payees = scoped.constraint("payment.allowed_payees")
     assert isinstance(payees, AllowedPayeesConstraint)
-    assert payees.allowed == ["m_stridefit"], "one merchant"
+    assert payees.ids == ["m_stridefit"], "one merchant"
 
     reference = scoped.constraint("payment.reference")
     assert isinstance(reference, ReferenceConstraint)

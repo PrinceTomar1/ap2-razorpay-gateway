@@ -80,6 +80,31 @@ class _Frozen(BaseModel):
 # ---------------------------------------------------------------------------
 
 
+class Payee(_Frozen):
+    """A merchant, as ``payment.allowed_payees`` and ``checkout.allowed_merchants``
+    carry them.
+
+    The spec's ``allowed`` arrays hold merchant objects with a name and a website.
+    We keep that shape, and add a required stable ``id`` which is the field
+    matching is actually performed on. Names are not identifiers, and a
+    look-alike name is precisely the attack an allow-list exists to stop — so
+    ``name`` and ``website`` are carried for display and provenance, and
+    :func:`gateway.verify.check_payee_allowed` compares ``id``.
+
+    A bare string is accepted as shorthand for ``Payee(id=...)`` so that policy
+    files and tests stay readable.
+    """
+
+    id: str
+    name: str | None = None
+    website: str | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _accept_a_bare_id(cls, value: Any) -> Any:
+        return {"id": value} if isinstance(value, str) else value
+
+
 class BudgetConstraint(_Frozen):
     """``payment.budget`` — a cumulative ceiling across many transactions.
 
@@ -125,13 +150,20 @@ class AllowedPayeesConstraint(_Frozen):
     Spec evaluation algorithm: "The ``payee`` property of the Payment Mandate
     MUST be present in the ``allowed`` array."
 
-    The spec's ``allowed`` entries are merchant objects (name + website). We
-    match on the stable merchant id, because names are not identifiers and a
-    look-alike name is precisely the attack this constraint exists to stop.
+    Entries are :class:`Payee` objects, matching the spec's shape. Matching is on
+    the stable ``id`` — see :class:`Payee` for why.
     """
 
     type: Literal["payment.allowed_payees"] = "payment.allowed_payees"
-    allowed: list[str] = Field(..., min_length=1, description="Merchant ids.")
+    allowed: list[Payee] = Field(..., min_length=1, description="Merchants that may be paid.")
+
+    def permits(self, merchant_id: str) -> bool:
+        """Spec: the mandate's ``payee`` MUST be present in ``allowed``."""
+        return any(payee.id == merchant_id for payee in self.allowed)
+
+    @property
+    def ids(self) -> list[str]:
+        return [payee.id for payee in self.allowed]
 
 
 class ExecutionDateConstraint(_Frozen):
@@ -163,6 +195,79 @@ class ReferenceConstraint(_Frozen):
     conditional_transaction_id: str = Field(
         ..., description="Lowercase hex sha-256 of the bound Checkout Mandate JWS."
     )
+
+
+# ---------------------------------------------------------------------------
+# Checkout Mandate constraints (docs/ap2/checkout_mandate.md)
+#
+# The spec defines `checkout.allowed_merchants` and `checkout.line_items`. We
+# implement the first exactly. We do not implement `checkout.line_items` — the
+# merchant's own signed cart already pins every SKU and quantity, so a per-item
+# constraint would restate it (LIMITATIONS.md).
+#
+# The two extension constraints below exist because a buyer's standing checkout
+# authorisation needs a spend ceiling and a delivery address, and the spec
+# defines neither. Adding them is explicitly permitted: "To define a new
+# constraint, the following MUST be specified: A uniquely defined `type`. A
+# Schema... The evaluation algorithm." Each is uniquely typed under an `x-`
+# prefix so it can never be confused with a future AP2 constraint, and each
+# carries its schema and evaluation algorithm below.
+# ---------------------------------------------------------------------------
+
+
+class AllowedMerchantsConstraint(_Frozen):
+    """``checkout.allowed_merchants`` — which shops this authorisation covers.
+
+    Spec constraint. Evaluation: the merchant of the cart being checked out MUST
+    be present in the ``allowed`` array. Matching is on :class:`Payee` ``id``.
+    """
+
+    type: Literal["checkout.allowed_merchants"] = "checkout.allowed_merchants"
+    allowed: list[Payee] = Field(..., min_length=1)
+
+    def permits(self, merchant_id: str) -> bool:
+        return any(payee.id == merchant_id for payee in self.allowed)
+
+    @property
+    def ids(self) -> list[str]:
+        return [payee.id for payee in self.allowed]
+
+
+class CheckoutAmountCeilingConstraint(_Frozen):
+    """``x-checkout.amount_ceiling`` — EXTENSION, not an AP2 constraint.
+
+    Schema: ``max`` (integer paise), ``currency`` (ISO 4217).
+    Evaluation: the ``total`` of the cart being checked out MUST be less than or
+    equal to ``max``, and the cart's currency MUST equal ``currency``.
+
+    Exists because AP2 defines no per-checkout spend ceiling, and a standing
+    checkout authorisation without one authorises a cart of any size.
+    """
+
+    type: Literal["x-checkout.amount_ceiling"] = "x-checkout.amount_ceiling"
+    max: int = Field(..., ge=0, description="Inclusive ceiling, in paise.")
+    currency: str = CURRENCY_INR
+
+
+class CheckoutShipToConstraint(_Frozen):
+    """``x-checkout.ship_to`` — EXTENSION, not an AP2 constraint.
+
+    Schema: ``pincode`` (string).
+    Evaluation: the ``ship_to_pincode`` of the cart being checked out MUST equal
+    ``pincode``.
+
+    Exists because "you may shop for me, but only ship to my home" is a bound a
+    buyer reasonably wants and AP2 does not express.
+    """
+
+    type: Literal["x-checkout.ship_to"] = "x-checkout.ship_to"
+    pincode: str
+
+
+CheckoutConstraint = Annotated[
+    AllowedMerchantsConstraint | CheckoutAmountCeilingConstraint | CheckoutShipToConstraint,
+    Field(discriminator="type"),
+]
 
 
 PaymentConstraint = Annotated[
@@ -250,9 +355,11 @@ class CheckoutMandateContents(_Frozen):
     # --- closed only -------------------------------------------------------
     cart: Cart | None = None
     # --- open only ---------------------------------------------------------
-    allowed_merchants: list[str] | None = None
-    max_amount: int | None = Field(None, ge=0, description="Per-checkout ceiling, paise.")
-    ship_to_pincode: str | None = None
+    #: Typed constraints, as docs/ap2/checkout_mandate.md specifies. An earlier
+    #: version carried ad-hoc `allowed_merchants` / `max_amount` /
+    #: `ship_to_pincode` fields; those are now `checkout.allowed_merchants` and
+    #: two documented extensions, so the shape matches the spec.
+    constraints: list[CheckoutConstraint] | None = None
     # --- both --------------------------------------------------------------
     currency: str = CURRENCY_INR
     delegate_chain: list[str] = Field(
@@ -260,7 +367,10 @@ class CheckoutMandateContents(_Frozen):
         description=(
             "Hashes of the mandates this one was derived from, oldest first. A "
             "closed Checkout Mandate lists the hash of the open Checkout Mandate "
-            "it was assembled under."
+            "it was assembled under. This is our plain-JWS analogue of the spec's "
+            "`delegate_payload`, whose {'...': digest} shape only has meaning "
+            "inside an SD-JWT; the binding it expresses is identical. See "
+            "LIMITATIONS.md."
         ),
     )
     cnf: dict[str, Any] | None = Field(
@@ -275,15 +385,45 @@ class CheckoutMandateContents(_Frozen):
         else:
             if self.cart is not None:
                 raise ValueError("an open Checkout Mandate must not carry a cart")
-            if not self.allowed_merchants:
-                raise ValueError("an open Checkout Mandate must list allowed_merchants")
-            if self.max_amount is None:
-                raise ValueError("an open Checkout Mandate must set max_amount")
+            if not self.constraints:
+                raise ValueError("an open Checkout Mandate must carry at least one constraint")
+            if self.constraint("checkout.allowed_merchants") is None:
+                raise ValueError(
+                    "an open Checkout Mandate must carry a checkout.allowed_merchants "
+                    "constraint; without it the authorisation covers every shop"
+                )
         return self
 
     @property
     def is_open(self) -> bool:
         return self.vct == "mandate.checkout.open.1"
+
+    def constraint(self, type_: str) -> CheckoutConstraint | None:
+        """Return the single constraint of ``type_``, or ``None``.
+
+        Raises on duplicates: two constraints of one type is ambiguous authority,
+        and silently picking one would be a way to smuggle a looser bound past the
+        merchant.
+        """
+        found = [c for c in (self.constraints or []) if c.type == type_]
+        if len(found) > 1:
+            raise ValueError(f"duplicate {type_} constraints in mandate {self.mandate_id}")
+        return found[0] if found else None
+
+    @property
+    def allowed_merchant_ids(self) -> list[str]:
+        constraint = self.constraint("checkout.allowed_merchants")
+        return constraint.ids if isinstance(constraint, AllowedMerchantsConstraint) else []
+
+    @property
+    def max_amount(self) -> int | None:
+        constraint = self.constraint("x-checkout.amount_ceiling")
+        return constraint.max if isinstance(constraint, CheckoutAmountCeilingConstraint) else None
+
+    @property
+    def ship_to_pincode(self) -> str | None:
+        constraint = self.constraint("x-checkout.ship_to")
+        return constraint.pincode if isinstance(constraint, CheckoutShipToConstraint) else None
 
 
 # ---------------------------------------------------------------------------

@@ -11,12 +11,15 @@ from datetime import timedelta
 import jwt
 import pytest
 
+from ap2_min.builders import open_checkout_mandate
 from ap2_min.models import (
+    AllowedMerchantsConstraint,
     AllowedPayeesConstraint,
     AmountRangeConstraint,
     BudgetConstraint,
     Cart,
     CartItem,
+    CheckoutAmountCeilingConstraint,
     CheckoutMandateContents,
     PaymentMandateContents,
     inr,
@@ -128,18 +131,81 @@ def test_open_checkout_mandate_must_not_carry_a_cart() -> None:
             vct=VCT_CHECKOUT_OPEN,
             mandate_id="cm_1",
             cart=_cart(),
-            allowed_merchants=["m_stridefit"],
-            max_amount=inr(2000),
+            constraints=[AllowedMerchantsConstraint(allowed=["m_stridefit"])],
         )
 
 
-def test_open_checkout_mandate_requires_bounds() -> None:
-    with pytest.raises(ValueError, match="allowed_merchants"):
-        CheckoutMandateContents(vct=VCT_CHECKOUT_OPEN, mandate_id="cm_1", max_amount=inr(2000))
-    with pytest.raises(ValueError, match="max_amount"):
+def test_open_checkout_mandate_requires_constraints() -> None:
+    with pytest.raises(ValueError, match="at least one constraint"):
+        CheckoutMandateContents(vct=VCT_CHECKOUT_OPEN, mandate_id="cm_1")
+
+
+def test_open_checkout_mandate_requires_an_allowed_merchants_constraint() -> None:
+    """Without it the authorisation covers every shop on the internet."""
+    with pytest.raises(ValueError, match=r"checkout\.allowed_merchants"):
         CheckoutMandateContents(
-            vct=VCT_CHECKOUT_OPEN, mandate_id="cm_1", allowed_merchants=["m_stridefit"]
+            vct=VCT_CHECKOUT_OPEN,
+            mandate_id="cm_1",
+            constraints=[CheckoutAmountCeilingConstraint(max=inr(2000))],
         )
+
+
+def test_checkout_constraints_use_the_specs_type_strings() -> None:
+    """docs/ap2/checkout_mandate.md names this one; the other two are extensions."""
+    mandate = open_checkout_mandate(
+        allowed_merchants=["m_stridefit"], max_amount=inr(2000), ship_to_pincode="560001"
+    )
+    types = [c.type for c in mandate.constraints or []]
+    assert types == [
+        "checkout.allowed_merchants",
+        "x-checkout.amount_ceiling",
+        "x-checkout.ship_to",
+    ]
+    assert mandate.allowed_merchant_ids == ["m_stridefit"]
+    assert mandate.max_amount == inr(2000)
+    assert mandate.ship_to_pincode == "560001"
+
+
+def test_duplicate_checkout_constraints_cannot_even_be_constructed() -> None:
+    """Two constraints of one type is ambiguous authority.
+
+    Caught at construction rather than at lookup, so a mandate that says "these
+    merchants" twice with different lists cannot exist as an object, let alone be
+    signed and presented.
+    """
+    with pytest.raises(ValueError, match="duplicate"):
+        CheckoutMandateContents(
+            vct=VCT_CHECKOUT_OPEN,
+            mandate_id="cm_dupe",
+            constraints=[
+                AllowedMerchantsConstraint(allowed=["m_a"]),
+                AllowedMerchantsConstraint(allowed=["m_b"]),
+            ],
+        )
+
+
+def test_allowed_payees_accepts_the_specs_merchant_objects() -> None:
+    """The spec's `allowed` array holds merchant objects; a bare id is shorthand."""
+    from ap2_min.models import AllowedPayeesConstraint, Payee
+
+    constraint = AllowedPayeesConstraint(
+        allowed=["m_stridefit", {"id": "m_lumen", "name": "Lumen", "website": "https://lumen.test"}]
+    )
+    assert constraint.ids == ["m_stridefit", "m_lumen"]
+    assert constraint.allowed[1] == Payee(id="m_lumen", name="Lumen", website="https://lumen.test")
+    assert constraint.permits("m_lumen")
+    assert not constraint.permits("m_lookalike")
+
+
+def test_allowed_payees_matches_on_id_not_on_name() -> None:
+    """A look-alike name is exactly what an allow-list exists to stop."""
+    from ap2_min.models import AllowedPayeesConstraint
+
+    constraint = AllowedPayeesConstraint(
+        allowed=[{"id": "m_stridefit", "name": "StrideFit Sportswear"}]
+    )
+    assert not constraint.permits("StrideFit Sportswear")
+    assert constraint.permits("m_stridefit")
 
 
 def test_closed_payment_mandate_lists_every_missing_field() -> None:
@@ -383,11 +449,8 @@ def test_load_contents_rejects_a_payload_of_the_wrong_shape(
 ) -> None:
     """A validly signed token whose body is not a Payment Mandate."""
     token = user_signer.sign(
-        CheckoutMandateContents(
-            vct=VCT_CHECKOUT_OPEN,
-            mandate_id="cm_1",
-            allowed_merchants=["m_stridefit"],
-            max_amount=inr(2000),
+        open_checkout_mandate(
+            allowed_merchants=["m_stridefit"], max_amount=inr(2000), ship_to_pincode="560001"
         ),
         ttl_seconds=60,
     )
@@ -464,8 +527,10 @@ def test_load_contents_strips_envelope_claims() -> None:
     claims = {
         "vct": VCT_CHECKOUT_OPEN,
         "mandate_id": "cm_1",
-        "allowed_merchants": ["m_stridefit"],
-        "max_amount": inr(2000),
+        "constraints": [
+            {"type": "checkout.allowed_merchants", "allowed": [{"id": "m_stridefit"}]},
+            {"type": "x-checkout.amount_ceiling", "max": inr(2000), "currency": "INR"},
+        ],
         "iss": "key_user_1",
         "iat": 1,
         "exp": 2,
@@ -473,6 +538,7 @@ def test_load_contents_strips_envelope_claims() -> None:
     }
     contents = load_contents(claims, CheckoutMandateContents)
     assert contents.max_amount == 200000
+    assert contents.allowed_merchant_ids == ["m_stridefit"]
 
 
 def test_merchant_signed_checkout_round_trips(merchant_signer: Signer, keyring: KeyRing) -> None:
