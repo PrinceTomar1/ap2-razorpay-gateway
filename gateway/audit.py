@@ -150,7 +150,7 @@ class Event:
     STOCK_DECREMENTED = "merchant.stock_decremented"
 
     # Verifier
-    PAYMENT_MANDATE_RECEIVED = "verifier.payment_mandate_received"
+    PAYMENT_MANDATE_RECEIVED = "merchant.payment_mandate_received"
     CHECK_RESULT = "verifier.check"
     DECISION = "verifier.decision"
     MANDATE_REJECTED = "verifier.mandate_rejected"
@@ -342,31 +342,54 @@ class AuditLog:
 _ACTOR_WIDTH = 22
 
 
-def render_log(rows: list[AuditRow], *, colour: bool = True) -> str:
+def render_log(rows: list[AuditRow], *, colour: bool = True, compact: bool = True) -> str:
     """Pretty-print the audit log the way a terminal log reads.
 
-    Used by `make demo`. The point is that a judge can scroll it and see the
+    Used by `make demo`. The point is that a reviewer can scroll it and see the
     whole decision path — mandate in, every check, the decision, the gate, the
     payment attempts, the receipt — without opening the database.
+
+    ``compact`` folds a run of *passing* verifier checks into one line. A clean
+    purchase runs fourteen of them and printing each is noise; a **failing** check
+    is never folded, because that is the line a reader is looking for.
     """
 
     def paint(text: str, code: str) -> str:
         return f"\033[{code}m{text}\033[0m" if colour else text
 
     lines: list[str] = []
+    passed_run: list[str] = []
+
+    def flush_run() -> None:
+        if not passed_run:
+            return
+        names = ", ".join(passed_run)
+        lines.append(
+            f"  {'':8}  {'verifier':<{_ACTOR_WIDTH}} "
+            f"{paint(f'{len(passed_run)} checks passed', '32')}"
+        )
+        lines.append(f"           {paint('↳ ' + names, '90')}")
+        passed_run.clear()
+
     for row in rows:
+        if compact and row.event == Event.CHECK_RESULT and row.payload.get("passed") is True:
+            passed_run.append(str(row.payload.get("check", "?")))
+            continue
+        flush_run()
+
         stamp = row.ts[11:19]
         event = row.event
         if event.startswith(("verifier.decision", "mpp.payment_captured", "recovery.succeeded")):
             tint = "32"  # green
-        elif "denied" in event or "declined" in event or "rejected" in event or "failed" in event:
+        elif any(word in event for word in ("denied", "declined", "rejected", "failed")):
             tint = "31"  # red
         elif event.startswith(("recovery.", "trusted_surface.")):
             tint = "33"  # yellow
         else:
             tint = "37"  # grey
-        head = f"  {stamp}  {row.actor:<{_ACTOR_WIDTH}} {paint(event, tint)}"
-        lines.append(head)
+        lines.append(f"  {stamp}  {row.actor:<{_ACTOR_WIDTH}} {paint(event, tint)}")
         if row.human_reason:
             lines.append(f"           {paint('↳ ' + row.human_reason, '90')}")
+
+    flush_run()
     return "\n".join(lines)

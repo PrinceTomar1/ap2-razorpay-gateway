@@ -29,12 +29,19 @@ select = [
     "B",   # flake8-bugbear
     "SIM", # flake8-simplify
     "C4",  # comprehensions
+    "BLE", # blind except — every one in this repo must be justified in a noqa
     "RUF", # ruff-specific
 ]
 ignore = [
     "E501",   # line length is enforced by the formatter, not the linter
     "B008",   # FastAPI's Depends(...) in defaults is idiomatic
     "RUF012", # ClassVar annotations not required for our small mutable defaults
+    # This project renders money and status for humans: rupee signs, em dashes,
+    # check marks, multiplication signs. Every "ambiguous" character below is a
+    # deliberate display glyph, never an identifier.
+    "RUF001",
+    "RUF002",
+    "RUF003",
 ]
 
 [tool.ruff.lint.per-file-ignores]
