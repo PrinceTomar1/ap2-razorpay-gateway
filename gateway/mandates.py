@@ -186,19 +186,30 @@ def generate_keypair() -> tuple[ec.EllipticCurvePrivateKey, str]:
     return private_key, public_pem
 
 
-def public_jwk(private_key: ec.EllipticCurvePrivateKey) -> dict[str, Any]:
-    """The public half as a JWK, for the ``cnf`` key-binding claim (RFC 7800).
+def jwk_from_public_key(public_key: ec.EllipticCurvePublicKey) -> dict[str, Any]:
+    """A P-256 public key as a JWK.
 
-    AP2 open mandates carry ``cnf`` so a verifier can tell which key is entitled
-    to present the closed mandate derived from it.
+    Split out from :func:`public_jwk` because binding a mandate to a *third
+    party's* agent is a real operation — see :meth:`gateway.bootstrap.Gateway.
+    delegate_to` and `make interop` — and in that case the public key is all
+    anybody has. Nobody should have to hold a private key to name one.
     """
-    numbers = private_key.public_key().public_numbers()
+    numbers = public_key.public_numbers()
     size = 32  # P-256 coordinates are 32 bytes
 
     def b64u(value: int) -> str:
         return base64.urlsafe_b64encode(value.to_bytes(size, "big")).rstrip(b"=").decode("ascii")
 
     return {"kty": "EC", "crv": "P-256", "x": b64u(numbers.x), "y": b64u(numbers.y)}
+
+
+def public_jwk(private_key: ec.EllipticCurvePrivateKey) -> dict[str, Any]:
+    """The public half as a JWK, for the ``cnf`` key-binding claim (RFC 7800).
+
+    AP2 open mandates carry ``cnf`` so a verifier can tell which key is entitled
+    to present the closed mandate derived from it.
+    """
+    return jwk_from_public_key(private_key.public_key())
 
 
 @dataclass(frozen=True)

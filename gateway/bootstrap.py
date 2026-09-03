@@ -22,6 +22,8 @@ from dataclasses import dataclass
 from datetime import timedelta
 from pathlib import Path
 
+from cryptography.hazmat.primitives.asymmetric import ec
+
 from ap2_min.builders import open_checkout_mandate, open_payment_mandate
 from ap2_min.models import CheckoutMandateContents, PaymentMandateContents
 from ap2_min.roles import (
@@ -83,6 +85,55 @@ class Gateway:
     open_checkout_jws: str
     open_payment_contents: PaymentMandateContents
     open_payment_jws: str
+
+    def delegate_to(self, public_key: ec.EllipticCurvePublicKey, *, kid: str) -> None:
+        """Re-issue the buyer's standing authorisations to a different agent key.
+
+        This is what onboarding a third-party agent actually looks like: the buyer
+        does not hand over their own key, and the merchant does not lower a bound.
+        The buyer signs the *same* constraints again with a new ``cnf``, so the new
+        agent gets exactly the authority the old one had and not a rupee more.
+
+        Used by `make interop`, where the agent is written by somebody who has
+        never seen this codebase. Without this the gateway refuses that agent
+        everything — which is key binding working, not a bug.
+        """
+        from cryptography.hazmat.primitives import serialization
+
+        from ap2_min.roles import ROLE_SHOPPING_AGENT
+        from gateway.mandates import jwk_from_public_key
+
+        pem = public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo,
+        ).decode()
+        self.keyring.register(kid, ROLE_SHOPPING_AGENT, pem)
+
+        cnf = {"jwk": jwk_from_public_key(public_key)}
+        standing = self.policy.standing_authorisation
+        now = utcnow()
+        validity = timedelta(hours=standing.validity_hours)
+        ttl = int(validity.total_seconds())
+
+        checkout = open_checkout_mandate(
+            allowed_merchants=list(standing.allowed_payees),
+            max_amount=standing.per_txn_max,
+            ship_to_pincode=standing.ship_to_pincode,
+            cnf=cnf,
+        )
+        payment = open_payment_mandate(
+            budget=standing.daily_budget,
+            amount_min=standing.per_txn_min,
+            amount_max=standing.per_txn_max,
+            allowed_payees=list(standing.allowed_payees),
+            not_before=now - timedelta(minutes=1),
+            not_after=now + validity,
+            cnf=cnf,
+        )
+        self.open_checkout_contents = checkout
+        self.open_checkout_jws = self.user.sign(checkout, ttl_seconds=ttl, now=now)
+        self.open_payment_contents = payment
+        self.open_payment_jws = self.user.sign(payment, ttl_seconds=ttl, now=now)
 
     def close(self) -> None:
         self.db.close()

@@ -9,6 +9,9 @@
 #                attempts 1 and 4 against the real Razorpay TEST sandbox
 #   make mcp     run the Merchant MCP server on stdio
 #   make serve   run the gateway (Razorpay webhooks + Trusted Surface page)
+#   make redteam 21 attacks against the money path -> REDTEAM.md
+#   make bench   500 mandates through the verifier -> BENCHMARK.md
+#   make interop an AP2 agent built on someone else's assumptions -> transcript.md
 #   make keys    check your Razorpay test keys work (30s, before LIVE=1)
 #   make smoke   fresh-clone smoke test in a temp dir
 # ---------------------------------------------------------------------------
@@ -18,7 +21,7 @@ PIP     := .venv/bin/pip
 VENV    := .venv
 
 .DEFAULT_GOAL := help
-.PHONY: help setup test lint fmt demo mcp serve keys smoke clean
+.PHONY: help setup test lint fmt demo mcp serve keys smoke redteam bench interop clean
 
 help:
 	@grep -E '^#   make' Makefile | sed 's/^#   //'
@@ -62,6 +65,15 @@ mcp:
 
 serve:
 	@$(PY) -m gateway.app
+
+redteam:
+	@$(PY) -m redteam.run
+
+bench:
+	@$(PY) -m bench.run
+
+interop:
+	@$(PY) -m scenarios.ap2_reference.run
 
 keys:
 	@bash scripts/check_keys.sh

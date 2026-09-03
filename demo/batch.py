@@ -50,6 +50,7 @@ from typing import Any
 from fastmcp import Client
 
 from ap2_min.models import paise_to_inr_str
+from demo.timeline import render as render_timeline
 from gateway.audit import Event, render_log
 from gateway.bootstrap import Gateway, build_gateway
 from gateway.config import ConfigurationError, load_dotenv
@@ -69,6 +70,7 @@ from shopping_agent.human import SimulatedShopper
 from shopping_agent.mcp_tools import McpMerchantTools
 
 REPORT_PATH = Path(__file__).with_name("report.json")
+TIMELINE_PATH = Path(__file__).with_name("audit_chain.html")
 
 #: The shopping list. Prices come from merchant/seed.json; the agent finds them by
 #: searching, and `prefer_sku` only makes the *choice* reproducible, never the
@@ -341,7 +343,8 @@ def _print_footer(
     print(f"      human decisions       {len(shopper.decisions)}")
     print(f"      budget remaining      ₹{paise_to_inr_str(_remaining(gateway))}")
 
-    print(f"\n\033[1m{report.line()}\033[0m\n")
+    print(f"\n\033[1m{report.line()}\033[0m")
+    print(f"  \033[90mtimeline → {TIMELINE_PATH.relative_to(Path.cwd())}\033[0m\n")
 
 
 def _remaining(gateway: Gateway) -> int:
@@ -439,6 +442,21 @@ async def main_async(argv: list[str] | None = None) -> int:
                 ensure_ascii=False,
             )
             + "\n",
+            encoding="utf-8",
+        )
+
+        # The same run, rendered for somebody being *shown* it rather than
+        # reading a terminal. Self-contained: opens from file:// with no network.
+        TIMELINE_PATH.write_text(
+            render_timeline(
+                gateway.audit.rows(),
+                chain=gateway.audit.verify_chain(),
+                tip_hash=gateway.audit.tip_hash(),
+                report_line=report.line(),
+                report=report.as_dict(),
+                captured=gateway.ledger.total_captured(),
+                rail=gateway.rail.name,
+            ),
             encoding="utf-8",
         )
 
