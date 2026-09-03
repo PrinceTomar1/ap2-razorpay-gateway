@@ -12,11 +12,14 @@ The playbook, in full:
 2. Before every attempt, re-check stock and price. Recovery must never buy
    something that sold out or changed price while we were retrying.
 3. Attempt the payment on the current instrument.
-4. On a **decline**, fall back to the next instrument. A decline is a definite
-   answer, so retrying the same instrument would get the same answer.
-5. On a **timeout or transport failure**, count it against the breaker. If the
+4. On a **retryable decline**, fall back to the next instrument. A decline is a
+   definite answer, so retrying the same instrument would get the same answer —
+   but a different one might work.
+5. On a **non-retryable decline**, stop immediately. The rail rejected the
+   request, not the instrument, so the rest of the ladder would fail identically.
+6. On a **timeout or transport failure**, count it against the breaker. If the
    breaker trips, defer (as in 1). Otherwise fall back.
-6. After ``recovery.max_attempts`` attempts, stop and issue a signed
+7. After ``recovery.max_attempts`` attempts, stop and issue a signed
    ``payment_failed`` receipt naming the reason.
 
 What recovery is **not** allowed to change: the amount, the payee, the cart, or
@@ -55,6 +58,7 @@ class FailureCode:
     """Terminal reasons a payment can end without a capture."""
 
     EXHAUSTED = "recovery.attempts_exhausted"
+    NOT_RETRYABLE = "rail.terminal"
     STOCK_UNAVAILABLE = "stock.unavailable"
     PRICE_CHANGED = "price.changed"
     RAIL_UNAVAILABLE = "rail.unavailable"
@@ -276,9 +280,42 @@ class RecoveryPlaybook:
             try:
                 outcome = self.processor.execute_payment(decision, checkout, method=method)
             except RailDeclined as exc:
-                # A definite no. The breaker stays closed; the instrument changes.
+                # A definite no. The breaker stays closed — a decline is a healthy
+                # rail — but whether to try another instrument depends on *why*.
                 self.breaker.record_decline()
                 last_error = exc.message
+                if not exc.retryable:
+                    # The rail rejected the request itself, not the instrument.
+                    # Walking the rest of the ladder would fail identically, twice
+                    # more, and create two more orders for nothing.
+                    self.audit.append(
+                        ROLE_MPP,
+                        Event.RECOVERY_NOT_RETRYABLE,
+                        {
+                            "attempt": index + 1,
+                            "method": method,
+                            "failure_code": exc.failure_code,
+                            "error": exc.message,
+                            "remaining_methods": methods[index + 1 :],
+                        },
+                        f"{method} failed with a terminal error ({exc.message}). Another "
+                        "instrument cannot fix a rejected request, so recovery stops here "
+                        f"instead of trying {len(methods) - index - 1} more.",
+                    )
+                    outcome = self.processor.finalise_failure(
+                        decision,
+                        checkout,
+                        failure_code=exc.failure_code or FailureCode.NOT_RETRYABLE,
+                        failure_reason=exc.message,
+                        attempts=len(tried),
+                        method=method,
+                    )
+                    return RecoveryResult(
+                        outcome=outcome,
+                        attempts=len(tried),
+                        methods_tried=tuple(tried),
+                        human_reason=(f"Payment failed and could not be retried: {exc.message}"),
+                    )
                 self._note_fallback(index, methods, method, exc.message)
                 continue
             except (RailTimeout, RailUnavailable) as exc:

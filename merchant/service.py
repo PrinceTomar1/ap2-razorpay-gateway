@@ -523,7 +523,12 @@ class MerchantService:
                 stock_payload,
                 self.reasons.reason(Event.STOCK_RECHECK_FAILED, stock_payload),
             )
-            record.status = "declined"
+            # The checkout status is deliberately NOT changed. The merchant's
+            # signed price guarantee still stands for its full window, and the
+            # stock re-check runs again on every subsequent attempt — so if the
+            # shelf is restocked in time the sale can still complete, and if it is
+            # not, this same branch refuses again. Marking it dead here would lose
+            # a legitimate sale for no safety benefit.
             return {
                 "error": "stock.unavailable",
                 "message": stock_reason,
@@ -581,7 +586,12 @@ class MerchantService:
 
         # --- 5b. Refusal ----------------------------------------------------
         if decision.outcome is Outcome.DENY:
-            record.status = "declined"
+            # The checkout survives a refused mandate. `status` describes the
+            # checkout, not the outcome of one presentation: an agent that
+            # presents a malformed or over-limit mandate can present a correct one
+            # next, and letting a single bad presentation invalidate the checkout
+            # would hand anyone who can call this endpoint a way to kill a
+            # stranger's cart.
             return {**decision.error_response(), "checkout_id": checkout_id, "charged": False}
 
         # --- 6. Pay, with bounded recovery ---------------------------------
@@ -613,8 +623,6 @@ class MerchantService:
                 decremented,
                 self.reasons.reason(Event.STOCK_DECREMENTED, decremented),
             )
-        else:
-            record.status = "declined"
 
         return {
             "payment_receipt": result.outcome.receipt.model_dump(mode="json"),

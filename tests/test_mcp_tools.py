@@ -177,3 +177,151 @@ async def test_the_server_carries_usage_instructions(wired: Gateway) -> None:
     assert server.instructions is not None
     for expected in ("mandate.payment.1", "unresolved_constraint", "complete_checkout"):
         assert expected in server.instructions
+
+
+# ---------------------------------------------------------------------------
+# Error paths — every tool, over a real MCP client
+#
+# A tool that only works when everything is right is a tool nobody can build an
+# agent against. Each of these asserts a stable machine `error` code, because
+# that is what a shopping agent branches on.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_search_with_no_matches_returns_an_empty_result_not_an_error(
+    tools: McpMerchantTools,
+) -> None:
+    """Nothing found is a valid answer, not a failure."""
+    response = await tools.search_inventory("submarine parts", {"max_price_inr": 1})
+    assert response["count"] == 0
+    assert response["results"] == []
+    assert "error" not in response
+
+
+@pytest.mark.asyncio
+async def test_search_filters_out_of_stock_items(tools: McpMerchantTools, wired: Gateway) -> None:
+    wired.catalog.set_stock("SF-RUN-001", 0)
+    response = await tools.search_inventory("velocity", None)
+    assert "SF-RUN-001" not in [p["sku"] for p in response["results"]]
+
+
+@pytest.mark.asyncio
+async def test_serviceability_error_path(tools: McpMerchantTools) -> None:
+    response = await tools.check_serviceability("999999")
+    assert response["serviceable"] is False
+    assert response["merchants"] == []
+
+
+@pytest.mark.asyncio
+async def test_assemble_cart_rejects_a_hallucinated_sku(tools: McpMerchantTools) -> None:
+    response = await tools.assemble_cart([{"sku": "NOPE-999", "qty": 1}], "560001")
+    assert response["error"] == "product.not_found"
+    assert response["sku"] == "NOPE-999"
+
+
+@pytest.mark.asyncio
+async def test_assemble_cart_rejects_a_two_merchant_basket(tools: McpMerchantTools) -> None:
+    response = await tools.assemble_cart(
+        [{"sku": "SF-RUN-001", "qty": 1}, {"sku": "LM-KIT-002", "qty": 1}], "560001"
+    )
+    assert response["error"] == "cart.mixed_merchants"
+    assert sorted(response["merchants"]) == ["m_lumen", "m_stridefit"]
+
+
+@pytest.mark.asyncio
+async def test_assemble_cart_rejects_an_unserviceable_pincode(
+    tools: McpMerchantTools,
+) -> None:
+    response = await tools.assemble_cart([{"sku": "SF-RUN-001", "qty": 1}], "999999")
+    assert response["error"] == "pincode.not_serviceable"
+
+
+@pytest.mark.asyncio
+async def test_assemble_cart_rejects_more_than_the_shelf_holds(
+    tools: McpMerchantTools,
+) -> None:
+    response = await tools.assemble_cart([{"sku": "SF-RUN-004", "qty": 500}], "560001")
+    assert response["error"] == "product.out_of_stock"
+
+
+@pytest.mark.asyncio
+async def test_create_checkout_rejects_an_unknown_cart(tools: McpMerchantTools) -> None:
+    response = await tools.create_checkout("cart_never_existed")
+    assert response["error"] == "catalog.error"
+    assert "cart_never_existed" in response["message"]
+
+
+@pytest.mark.asyncio
+async def test_complete_checkout_rejects_a_merchant_signed_authorisation(
+    tools: McpMerchantTools, wired: Gateway
+) -> None:
+    """Only the buyer may sign a standing authorisation. A shop may not."""
+    cart = (await tools.assemble_cart([{"sku": "SF-RUN-001", "qty": 1}], "560001"))["cart"]
+    checkout = await tools.create_checkout(cart["cart_id"])
+    forged = wired.merchant_signer.sign(wired.open_checkout_contents, ttl_seconds=600)
+
+    response = await tools.complete_checkout(checkout["checkout_id"], forged)
+    assert response["error"] == "mandate.wrong_issuer"
+
+
+@pytest.mark.asyncio
+async def test_complete_checkout_returns_unresolved_constraint_over_the_cap(
+    tools: McpMerchantTools, wired: Gateway
+) -> None:
+    """The AP2 error shape an agent must be able to act on, delivered over MCP."""
+    cart = (await tools.assemble_cart([{"sku": "SF-RUN-004", "qty": 1}], "560001"))["cart"]
+    checkout = await tools.create_checkout(cart["cart_id"])
+
+    response = await tools.complete_checkout(checkout["checkout_id"], wired.open_checkout_jws)
+
+    assert response["error"] == "unresolved_constraint"
+    assert response["constraint"] == "checkout.amount_exceeds_standing_limit"
+    assert response["hold_id"]
+    assert response["approval_url"].endswith(response["hold_id"])
+    assert response["amount"] == inr(4999)
+    assert response["human_reason"]
+
+
+@pytest.mark.asyncio
+async def test_complete_checkout_rejects_an_unknown_checkout(
+    tools: McpMerchantTools, wired: Gateway
+) -> None:
+    response = await tools.complete_checkout("chk_nope", wired.open_checkout_jws)
+    assert response["error"] == "catalog.error"
+
+
+@pytest.mark.asyncio
+async def test_initiate_payment_refuses_an_unconfirmed_checkout(
+    tools: McpMerchantTools, wired: Gateway
+) -> None:
+    """Order of operations, enforced over the wire."""
+    cart = (await tools.assemble_cart([{"sku": "SF-RUN-001", "qty": 1}], "560001"))["cart"]
+    checkout = await tools.create_checkout(cart["cart_id"])
+
+    response = await tools.initiate_payment(checkout["checkout_id"], "anything-at-all")
+    assert response["error"] == "checkout.not_confirmed"
+    assert isinstance(wired.rail, FakeRail)
+    assert wired.rail.calls == []
+
+
+@pytest.mark.asyncio
+async def test_initiate_payment_refuses_an_unknown_checkout(tools: McpMerchantTools) -> None:
+    response = await tools.initiate_payment("chk_nope", "anything")
+    assert response["error"] == "catalog.error"
+
+
+@pytest.mark.asyncio
+async def test_every_error_response_carries_a_stable_machine_code(
+    tools: McpMerchantTools,
+) -> None:
+    """An agent branches on `error`. Every failure path must supply one."""
+    responses = [
+        await tools.check_product("NOPE"),
+        await tools.assemble_cart([{"sku": "NOPE", "qty": 1}], "560001"),
+        await tools.create_checkout("cart_nope"),
+        await tools.initiate_payment("chk_nope", "x"),
+    ]
+    for response in responses:
+        assert isinstance(response.get("error"), str) and response["error"]
+        assert "." in response["error"], "codes are namespaced, e.g. product.not_found"

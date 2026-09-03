@@ -73,15 +73,38 @@ class RailError(Exception):
 
 
 class RailDeclined(RailError):
-    """The rail processed the request and declined it. A definite answer."""
+    """The rail processed the request and declined it. A definite answer.
+
+    ``retryable`` says whether a *different instrument* could plausibly succeed.
+
+    * A declined card is retryable: the buyer's UPI might work.
+    * "This order is already paid", "the amount is invalid", "the merchant
+      account is suspended" are not. They are properties of the *request*, not of
+      the instrument, so walking down the instrument ladder is guaranteed to fail
+      three times, take three times as long, and create three orders for nothing.
+
+    Retrying a failure that cannot succeed is not resilience; it is a slower way
+    to reach the same answer while generating noise for whoever reads the audit
+    trail afterwards.
+    """
 
     code = "rail.declined"
 
-    def __init__(self, message: str, *, order_id: str, payment: Payment | None = None) -> None:
+    def __init__(
+        self,
+        message: str,
+        *,
+        order_id: str,
+        payment: Payment | None = None,
+        retryable: bool = True,
+        failure_code: str | None = None,
+    ) -> None:
         super().__init__(message)
         self.message = message
         self.order_id = order_id
         self.payment = payment
+        self.retryable = retryable
+        self.failure_code = failure_code or ("rail.declined" if retryable else "rail.terminal")
 
 
 class RailTimeout(RailError):
@@ -203,7 +226,7 @@ class PaymentRail(Protocol):
 class _Rule:
     """A programmed misbehaviour, scoped to a reference and optionally a method."""
 
-    kind: str  # decline | timeout | unavailable
+    kind: str  # decline | terminal_decline | timeout | timeout_after_capture | unavailable
     reference: str | None
     methods: frozenset[str] | None
     remaining: int | None
@@ -257,6 +280,22 @@ class FakeRail:
             _Rule("decline", reference, frozenset(methods) if methods else None, times)
         )
 
+    def decline_terminally(
+        self,
+        *,
+        reference: str | None = None,
+        methods: set[str] | None = None,
+        times: int | None = 1,
+    ) -> None:
+        """Programme a decline that no other instrument could recover from.
+
+        Models a rejected *request* — a bad amount, an order already paid, a
+        suspended merchant account — rather than a rejected instrument.
+        """
+        self._rules.append(
+            _Rule("terminal_decline", reference, frozenset(methods) if methods else None, times)
+        )
+
     def timeout(
         self,
         *,
@@ -267,6 +306,32 @@ class FakeRail:
         """Programme a timeout: the rail does not answer, outcome unknown."""
         self._rules.append(
             _Rule("timeout", reference, frozenset(methods) if methods else None, times)
+        )
+
+    def timeout_after_capture(
+        self,
+        *,
+        reference: str | None = None,
+        methods: set[str] | None = None,
+        times: int | None = 1,
+    ) -> None:
+        """The worst case in payments: the money moved, and we never heard back.
+
+        The payment is recorded as captured — so ``fetch_order_payments`` will
+        show it — and then the call raises :class:`RailTimeout`, so the caller
+        learns nothing. Any system that retries here without first asking the rail
+        what really happened charges the buyer twice.
+
+        A real sandbox cannot be asked to do this on demand, which is the whole
+        reason FakeRail exists.
+        """
+        self._rules.append(
+            _Rule(
+                "timeout_after_capture",
+                reference,
+                frozenset(methods) if methods else None,
+                times,
+            )
         )
 
     def unavailable(
@@ -319,6 +384,25 @@ class FakeRail:
 
         reference = order.notes.get("reference", order.receipt)
         rule = self._consume_rule(reference, method)
+
+        if rule is not None and rule.kind == "timeout_after_capture":
+            # Record the capture, then refuse to tell the caller about it.
+            payment = Payment(
+                id=f"pay_{self._prefix}_{next(self._payment_seq):06d}",
+                order_id=order_id,
+                amount=order.amount,
+                currency=order.currency,
+                status="captured",
+                method=method,
+            )
+            self._payments[order_id].append(payment)
+            self._orders[order_id] = dataclasses.replace(order, status="paid")
+            raise RailTimeout(
+                f"no response from the rail for {order_id} on {method} "
+                "(the payment did in fact capture)",
+                order_id=order_id,
+            )
+
         if rule is not None and rule.kind == "timeout":
             # Deliberately record NOTHING. A timeout means the caller cannot know
             # whether a payment happened, which is what makes the capture probe
@@ -329,7 +413,8 @@ class FakeRail:
         if rule is not None and rule.kind == "unavailable":
             raise RailUnavailable(f"rail unreachable for {order_id}", order_id=order_id)
 
-        declined = rule is not None and rule.kind == "decline"
+        terminal = rule is not None and rule.kind == "terminal_decline"
+        declined = terminal or (rule is not None and rule.kind == "decline")
         if method == METHOD_UPI and vpa == TEST_VPA_FAILURE:
             declined = True
 
@@ -345,7 +430,15 @@ class FakeRail:
         )
         self._payments[order_id].append(payment)
         if declined:
-            raise RailDeclined("the bank declined this payment", order_id=order_id, payment=payment)
+            raise RailDeclined(
+                "this order cannot be paid on any instrument"
+                if terminal
+                else "the bank declined this payment",
+                order_id=order_id,
+                payment=payment,
+                retryable=not terminal,
+                failure_code="rail.terminal" if terminal else "rail.declined",
+            )
         self._orders[order_id] = dataclasses.replace(order, status="paid")
         return payment
 
@@ -584,7 +677,10 @@ class RazorpayRail:
         except rzp_errors.SignatureVerificationError:
             raise
         except rzp_errors.BadRequestError as exc:
-            raise RailDeclined(str(exc), order_id="") from exc
+            # A 400 from Razorpay is a statement about the *request* — a bad
+            # amount, an order that is already paid, an invalid receipt. Another
+            # instrument will not fix any of those, so this is not retryable.
+            raise RailDeclined(str(exc), order_id="", retryable=False) from exc
         except (rzp_errors.GatewayError, rzp_errors.ServerError) as exc:
             raise RailUnavailable(f"Razorpay returned an error: {exc}") from exc
         except requests.Timeout as exc:

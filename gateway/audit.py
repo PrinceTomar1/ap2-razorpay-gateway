@@ -171,6 +171,7 @@ class Event:
     RECOVERY_BACKOFF = "recovery.backoff"
     RECOVERY_SUCCEEDED = "recovery.succeeded"
     RECOVERY_EXHAUSTED = "recovery.exhausted"
+    RECOVERY_NOT_RETRYABLE = "recovery.not_retryable"
     RECOVERY_ABORTED_PRIOR_CAPTURE = "recovery.aborted_prior_capture"
     CIRCUIT_OPENED = "recovery.circuit_opened"
     CIRCUIT_DEFERRED = "recovery.circuit_deferred"
