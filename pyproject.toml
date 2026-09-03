@@ -18,6 +18,10 @@ packages = ["ap2_min", "gateway", "merchant", "llm", "shopping_agent", "demo"]
 line-length = 100
 target-version = "py311"
 src = ["."]
+# Ruff formats Python blocks inside Markdown. Our documentation snippets are
+# illustrative — some elide with `...` and are not valid Python — so they are
+# prose, not source, and the formatter should leave them alone.
+extend-exclude = ["*.md"]
 
 [tool.ruff.lint]
 select = [
