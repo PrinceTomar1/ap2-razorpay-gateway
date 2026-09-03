@@ -22,6 +22,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 
 from ap2_min.models import paise_to_inr_str
 from gateway.bootstrap import Gateway, build_gateway
+from gateway.config import ConfigurationError, load_dotenv
 from gateway.trusted_surface import build_router as build_trusted_surface_router
 from gateway.webhooks import WebhookReceiver
 from gateway.webhooks import build_router as build_webhook_router
@@ -132,12 +133,20 @@ def create_app(gateway: Gateway | None = None) -> FastAPI:
 
 def main() -> None:
     """`make serve`."""
+    import sys
+
     import uvicorn
 
+    load_dotenv()
     host = os.environ.get("GATEWAY_HOST", "127.0.0.1")
     port = int(os.environ.get("GATEWAY_PORT", "8000"))
+    try:
+        app = create_app()
+    except ConfigurationError as exc:
+        print(f"\n  Cannot start: {exc}\n", file=sys.stderr)
+        raise SystemExit(2) from None
     print(f"  gateway on http://{host}:{port}  (Trusted Surface + Razorpay webhooks)")
-    uvicorn.run(create_app(), host=host, port=port, log_level="info")
+    uvicorn.run(app, host=host, port=port, log_level="info")
 
 
 if __name__ == "__main__":

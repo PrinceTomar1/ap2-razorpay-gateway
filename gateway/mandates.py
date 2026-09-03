@@ -29,6 +29,7 @@ from typing import Any, Final, TypeVar
 import jwt
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
+from jwt.types import Options as JwtOptions
 from pydantic import BaseModel, ValidationError
 
 from ap2_min.models import CheckoutMandateContents, PaymentMandateContents
@@ -321,17 +322,20 @@ def decode_unverified(token: str) -> dict[str, Any]:
     mandate is rejected we still want the audit row to record what was claimed.
     """
     try:
-        return dict(jwt.decode(token, options={"verify_signature": False}))
+        claims: dict[str, Any] = jwt.decode(token, options={"verify_signature": False})
     except jwt.PyJWTError as exc:
         raise MandateMalformedError("not a decodable JWS", detail=str(exc)) from exc
+    return dict(claims)
 
 
 def unverified_kid(token: str) -> str | None:
     """Read ``kid`` from the JWS header without verifying anything."""
     try:
-        return jwt.get_unverified_header(token).get("kid")
+        header: dict[str, Any] = jwt.get_unverified_header(token)
     except jwt.PyJWTError:
         return None
+    kid = header.get("kid")
+    return kid if isinstance(kid, str) else None
 
 
 def verify_jws(
@@ -366,7 +370,10 @@ def verify_jws(
             detail=f"expected_role={expected_role} actual_role={trusted.role}",
         )
 
-    options: dict[str, Any] = {"require": ["exp", "iat", "iss", "jti"]}
+    # PyJWT's own TypedDict, so the option names are checked at type-check time
+    # rather than silently ignored if one is ever misspelled. A misspelled
+    # `verify_signature` would be a catastrophic silent no-op.
+    options: JwtOptions = {"require": ["exp", "iat", "iss", "jti"]}
     if audience is None:
         options["verify_aud"] = False
     try:

@@ -20,8 +20,9 @@ The failure modes, and where each is defended:
 from __future__ import annotations
 
 import subprocess
+from collections.abc import AsyncIterator
 from pathlib import Path
-from typing import Any
+from typing import Any, NamedTuple
 
 import pytest
 import pytest_asyncio
@@ -81,9 +82,21 @@ def signed_payment(wired: Gateway, checkout: dict[str, Any], **overrides: Any) -
     return wired.agent.sign(contents, ttl_seconds=600, now=now)
 
 
+class AgentHarness(NamedTuple):
+    """A live agent over MCP, the rail so a test can misbehave it, and the human.
+
+    A NamedTuple rather than a bare tuple so every test that unpacks it is
+    type-checked, and so `harness.rail` reads better than `harness[1]`.
+    """
+
+    agent: ShoppingAgent
+    rail: FakeRail
+    shopper: SimulatedShopper
+
+
 @pytest_asyncio.fixture
-async def agent_and_rail(wired: Gateway):  # type: ignore[no-untyped-def]
-    """A live agent over MCP, plus the rail so a test can misbehave it."""
+async def agent_and_rail(wired: Gateway) -> AsyncIterator[AgentHarness]:
+    """Build the harness against the wired gateway."""
     server, _ = build_server(wired)
     async with Client(server) as client:
         shopper = SimulatedShopper(wired.trusted_surface, policy=always_deny)
@@ -96,7 +109,8 @@ async def agent_and_rail(wired: Gateway):  # type: ignore[no-untyped-def]
             audit=wired.audit,
             human=shopper.gate_view(),
         )
-        yield agent, wired.rail, shopper
+        assert isinstance(wired.rail, FakeRail)
+        yield AgentHarness(agent, wired.rail, shopper)
 
 
 # ---------------------------------------------------------------------------
@@ -506,7 +520,7 @@ def test_failure_7_a_cart_containing_a_hallucinated_sku_is_refused(wired: Gatewa
 
 @pytest.mark.asyncio
 async def test_failure_7_the_agent_replans_and_completes_the_purchase(
-    agent_and_rail: Any, wired: Gateway
+    agent_and_rail: AgentHarness, wired: Gateway
 ) -> None:
     """The agent is told about a product that does not exist, and recovers."""
     agent, _rail, _shopper = agent_and_rail
@@ -535,7 +549,7 @@ async def test_failure_7_the_agent_replans_and_completes_the_purchase(
 
 @pytest.mark.asyncio
 async def test_failure_8_an_out_of_scope_purchase_is_escalated_and_can_be_denied(
-    agent_and_rail: Any, wired: Gateway
+    agent_and_rail: AgentHarness, wired: Gateway
 ) -> None:
     agent, rail, _shopper = agent_and_rail  # the shopper declines by default
 
@@ -563,7 +577,7 @@ async def test_failure_8_an_out_of_scope_purchase_is_escalated_and_can_be_denied
 
 @pytest.mark.asyncio
 async def test_failure_8_an_approved_escalation_completes_on_a_user_signed_mandate(
-    agent_and_rail: Any, wired: Gateway
+    agent_and_rail: AgentHarness, wired: Gateway
 ) -> None:
     agent, rail, shopper = agent_and_rail
     shopper.policy = always_approve
@@ -591,7 +605,7 @@ async def test_failure_8_an_approved_escalation_completes_on_a_user_signed_manda
 
 @pytest.mark.asyncio
 async def test_failure_8_the_agent_cannot_approve_on_its_own_behalf(
-    agent_and_rail: Any,
+    agent_and_rail: AgentHarness,
 ) -> None:
     """Three separate reasons the agent cannot approve its own payment."""
     agent, _rail, _shopper = agent_and_rail

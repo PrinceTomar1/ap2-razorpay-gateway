@@ -59,25 +59,22 @@ python_version = "3.11"
 files = ["ap2_min", "gateway", "merchant", "llm", "shopping_agent", "demo", "tests"]
 plugins = ["pydantic.mypy"]
 
-# Strict on our own code.
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = false
-warn_no_return = true
-warn_unreachable = false
-strict_equality = true
+# Full strict mode. This is a payments system; an untyped function on the money
+# path is a function nobody has checked.
+strict = true
+warn_unreachable = true
 show_error_codes = true
 
-# Third-party packages ship partial or no type information.
-ignore_missing_imports = true
+# `razorpay` is the only dependency that ships no type information, so it is the
+# only one allowed to be Any. Everything else — pyjwt, fastmcp, anthropic, mcp,
+# pydantic — ships py.typed, and PyYAML is covered by types-PyYAML. An earlier
+# version of this config had `follow_imports = "skip"` on all of them, which
+# silently turned their return values into Any and hid nine real strict errors.
+ignore_missing_imports = false
 
 [[tool.mypy.overrides]]
-module = ["razorpay.*", "fastmcp.*", "yaml.*", "jwt.*", "anthropic.*"]
+module = ["razorpay", "razorpay.*"]
 ignore_missing_imports = true
-follow_imports = "skip"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

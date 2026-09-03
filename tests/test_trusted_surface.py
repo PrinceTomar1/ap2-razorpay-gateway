@@ -10,6 +10,8 @@ Two things are being tested, and the second matters more than the first:
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -30,7 +32,7 @@ from gateway.trusted_surface import ONE_TIME_MANDATE_TTL_SECONDS
 from shopping_agent.human import SimulatedShopper, always_approve, always_deny
 
 
-def _hold(wired: Gateway, sku: str = "SF-RUN-004") -> dict:
+def _hold(wired: Gateway, sku: str = "SF-RUN-004") -> dict[str, Any]:
     """Drive a purchase far enough to raise the gate, and return the response."""
     merchant = wired.merchant
     cart = merchant.assemble_cart([{"sku": sku, "qty": 1}])["cart"]

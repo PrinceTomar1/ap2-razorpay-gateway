@@ -36,7 +36,7 @@ from ap2_min.models import (
     paise_to_inr_str,
 )
 from ap2_min.roles import ROLE_MERCHANT, ROLE_USER
-from ap2_min.vct import VCT_CHECKOUT_CLOSED, VCT_CHECKOUT_OPEN
+from ap2_min.vct import VCT_CHECKOUT_CLOSED
 from gateway.audit import AuditLog, Event
 from gateway.ledger import Ledger
 from gateway.mandates import (
@@ -408,9 +408,11 @@ class MerchantService:
                 )
             return None
 
-        if mandate.vct != VCT_CHECKOUT_OPEN:  # pragma: no cover — the model forbids it
-            return ("checkout.wrong_vct", f"Unexpected mandate type {mandate.vct!r}.")
-
+        # Nothing below needs a vct guard: CheckoutVct is a two-value Literal and
+        # the closed case returned above, so this is the open case by construction.
+        # (An earlier version had an unreachable `!= VCT_CHECKOUT_OPEN` branch here,
+        # carrying a `# pragma: no cover` that hid the fact it was dead. Strict
+        # mypy found it.)
         if cart.merchant_id not in (mandate.allowed_merchants or []):
             return (
                 "checkout.merchant_outside_standing_scope",

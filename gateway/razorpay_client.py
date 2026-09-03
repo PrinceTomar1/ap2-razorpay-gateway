@@ -35,6 +35,8 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from typing import Any, Protocol, runtime_checkable
 
+from gateway.config import ConfigurationError
+
 CURRENCY_INR = "INR"
 
 #: Razorpay's documented test VPAs. Paying a test-mode link from these drives a
@@ -425,12 +427,12 @@ class RazorpayRail:
     ) -> None:
         if not key_id.startswith("rzp_test_"):
             # Checked in code, not in a README. A live key here spends real money.
-            raise ValueError(
+            raise ConfigurationError(
                 f"refusing to start: RAZORPAY_KEY_ID is {key_id[:12]!r}, which is not a test key. "
                 "This project is test-mode only and will never accept an rzp_live_ key."
             )
         if not key_secret:
-            raise ValueError("RAZORPAY_KEY_SECRET is empty")
+            raise ConfigurationError("RAZORPAY_KEY_SECRET is empty")
 
         import razorpay  # imported lazily so the offline path never needs it
 
@@ -615,9 +617,23 @@ def build_rail(
         key_id = os.environ.get("RAZORPAY_KEY_ID", "")
         key_secret = os.environ.get("RAZORPAY_KEY_SECRET", "")
         if not key_id or not key_secret:
-            raise RuntimeError(
-                "PAYMENT_RAIL=razorpay needs RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env. "
-                "See docs/RAZORPAY_TESTING.md."
+            missing = [
+                name
+                for name, value in (
+                    ("RAZORPAY_KEY_ID", key_id),
+                    ("RAZORPAY_KEY_SECRET", key_secret),
+                )
+                if not value
+            ]
+            raise ConfigurationError(
+                f"PAYMENT_RAIL=razorpay, but {' and '.join(missing)} "
+                f"{'is' if len(missing) == 1 else 'are'} not set.\n"
+                "  Put your Razorpay TEST-mode credentials in .env:\n"
+                "      RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxxxx\n"
+                "      RAZORPAY_KEY_SECRET=your_test_secret\n"
+                "  Get them from the Razorpay dashboard in Test Mode:\n"
+                "      Settings -> API Keys -> Generate Test Key\n"
+                "  Walkthrough: docs/RAZORPAY_TESTING.md"
             )
         return RazorpayRail(
             key_id,
@@ -626,4 +642,4 @@ def build_rail(
             poll_interval_seconds=float(os.environ.get("RAZORPAY_POLL_INTERVAL_SECONDS", "3")),
             notify=notify,
         )
-    raise ValueError(f"unknown PAYMENT_RAIL {selected!r}; expected 'fake' or 'razorpay'")
+    raise ConfigurationError(f"unknown PAYMENT_RAIL {selected!r}; expected 'fake' or 'razorpay'")

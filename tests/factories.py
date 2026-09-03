@@ -107,9 +107,34 @@ class Scenario:
             mandate_id=mandate_id,
         )
 
-    def present(self, signer: Signer | None = None, **kwargs: object) -> str:
-        """Sign a closed payment mandate as the agent (or whoever is given)."""
-        contents = self.closed_payment(**kwargs)  # type: ignore[arg-type]
+    def present(
+        self,
+        signer: Signer | None = None,
+        *,
+        amount: int | None = None,
+        payee: str = MERCHANT_ID,
+        instrument: str = "upi",
+        checkout_jws: str | None = None,
+        open_jws: str | None = None,
+        execution_date: datetime | None = None,
+        nonce: str | None = None,
+        mandate_id: str | None = None,
+    ) -> str:
+        """Sign a closed payment mandate as the agent (or whoever is given).
+
+        The arguments are spelled out rather than forwarded as **kwargs so that a
+        typo in a test is a type error rather than a silently ignored keyword.
+        """
+        contents = self.closed_payment(
+            amount=amount,
+            payee=payee,
+            instrument=instrument,
+            checkout_jws=checkout_jws,
+            open_jws=open_jws,
+            execution_date=execution_date,
+            nonce=nonce,
+            mandate_id=mandate_id,
+        )
         return (signer or self.agent).sign(contents, ttl_seconds=600, now=self.now)
 
     def present_open(self) -> str:

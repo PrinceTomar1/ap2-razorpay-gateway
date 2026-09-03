@@ -8,7 +8,8 @@ the code works is a screenshot.
 from __future__ import annotations
 
 import json
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
+from pathlib import Path
 
 import pytest
 
@@ -16,6 +17,7 @@ from ap2_min.models import inr
 from demo.batch import PLAN, REPORT_PATH, Report, main_async, measure, run_batch
 from gateway.audit import Event
 from gateway.bootstrap import Gateway, build_gateway
+from gateway.db import MEMORY
 from gateway.razorpay_client import FakeRail
 from gateway.trusted_surface import HeldRequest
 from shopping_agent.agent import (
@@ -31,7 +33,7 @@ EXPECTED_LINE = (
 
 @pytest.fixture
 def demo_gateway() -> Iterator[Gateway]:
-    gateway = build_gateway(use_llm=False, sleep=lambda _seconds: None)
+    gateway = build_gateway(db_path=MEMORY, use_llm=False, sleep=lambda _seconds: None)
     try:
         yield gateway
     finally:
@@ -129,17 +131,22 @@ async def test_a_shopper_who_approves_changes_the_report(demo_gateway: Gateway) 
     assert results[2].charged_amount == inr(4999)
 
 
+def _no_world_event(gateway: Gateway, index: int, goal: object) -> Callable[[], None] | None:
+    """Stand-in for demo.batch._interleave_for with nothing scripted."""
+    return None
+
+
 @pytest.mark.asyncio
 async def test_removing_the_stock_event_changes_attempt_six(demo_gateway: Gateway) -> None:
     """Without the concurrent buyer, attempt 6 is an ordinary purchase."""
     import demo.batch as batch
 
     original = batch._interleave_for
-    batch._interleave_for = lambda *_args, **_kwargs: None  # type: ignore[assignment]
+    batch._interleave_for = _no_world_event
     try:
         results, _ = await run_batch(demo_gateway, quiet=True)
     finally:
-        batch._interleave_for = original  # type: ignore[assignment]
+        batch._interleave_for = original
 
     assert results[5].status == STATUS_PAID
     assert measure(demo_gateway, results).paid == 5
@@ -222,7 +229,7 @@ async def test_the_batch_is_deterministic() -> None:
     """Two runs, same numbers. A demo you cannot re-run is a demo you cannot trust."""
     lines = []
     for _ in range(2):
-        gateway = build_gateway(use_llm=False, sleep=lambda _s: None)
+        gateway = build_gateway(db_path=MEMORY, use_llm=False, sleep=lambda _s: None)
         try:
             results, _ = await run_batch(gateway, quiet=True)
             lines.append(measure(gateway, results).line())
@@ -319,7 +326,7 @@ async def test_the_batch_opens_no_sockets(
     """
     import socket
 
-    class NoNetwork(socket.socket):  # type: ignore[misc]
+    class NoNetwork(socket.socket):
         def __init__(self, *args: object, **kwargs: object) -> None:
             raise AssertionError("the demo opened a socket; it is supposed to be offline")
 
@@ -327,3 +334,100 @@ async def test_the_batch_opens_no_sockets(
 
     results, _ = await run_batch(demo_gateway, quiet=True)
     assert measure(demo_gateway, results).line() == EXPECTED_LINE
+
+
+# ---------------------------------------------------------------------------
+# Determinism at the CLI level, and immunity to leftover state
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_running_the_cli_twice_produces_an_identical_report(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """`make demo` twice must give the same answer. This is that, through main().
+
+    Not the same thing as `test_the_batch_is_deterministic`, which builds two
+    gateways by hand. This drives the actual entry point, writes the actual
+    report.json, and compares the whole file — which is what a reviewer running
+    the command twice will see.
+    """
+    first_exit = await main_async(["--json"])
+    first = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+    second_exit = await main_async(["--json"])
+    second = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert first_exit == second_exit == 0
+    assert first["line"] == second["line"] == EXPECTED_LINE
+    assert first["captured_paise"] == second["captured_paise"] == inr(4096)
+    assert first["audit_rows"] == second["audit_rows"]
+    # Everything except the chain tip, which is a hash over randomised ECDSA
+    # signatures and wall-clock timestamps and is *supposed* to differ.
+    volatile = {"audit_chain_tip", "attempts_detail"}
+    assert {k: v for k, v in first.items() if k not in volatile} == {
+        k: v for k, v in second.items() if k not in volatile
+    }
+    assert first["audit_chain_tip"] != second["audit_chain_tip"], (
+        "identical tips would mean the run was not actually re-executed"
+    )
+
+
+@pytest.mark.asyncio
+async def test_the_demo_ignores_gateway_db_and_starts_from_an_empty_ledger(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """A leftover database must not change the report. Regression test.
+
+    Found in review: once .env was honoured, `GATEWAY_DB=run/gateway.db` made the
+    demo persistent, so a second run inherited the first run's spend and the
+    reconciliation check failed with "signed receipts total ₹4,096.00 but the
+    spend ledger says ₹121,802.00". The demo now pins its own in-memory database
+    whatever the environment says.
+    """
+    poisoned = tmp_path / "leftover.db"
+    monkeypatch.setenv("GATEWAY_DB", str(poisoned))
+
+    assert await main_async(["--json"]) == 0
+    first = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+    assert await main_async(["--json"]) == 0
+    second = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert first["line"] == second["line"] == EXPECTED_LINE
+    assert not poisoned.exists(), "the demo must not have written to $GATEWAY_DB at all"
+
+
+@pytest.mark.asyncio
+async def test_the_report_recomputes_from_the_audit_chain_alone(
+    demo_gateway: Gateway,
+) -> None:
+    """Rebuild the headline numbers from the audit database, ignoring the results.
+
+    `measure()` reads AttemptResult objects. This recomputes the same figures from
+    nothing but persisted audit rows — a completely independent path — and
+    requires them to agree. If the in-memory result objects and the durable record
+    ever disagreed, one of them would be lying.
+    """
+    results, _ = await run_batch(demo_gateway, quiet=True)
+    report = measure(demo_gateway, results)
+    audit = demo_gateway.audit
+
+    captured_rows = [
+        row
+        for row in audit.rows(event=Event.PAYMENT_RECEIPT_ISSUED)
+        if row.payload["status"] == "captured"
+    ]
+    allow_rows = [
+        row for row in audit.rows(event=Event.DECISION) if row.payload["outcome"] == "ALLOW"
+    ]
+    denied_rows = audit.rows(event="trusted_surface.gate_denied")
+    recovered_rows = audit.rows(event=Event.RECOVERY_SUCCEEDED)
+    plan_rows = audit.rows(event=Event.AGENT_PLAN)
+
+    assert len(plan_rows) == report.attempts == 6
+    assert len(captured_rows) == report.paid == 4
+    assert len(denied_rows) == report.human_denied == 1
+    assert len(recovered_rows) == report.recovered == 1
+    assert sum(int(r.payload["amount"]) for r in captured_rows) == inr(4096)
+    assert len(captured_rows) <= len(allow_rows)
+    assert all(row.human_reason for row in audit.rows())
+    assert audit.verify_chain().ok

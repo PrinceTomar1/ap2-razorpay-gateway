@@ -24,6 +24,7 @@ from fastmcp import FastMCP
 from pydantic import Field
 
 from gateway.bootstrap import Gateway, build_gateway
+from gateway.config import ConfigurationError, load_dotenv
 
 INSTRUCTIONS = """
 An AP2 v0.2 Merchant and Merchant Payment Processor, backed by Razorpay test mode.
@@ -167,7 +168,14 @@ def build_server(gateway: Gateway | None = None) -> tuple[FastMCP, Gateway]:
 
 def main() -> None:
     """Run the Merchant MCP server on stdio. `make mcp`."""
-    server, wired = build_server()
+    import sys
+
+    load_dotenv()
+    try:
+        server, wired = build_server()
+    except ConfigurationError as exc:
+        print(f"\n  Cannot start: {exc}\n", file=sys.stderr)
+        raise SystemExit(2) from None
     print(
         f"  merchant MCP server ready — {len(wired.catalog.products)} SKUs, "
         f"{len(wired.catalog.merchants)} merchants, {wired.rail.name} rail"

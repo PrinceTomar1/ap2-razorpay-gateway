@@ -31,6 +31,7 @@ from ap2_min.roles import (
     ROLE_USER,
 )
 from gateway.audit import AuditLog
+from gateway.config import load_dotenv
 from gateway.db import MEMORY, Database
 from gateway.ledger import Ledger
 from gateway.mandates import KeyRing, Signer, generate_keypair, utcnow
@@ -105,6 +106,10 @@ def build_gateway(
     no language model. Every dangerous choice — a real rail, a real API key, a
     file on disk — has to be asked for.
     """
+    # `.env` first, so every os.environ.get below sees it. Non-overriding, so a
+    # real environment variable still wins.
+    load_dotenv()
+
     policy = load_policy(policy_path)
     database = Database(db_path or os.environ.get("GATEWAY_DB") or MEMORY)
     audit = AuditLog(database)

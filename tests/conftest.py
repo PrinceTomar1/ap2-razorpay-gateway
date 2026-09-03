@@ -19,7 +19,7 @@ from ap2_min.roles import (
 )
 from gateway.audit import AuditLog
 from gateway.bootstrap import Gateway, build_gateway
-from gateway.db import Database
+from gateway.db import MEMORY, Database
 from gateway.ledger import InMemoryLedgerView, Ledger
 from gateway.mandates import KeyRing, Signer, generate_keypair, load_checkout_mandate
 from gateway.payments import PaymentProcessor
@@ -30,6 +30,43 @@ from gateway.verify import Decision, verify_payment_mandate
 from shopping_agent.human import SimulatedShopper, always_approve
 
 from .factories import Scenario
+
+#: Credentials that must never be visible to a test. Deleted outright.
+_SECRET_ENV_VARS = (
+    "RAZORPAY_KEY_ID",
+    "RAZORPAY_KEY_SECRET",
+    "RAZORPAY_WEBHOOK_SECRET",
+    "ANTHROPIC_API_KEY",
+)
+
+#: Configuration pinned to safe, explicit values. Setting rather than deleting is
+#: deliberate: build_gateway() calls load_dotenv(), and load_dotenv only fills in
+#: names that are ABSENT from the environment. Deleting these would invite the
+#: developer's own .env to supply them again — which is exactly the bug this
+#: fixture was written to close.
+_PINNED_ENV = {
+    "PAYMENT_RAIL": "fake",
+    "LLM_PROVIDER": "fake",
+    "GATEWAY_DB": MEMORY,
+    "POLICY_FILE": "config/policy.yaml",
+    "GATEWAY_PUBLIC_URL": "http://127.0.0.1:8000",
+}
+
+
+@pytest.fixture(autouse=True)
+def hermetic_environment(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Run every test as if no .env and no exported configuration existed.
+
+    Added after honouring .env made three tests fail: `GATEWAY_DB=run/gateway.db`
+    from the shipped .env.example turned the in-memory test database into a shared
+    file on disk, so tests polluted one another and accumulated real state across
+    runs. A test suite whose result depends on the developer's local
+    configuration is not a test suite.
+    """
+    for name in _SECRET_ENV_VARS:
+        monkeypatch.delenv(name, raising=False)
+    for name, value in _PINNED_ENV.items():
+        monkeypatch.setenv(name, value)
 
 
 def make_signer(kid: str, role: str) -> Signer:
@@ -165,7 +202,7 @@ def wired() -> Iterator[Gateway]:
     Offline and deterministic — the fake rail, no language model, an in-memory
     database, and a no-op sleep so bounded recovery never actually waits.
     """
-    gateway = build_gateway(use_llm=False, sleep=lambda _seconds: None)
+    gateway = build_gateway(db_path=MEMORY, use_llm=False, sleep=lambda _seconds: None)
     try:
         yield gateway
     finally:

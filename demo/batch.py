@@ -52,6 +52,8 @@ from fastmcp import Client
 from ap2_min.models import paise_to_inr_str
 from gateway.audit import Event, render_log
 from gateway.bootstrap import Gateway, build_gateway
+from gateway.config import ConfigurationError, load_dotenv
+from gateway.db import MEMORY
 from gateway.razorpay_client import METHOD_UPI, FakeRail
 from gateway.trusted_surface import HeldRequest
 from merchant.mcp_server import build_server
@@ -372,6 +374,10 @@ async def main_async(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
+    # Read .env before anything looks at os.environ, including the --live
+    # override below. Non-overriding, so a real environment variable still wins.
+    load_dotenv()
+
     mode = "llm" if args.llm else "scripted"
     plan = PLAN
 
@@ -381,13 +387,34 @@ async def main_async(argv: list[str] | None = None) -> int:
         # cannot be made to produce on demand.
         os.environ["PAYMENT_RAIL"] = "razorpay"
         plan = [PLAN[0], PLAN[3]]
+
+    try:
+        gateway = build_gateway(
+            rail_kind=os.environ.get("PAYMENT_RAIL"),
+            # The demo ALWAYS starts from an empty database, whatever $GATEWAY_DB
+            # says. It portrays one buyer's day against a ₹5,000 budget; carrying
+            # yesterday's spend in would make the numbers depend on how many times
+            # you had run it before, and "run it twice, get the same answer" is
+            # the whole claim. `make serve` still honours $GATEWAY_DB, because a
+            # gateway that forgets its receipts on restart would be useless.
+            db_path=MEMORY,
+        )
+    except ConfigurationError as exc:
+        # A human can fix this. A traceback would bury the sentence that says how.
+        print(f"\n  Cannot start: {exc}\n", file=sys.stderr, flush=True)
+        return 2
+
+    if args.live:
+        # Announced only once we know we can actually reach the sandbox — telling
+        # someone "going live" and then failing to start is a worse experience
+        # than saying nothing.
         print(
             "\n  LIVE: attempts 1 and 4 will run against the real Razorpay test sandbox.\n"
             "  You will be given payment links to pay by hand — use success@razorpay.\n"
-            "  See docs/RAZORPAY_TESTING.md.\n"
+            "  See docs/RAZORPAY_TESTING.md.\n",
+            flush=True,
         )
 
-    gateway = build_gateway(rail_kind=os.environ.get("PAYMENT_RAIL"))
     try:
         if not args.json:
             _print_header(gateway, mode)

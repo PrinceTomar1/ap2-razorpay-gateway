@@ -8,6 +8,8 @@ access to our database, our logs, or our goodwill.
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 
 from ap2_min.models import (
@@ -26,7 +28,7 @@ from gateway.mandates import (
 )
 
 
-def _buy(wired: Gateway, sku: str = "SF-RUN-001") -> tuple[dict, dict]:
+def _buy(wired: Gateway, sku: str = "SF-RUN-001") -> tuple[dict[str, Any], dict[str, Any]]:
     """Run one clean purchase and return (checkout response, payment response)."""
     from ap2_min.builders import closed_payment_mandate
     from gateway.mandates import utcnow
