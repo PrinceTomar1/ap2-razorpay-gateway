@@ -39,6 +39,36 @@ Test mode only. This service will refuse a live Razorpay key.
 """
 
 
+#: Env-gated demo seeding. Off by default, so `make serve` locally is unchanged.
+#: A hosted demo that greets a reviewer with "nothing waiting on you" wastes the
+#: one click they were willing to give it.
+SEED_ENV_VAR = "DEMO_SEED_HOLD"
+
+#: The ₹4,999 racing shoe — attempt 3 of the batch, and the only one that reaches
+#: a human. Seeding it is safe: raising a hold grants no authority whatsoever.
+#: Only a human decision on the page mints a mandate, and even then it is scoped
+#: to one amount at one merchant for one basket for ten minutes.
+SEED_SKU = "SF-RUN-004"
+
+
+def seed_demo_hold(gateway: Gateway) -> str | None:
+    """Raise one pending Trusted Surface hold, so the live page shows something.
+
+    Returns the hold id, or None if the catalogue could not produce one. Never
+    raises: a demo convenience must not be able to stop the service booting.
+    """
+    try:
+        cart = gateway.merchant.assemble_cart([{"sku": SEED_SKU, "qty": 1}])["cart"]
+        checkout = gateway.merchant.create_checkout(cart["cart_id"])
+        response = gateway.merchant.complete_checkout(
+            checkout["checkout_id"], gateway.open_checkout_jws
+        )
+    except Exception:  # noqa: BLE001 — seeding is decoration; booting is not
+        return None
+    hold_id = response.get("hold_id")
+    return str(hold_id) if hold_id else None
+
+
 def create_app(gateway: Gateway | None = None) -> FastAPI:
     wired = gateway or build_gateway(
         db_path=os.environ.get("GATEWAY_DB"), rail_kind=os.environ.get("PAYMENT_RAIL")
@@ -50,16 +80,24 @@ def create_app(gateway: Gateway | None = None) -> FastAPI:
     )
     app.state.gateway = wired
 
+    if os.environ.get(SEED_ENV_VAR) == "1":
+        seed_demo_hold(wired)
+
     app.include_router(build_trusted_surface_router(wired.trusted_surface))
     app.include_router(build_webhook_router(WebhookReceiver(audit=wired.audit)))
 
     @app.get("/", response_class=HTMLResponse)
     def index() -> HTMLResponse:
         pending = wired.trusted_surface.pending()
+        if not pending and os.environ.get(SEED_ENV_VAR) == "1":
+            # Somebody decided the last one. Raise a fresh hold so the next
+            # visitor sees the gate rather than an empty list.
+            seed_demo_hold(wired)
+            pending = wired.trusted_surface.pending()
         rows = (
             "".join(
                 f'<li><a href="/trusted-surface/{h.hold_id}">₹{paise_to_inr_str(h.amount)} '
-                f"at {h.cart.merchant_name}</a></li>"
+                f"at {h.cart.merchant_name}</a> — over the buyer's ₹1,500 limit</li>"
                 for h in pending
             )
             or "<li>nothing waiting on you</li>"
@@ -69,6 +107,12 @@ def create_app(gateway: Gateway | None = None) -> FastAPI:
             "<style>body{font:15px/1.6 system-ui;max-width:36rem;margin:3rem auto;padding:0 1rem}"
             "code{background:#f4f4f4;padding:.1rem .3rem;border-radius:3px}</style>"
             "<h1>AP2 × Razorpay gateway</h1>"
+            "<p>An implementation of Google's <b>Agent Payments Protocol (AP2 v0.2)</b> "
+            "for Razorpay. A shopping agent can buy from a merchant here, and every "
+            "money action is verified in deterministic code before a rupee moves.</p>"
+            "<p><b>Test rail only.</b> No Razorpay credentials exist in this "
+            "environment and no live path exists in the code, so nothing here can "
+            "move real money.</p>"
             f"<p>Rail: <code>{wired.rail.name}</code> · "
             f"{len(wired.catalog.products)} SKUs · "
             f"{wired.audit.count()} audit rows</p>"
@@ -79,6 +123,10 @@ def create_app(gateway: Gateway | None = None) -> FastAPI:
             "<li><code>GET /audit</code> — the chain, and whether it verifies</li>"
             "<li>The merchant itself is an MCP server: <code>make mcp</code></li>"
             "</ul>"
+            "<h2>Source</h2>"
+            "<p><a href='https://github.com/PrinceTomar1/ap2-razorpay-gateway'>"
+            "github.com/PrinceTomar1/ap2-razorpay-gateway</a> — "
+            "<code>make demo</code> runs the full six-attempt batch offline.</p>"
         )
 
     @app.get("/health")

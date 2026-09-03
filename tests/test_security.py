@@ -12,6 +12,7 @@ import base64
 import hashlib
 import hmac
 import json
+import os
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -599,3 +600,55 @@ def test_the_working_tree_env_file_is_never_committed() -> None:
         check=True,
     ).stdout.split()
     assert ".env" not in ever, ".env was committed at some point in history"
+
+
+# ===========================================================================
+# The demo seeding on the hosted deployment
+# ===========================================================================
+
+
+def test_demo_seeding_is_off_by_default(wired: Gateway) -> None:
+    """`make serve` locally must be unchanged by a hosted-demo convenience."""
+    from gateway.app import SEED_ENV_VAR, create_app
+
+    assert os.environ.get(SEED_ENV_VAR) is None
+    create_app(wired)
+    assert wired.trusted_surface.pending() == []
+
+
+def test_demo_seeding_raises_a_hold_but_grants_no_authority(
+    wired: Gateway, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Seeding must never be a back door.
+
+    A hold is a *question*, not an answer. Raising one authorises nothing: the
+    mandate only exists once a human decides on the page.
+    """
+    from gateway.app import SEED_ENV_VAR, create_app
+
+    monkeypatch.setenv(SEED_ENV_VAR, "1")
+    create_app(wired)
+
+    pending = wired.trusted_surface.pending()
+    assert len(pending) == 1
+    held = pending[0]
+    assert held.status == "pending"
+    assert held.payment_mandate_jws is None, "seeding must not mint a mandate"
+    assert held.checkout_mandate_jws is None
+    assert wired.ledger.total_captured() == 0, "seeding must not move money"
+    assert isinstance(wired.rail, FakeRail)
+    assert wired.rail.calls == [], "seeding must not reach the rail"
+
+
+def test_demo_seeding_cannot_stop_the_service_booting(
+    wired: Gateway, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A decoration must not be able to take the gateway down."""
+    from gateway.app import SEED_ENV_VAR, create_app, seed_demo_hold
+
+    monkeypatch.setenv(SEED_ENV_VAR, "1")
+    wired.catalog.products.clear()  # the seed SKU no longer exists
+
+    assert seed_demo_hold(wired) is None
+    app = create_app(wired)  # must still build
+    assert app is not None
