@@ -1,0 +1,19 @@
+# Railway deployment for the public demo.
+#
+# PAYMENT_RAIL is pinned to `fake` here and there are no Razorpay credentials in
+# the environment, so this deployment cannot move money even if someone tried:
+# RazorpayRail refuses to construct without a test key, and there is no live
+# path in the codebase at all.
+#
+# What this URL is for: letting a reviewer click through the Trusted Surface
+# approval page, read /audit, and see the gateway is a real service rather than
+# a screenshot. The six-attempt batch still runs locally via `make demo`.
+
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python -m gateway.app"
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"

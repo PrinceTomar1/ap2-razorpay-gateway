@@ -138,8 +138,12 @@ def main() -> None:
     import uvicorn
 
     load_dotenv()
-    host = os.environ.get("GATEWAY_HOST", "127.0.0.1")
-    port = int(os.environ.get("GATEWAY_PORT", "8000"))
+    # $PORT is what every PaaS injects (Railway, Render, Fly, Heroku). It wins,
+    # because a host that tells you which port to bind is not making a suggestion.
+    # $GATEWAY_HOST defaults to loopback locally but must be 0.0.0.0 in a
+    # container, or the platform's health check can never reach us.
+    port = int(os.environ.get("PORT") or os.environ.get("GATEWAY_PORT") or "8000")
+    host = os.environ.get("GATEWAY_HOST") or ("0.0.0.0" if os.environ.get("PORT") else "127.0.0.1")
     try:
         app = create_app()
     except ConfigurationError as exc:
