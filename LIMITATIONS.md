@@ -173,6 +173,14 @@ Out of scope. A production MPP needs all four.
 
 ## Scale and operations
 
+### Webhook deduplication is in memory
+
+Deliveries are deduplicated on `X-Razorpay-Event-Id`, but the set of seen ids
+lives in the process. A restart forgets them, and a second process would not share
+them. It belongs in the database beside the idempotency store. The blast radius is
+small — a webhook is information and can never authorise a payment — but the gap
+is real.
+
 ### Single-process idempotency lease
 
 The attempt lease is a conditional `UPDATE` inside `BEGIN IMMEDIATE`, which

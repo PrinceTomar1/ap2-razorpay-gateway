@@ -53,7 +53,7 @@ payments with NPCI and OpenAI. This is that missing piece, built to the spec.
 
 ```bash
 make setup     # venv + pinned deps + .env from .env.example
-make test      # 300+ tests, all offline
+make test      # 516 tests, all offline
 make demo      # the six-attempt batch, zero network
 ```
 
@@ -206,6 +206,11 @@ corresponding audit row.
 | 7 | **Hallucinated SKU** | `check_product` → flat `product.not_found`. No cart, no signature, the verifier never runs, the agent re-plans | `merchant/service.py` |
 | 8 | **Out-of-band request** | `unresolved_constraint` → Trusted Surface → the human signs a one-time mandate, or declines | `gateway/trusted_surface.py` |
 
+A ninth, added during adversarial review: a **non-retryable** decline. A rejected
+*request* — bad amount, order already paid, suspended account — cannot be fixed by
+a different instrument, so recovery stops after one attempt instead of failing
+identically twice more and creating two orders for nothing.
+
 The nastiest case is worth naming on its own: **a timeout whose payment actually
 succeeded.** Before creating any new order, the processor asks the rail about every
 order already created under the same idempotency key. If one captured, it stops and
@@ -214,20 +219,26 @@ returns that capture. `test_failure_2_a_timeout_that_actually_captured_is_not_ch
 ## Repository map
 
 ```
-ap2_min/       vendored AP2 v0.2 models — mandates, constraints, receipts, roles
-gateway/       verifier, payments, recovery, audit chain, Trusted Surface,
-               Razorpay rail, webhooks, policy, composition root
-merchant/      catalogue, carts, stock re-check, the 7-tool MCP server
-llm/           the only door a model gets: narration + product selection
+ap2_min/        vendored AP2 v0.2 models — mandates, typed constraints, receipts, roles
+gateway/        verify · payments · recovery · audit · trusted_surface
+                razorpay_client · webhooks · ledger · policy · config · db
+                bootstrap (composition root) · app (FastAPI)
+merchant/       catalogue, carts, stock re-check, service, the 7-tool MCP server
+llm/            the only door a model gets: narration + product selection
 shopping_agent/ the agent, its MCP client, and the human gate it cannot cross
-demo/          the six-attempt batch and its measured report
-tests/         13 files; every failure mode asserts an outcome and an audit row
+demo/           the six-attempt batch and its measured report
+tests/          18 files, 516 tests; every failure mode asserts an outcome
+                AND the audit row that records it
 ```
 
 ## Documentation
 
 - [ARCHITECTURE.md](ARCHITECTURE.md) — roles, the full request lifecycle, the trust
   model, and *where we deliberately do not use an LLM*
+- [SECURITY.md](SECURITY.md) — ten threats, each mitigation, and the test that
+  proves it; plus what is deliberately **not** defended
+- [VERIFICATION_REPORT.md](VERIFICATION_REPORT.md) — the adversarial review pass,
+  with pasted output for every check
 - [DEMO.md](DEMO.md) — what the batch proves, and why the numbers are real
 - [LIMITATIONS.md](LIMITATIONS.md) — what this is not, stated plainly
 - [DECISIONS.md](DECISIONS.md) — every autonomous choice and its one-line rationale
@@ -254,6 +265,10 @@ code to construct with a key id that is not `rzp_test_`. No live keys, no real m
 no secrets in the repository, no scraping, no personal data. The catalogue is
 synthetic: three fictional merchants, sixty invented SKUs, plausible prices, no real
 product or business represented.
+
+The threat model is in [SECURITY.md](SECURITY.md), including a section on what is
+deliberately not defended — this is a buildathon submission, not a deployed
+service.
 
 ## Credits and licence
 

@@ -32,9 +32,13 @@ single-merchant INR checkout. `payment.agent_recurrence`,
 `payment.allowed_payment_instruments` and `payment.allowed_pisps` are recorded in
 LIMITATIONS.md.
 
-**`allowed_payees` matches on merchant *id*, not the spec's name/website object.**
-Names are not identifiers, and a look-alike name is precisely the attack this
-constraint exists to stop.
+**`allowed_payees` carries the spec's merchant objects, and matches on `id`.**
+The spec's `allowed` array holds objects with a name and a website. Ours holds the
+same objects plus a required stable `id`, and matching is performed on `id` alone
+— names are not identifiers, and a look-alike merchant name is precisely the attack
+an allow-list exists to stop. A bare string is accepted as shorthand for
+`{"id": ...}` so policy files stay readable. *(This originally used bare strings
+and was corrected during the adversarial review — see the entry below.)*
 
 **Single-hop delegation.** A closed mandate carries one `open_mandate_jws`, not a
 chain. Multi-hop was explicitly out of scope.
@@ -330,3 +334,143 @@ succeeds anyway, rather than needing an attempt of its own.
 
 **The simulated buyer declines attempt 3.** A gate that is only ever tested by
 approving is not tested.
+
+---
+
+# Adversarial review pass
+
+A second pass, reviewing the project as somebody trying to reject it. Everything
+below was decided during that review; the ones marked **found** were bugs the
+checks uncovered rather than choices made up front.
+
+## Tooling and configuration
+
+**mypy runs in full `strict` mode.** *(found)* It was not. Worse, a
+`follow_imports = "skip"` override was blinding it to pyjwt, fastmcp, anthropic
+and mcp — all of which ship `py.typed`. Removing it and enabling `strict` surfaced
+nine real errors. Third-party code is now trusted to describe itself, and
+`razorpay` is the only module allowed to be `Any` because it is the only one that
+ships no types.
+
+**Deleted an unreachable branch rather than annotating it.** *(found)* Strict mypy
+found dead code in `merchant/service.py` guarded by `# pragma: no cover` — a
+comment that had been hiding the fact it could never run. `CheckoutVct` is a
+two-value Literal and the other case returned above it.
+
+**A dependency-free `.env` loader instead of `python-dotenv`.** *(found — nothing
+read `.env` at all.)* The whole job is twenty lines of parsing. A package that
+reads a file full of API keys is a package worth not having, and writing it means
+the "never evaluates anything" property is testable rather than trusted:
+`$(...)`, backticks and `${...}` all stay literal.
+
+**A real environment variable always beats the file.** Standard dotenv semantics,
+and it is what lets `demo/batch.py --live` set the rail before the file is read,
+and CI secrets beat a checked-out `.env`.
+
+**A typed `ConfigurationError`, caught at every entry point.** "You have not set
+your Razorpay keys" is not a bug, and a stack trace buries the one sentence that
+tells the reader what to do. Prints the message, exits 2.
+
+**The demo pins its own in-memory database.** *(found)* Once `.env` was honoured,
+`GATEWAY_DB=run/gateway.db` made the demo persistent and a second run inherited
+the first run's spend — the reconciliation check caught it with "receipts total
+₹4,096 but the spend ledger says ₹121,802". A demo whose result depends on how
+many times you have run it is not reproducible. `make serve` still persists.
+
+**Tests pin safe environment values rather than deleting them.** *(found)* Deleting
+`GATEWAY_DB` let `load_dotenv` fill it back in from the developer's own `.env`,
+which is how three tests started sharing a file on disk. Pinning is the only
+version that actually isolates.
+
+## Correctness
+
+**A refused mandate no longer changes checkout state.** *(found)* One malformed or
+over-limit presentation used to mark the whole checkout `declined` — a lost sale,
+and a denial of service for anyone who can reach `initiate_payment` with a bad
+token. `status` describes the checkout, not the outcome of one presentation.
+
+**A stock re-check failure no longer kills the checkout either.** *(found)* The
+merchant's signed price guarantee still stands for its full window and the
+re-check runs again on every subsequent attempt, so if the shelf is restocked in
+time the sale can still complete — and if it is not, the same branch refuses
+again. Marking it dead bought nothing.
+
+**`RailDeclined` carries `retryable`.** A declined card is retryable; "this order
+is already paid", "the amount is invalid", "the account is suspended" are not.
+They are properties of the request, not the instrument, so the rest of the ladder
+would fail identically twice more and create two orders for nothing. Razorpay 400s
+are classified non-retryable.
+
+**`FakeRail.timeout_after_capture`.** The money moves and the caller never hears
+back — the classic double-charge hazard, and a real sandbox cannot be asked to
+produce it on demand. Writing the test revealed the system does something better
+than expected: the capture probe settles it *inside the same recovery run*, before
+the fallback creates an order. The test asserts the stronger behaviour.
+
+**A precise JWS detector in the audit-leak test.** *(found)* The first version
+matched any string with two dots and 120 characters, which flagged the verifier's
+own English explanation. A test that fires on prose proves nothing. It now
+requires the `eyJ` header prefix and no whitespace, and there is a test of the
+detector itself.
+
+## AP2 fidelity
+
+**The open Checkout Mandate uses the spec's typed `constraints` array.** *(found)*
+It was carrying ad-hoc `allowed_merchants` / `max_amount` / `ship_to_pincode`
+fields. `checkout.allowed_merchants` is now the spec's own constraint, exactly.
+
+**Two extension constraints under an `x-` prefix.** AP2 defines no per-checkout
+spend ceiling and no delivery address, and both are bounds a buyer reasonably
+wants. The spec permits new constraints provided each has a unique `type`, a
+schema and an evaluation algorithm; `x-checkout.amount_ceiling` and
+`x-checkout.ship_to` have all three, and the prefix guarantees no future AP2
+constraint can collide.
+
+**`payment.allowed_payees` holds merchant objects, matched on `id`.** *(found)* The
+spec's `allowed` array holds objects with a name and a website; ours was a list of
+bare strings. It now carries the spec's shape plus a required stable `id`, and
+matching is on `id` alone — a look-alike merchant name is exactly what an
+allow-list exists to stop. A bare string is accepted as shorthand.
+
+**`checkout.line_items` deliberately not implemented.** The merchant's signed cart
+already pins every SKU and quantity; the constraint would restate what the
+signature guarantees.
+
+**Fidelity is a test, not a claim.** `tests/test_ap2_fidelity.py` asserts every
+`vct` string, every constraint type and its exact field set, that no constraint
+carries a field the spec does not define, that each docstring quotes the algorithm
+it implements, and that every deliberate divergence is documented where a reader
+will look.
+
+## Security
+
+**Webhook deduplication on `X-Razorpay-Event-Id`.** *(found)* A valid signature
+proves a delivery came from Razorpay, not that it has not arrived before —
+Razorpay retries on any non-2xx, so duplicates are normal, and anyone who captures
+one body can replay it. Deduplication happens **after** signature verification, so
+an unauthenticated caller cannot claim an event id to suppress the real webhook.
+
+**A duplicate returns 200, not 400.** The delivery genuinely succeeded and
+Razorpay should stop retrying. The response says `duplicate: true` and the audit
+row says so too, because an operator should be able to tell a retry storm from
+real traffic.
+
+**A webhook with no event id is processed but recorded as un-deduplicable.** Older
+integrations omit it. Making the gap visible beats silently dropping the delivery
+or silently failing to dedupe it.
+
+**A real secret scanner instead of the naive grep.** The grep the review specified
+matches variable names, `.env.example` placeholders, the SDK's `rzp_errors` alias
+and documentation prose — it cannot be empty for a project that names
+`RAZORPAY_KEY_ID` at all. The scanner looks for credential-*shaped* values across
+full history against an explicit allowlist, plus a test asserting every allowlist
+entry is obviously fake, plus a test that a planted key is caught.
+
+**The scanner's bait is assembled at runtime.** *(found)* Writing it as a literal
+put a credential-shaped string into git history, which the scanner then correctly
+flagged — and the usual "fix" for that is widening the allowlist until the scanner
+is useless. The offending commit was amended out.
+
+**`SECURITY.md` names what is deliberately not defended.** No auth on the HTTP
+surface, no rate limiting, no CSRF token, in-memory keys, single-process
+guarantees. Absence should not be mistaken for coverage.

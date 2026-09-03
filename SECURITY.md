@@ -40,7 +40,7 @@ key, or any way to raise its own limits.
 | HMAC-SHA256 using the EC **public** key as the secret | Same — the header's `alg` must be `ES256` | `test_only_es256_is_accepted[HS256]`, `test_alg_confusion_is_refused_at_the_service_boundary` |
 | `ES384`, `RS256`, `EdDSA` | Same | `test_only_es256_is_accepted[…]` |
 | Empty signature segment | Refused as malformed | `test_an_empty_signature_segment_is_refused` |
-| Sign with an unknown key | The `kid` must be in the trust store | `test_a_mandate_from_an_unknown_key_is_rejected` |
+| Sign with an unknown key | The `kid` must be in the trust store | `test_failure_3_a_mandate_from_an_unknown_key_is_rejected` |
 | Sign a *standing* authorisation with the agent's own key | Verification is by **role**, not just validity — only the user may sign an open mandate | `test_no_role_but_the_user_can_sign_a_standing_authorisation` |
 | Merchant signs the mandate that pays itself | Same role check | `test_the_merchant_cannot_present_the_mandate_that_pays_it` |
 | Bump `vct` to an unreviewed version | `vct` is a closed Literal; parsing fails before any check runs | `test_a_closed_mandate_with_a_tampered_vct_is_rejected` |

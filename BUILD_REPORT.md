@@ -7,6 +7,11 @@ Razorpay. Built 3 September 2026. Python 3.13.5 on macOS (targets ≥3.11).
 and mypy clean, and the demo prints the exact report line from a fresh clone with no
 network, no API key and no Razorpay account.
 
+> **Superseded in part.** A later adversarial verification pass found and fixed
+> several real bugs, tightened mypy to full `strict`, and grew the suite from 295
+> to 516 tests. The counts below are the ones from the original build. See
+> [VERIFICATION_REPORT.md](VERIFICATION_REPORT.md) for the current state.
+
 ```
 6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
 ```

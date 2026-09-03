@@ -24,7 +24,7 @@ Four kinds, and the open/closed split is the heart of it.
 
 |  | **Open** — standing authorisation | **Closed** — one transaction |
 |---|---|---|
-| **Checkout** | `mandate.checkout.open.1`<br>*user-signed*: these merchants, this ceiling, this pincode, 24h | `mandate.checkout.1`<br>*merchant-signed*: this exact cart at this exact price, 15 min |
+| **Checkout** | `mandate.checkout.open.1`<br>*user-signed*: a typed `constraints` array — `checkout.allowed_merchants` (the spec's own) plus `x-checkout.amount_ceiling` and `x-checkout.ship_to` (documented extensions), 24h | `mandate.checkout.1`<br>*merchant-signed*: this exact cart at this exact price, 15 min |
 | **Payment** | `mandate.payment.open.1`<br>*user-signed*: a list of AP2 constraints, no amount | `mandate.payment.1`<br>*agent-signed*: this much, to them, for this checkout, now, 10 min |
 
 Two properties do most of the work:
@@ -55,14 +55,22 @@ in `make demo`'s audit trail.
 The buyer signs two mandates on their Trusted Surface (`gateway/bootstrap.py`):
 
 ```
-open Checkout Mandate   merchants [m_stridefit, m_lumen, m_pixelbyte]
-                        max_amount ₹1,500 · ship_to 560001 · cnf = agent key
+open Checkout Mandate   checkout.allowed_merchants   m_stridefit, m_lumen, m_pixelbyte
+                        x-checkout.amount_ceiling    ₹1,500
+                        x-checkout.ship_to           560001
+                        cnf = agent key
+
 open Payment Mandate    payment.budget          ₹5,000
                         payment.amount_range    ₹1 – ₹1,500
                         payment.allowed_payees  the same three
                         payment.execution_date  now → +24h
                         cnf = agent key
 ```
+
+The `x-` prefixed two are extensions: AP2 defines no per-checkout spend ceiling and
+no delivery address, and the spec explicitly permits new constraint types provided
+each has a unique `type`, a schema and an evaluation algorithm. Each has all three,
+and the prefix means no future AP2 constraint can collide with them.
 
 Everything the agent can ever do flows from exactly these two tokens.
 
@@ -76,7 +84,7 @@ returns the same list. Read-only, signs nothing.
 and returns `product.not_found` — no cart, no signature, and the verifier is never
 invoked. *(Failure mode 7.)*
 
-**3. Assemble.** `assemble_cart([{sku, qty}])`. Validates every SKU, stock level and
+**3. Assemble.** `assemble_cart([{sku, qty}])` (`merchant/checkout.py`). Validates every SKU, stock level and
 serviceability, refuses a basket spanning two merchants (one Payment Mandate names
 one payee), and **stamps the prices in**. Those stamped prices are what makes a
 later price change detectable rather than invisible.
@@ -240,6 +248,15 @@ integers make it impossible to accidentally introduce a fractional unit, and
 branches on the difference, and the circuit breaker counts only the second and third.
 Flattening them is how a system ends up retrying something that already succeeded.
 
+**And declines carry `retryable`.** A declined card is retryable — the buyer's UPI
+might work. "This order is already paid", "the amount is invalid", "the merchant
+account is suspended" are not: they are properties of the *request*, not of the
+instrument, so walking the rest of the ladder is guaranteed to fail identically,
+twice more, and create two orders for nothing. Razorpay 400s are classified
+non-retryable. Retrying a failure that cannot succeed is not resilience; it is a
+slower way to reach the same answer while generating noise for whoever reads the
+audit trail.
+
 **A deferral issues no receipt.** When the breaker trips, the idempotency record
 stays `in_flight`, the nonce stays attributed to that mandate, and the *same* mandate
 can be presented on the next tick — where the capture probe first asks the rail
@@ -259,6 +276,13 @@ freely editable is not much of an audit trail.
 **Declines do not consume budget.** Only a capture calls `record_spend`. If declines
 ate budget, anyone who could make our payments fail could lock a buyer out of their
 own daily limit without ever taking a rupee.
+
+**A refused mandate does not kill the checkout.** `status` describes the checkout,
+not the outcome of one presentation. An agent that presents a malformed or
+over-limit mandate can present a correct one next; letting a single bad
+presentation invalidate the checkout would lose a legitimate sale and hand anyone
+who can reach `initiate_payment` a way to kill a stranger's cart. Found during
+adversarial review — it used to mark the checkout `declined`.
 
 **The MCP surface has seven tools and no eighth.** No tool adjusts a price, skips
 verification, retries a payment, approves a hold or raises a limit. The bound is the
@@ -282,11 +306,28 @@ Three read-modify-write sequences must be atomic, and each is:
 Burning a nonce relies on the primary key rather than a read-then-write, for the same
 reason.
 
+A fourth, outside the money path: **webhook deduplication**. A valid signature
+proves a delivery came from Razorpay, not that it has not arrived before — Razorpay
+retries on any non-2xx, so duplicates are normal. Deliveries are keyed on
+`X-Razorpay-Event-Id` and answered once, *after* signature verification, so an
+unauthenticated caller cannot claim an event id to suppress the genuine webhook.
+
 ## 8. Storage
 
 SQLite, stdlib only. The properties actually needed are durability, a serialisable
 write path, and the ability to hand a reviewer a single file they can open. SQLite
 has all three; a server would add operational surface without adding a guarantee.
+
+`$GATEWAY_DB` selects the file, and `.env` is read by `gateway/config.py` — a
+twenty-line parser rather than a dependency, because a package that reads a file
+full of API keys is a package worth not having. It never overrides a real
+environment variable and never evaluates anything, so a `.env` cannot execute code.
+
+**The demo ignores `$GATEWAY_DB` and always starts empty.** It portrays one
+buyer's day against a ₹5,000 budget; carrying yesterday's spend in would make the
+numbers depend on how many times you had run it, and "run it twice, get the same
+answer" is the whole claim. `make serve` still persists, because a gateway that
+forgets its receipts on restart would be useless.
 
 Carts and checkouts are in memory — they are ephemeral, and losing an unconfirmed
 cart on a restart is not a correctness problem. Losing a receipt would be, so
