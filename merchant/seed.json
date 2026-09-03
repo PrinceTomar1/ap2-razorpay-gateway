@@ -1,0 +1,1198 @@
+{
+  "_comment": "Synthetic catalogue for three fictional Indian merchants. Prices are plausible INR retail prices as whole rupees; gateway/ converts them to integer paise at load time. No real merchant, product or price is represented here — see LIMITATIONS.md.",
+  "merchants": [
+    {
+      "id": "m_stridefit",
+      "name": "StrideFit Sportswear",
+      "city": "Bengaluru",
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "id": "m_lumen",
+      "name": "Lumen Home & Kitchen",
+      "city": "Mumbai",
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "id": "m_pixelbyte",
+      "name": "PixelByte Electronics",
+      "city": "New Delhi",
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    }
+  ],
+  "products": [
+    {
+      "sku": "SF-RUN-001",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Velocity Road Runner",
+      "category": "running_shoes",
+      "price_inr": 1299,
+      "stock": 14,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-RUN-002",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Velocity Road Runner Pro",
+      "category": "running_shoes",
+      "price_inr": 2499,
+      "stock": 9,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-RUN-003",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Trailhead Off-Road Shoe",
+      "category": "running_shoes",
+      "price_inr": 1899,
+      "stock": 6,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-RUN-004",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Marathon Elite Carbon",
+      "category": "running_shoes",
+      "price_inr": 4999,
+      "stock": 3,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-RUN-005",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Daily Trainer Lite",
+      "category": "running_shoes",
+      "price_inr": 1149,
+      "stock": 21,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-RUN-006",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Campus Court Sneaker",
+      "category": "running_shoes",
+      "price_inr": 1499,
+      "stock": 11,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-RUN-007",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Monsoon Grip Runner",
+      "category": "running_shoes",
+      "price_inr": 1799,
+      "stock": 1,
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-APP-001",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Featherweight Running Shorts",
+      "category": "apparel",
+      "price_inr": 899,
+      "stock": 32,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-APP-002",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Dryflow Training Tee",
+      "category": "apparel",
+      "price_inr": 649,
+      "stock": 44,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-APP-003",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Windcheater Track Jacket",
+      "category": "apparel",
+      "price_inr": 2199,
+      "stock": 12,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-APP-004",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Compression Half Tights",
+      "category": "apparel",
+      "price_inr": 1099,
+      "stock": 18,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-APP-005",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Cotton Blend Joggers",
+      "category": "apparel",
+      "price_inr": 1349,
+      "stock": 15,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-APP-006",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Sleeveless Gym Vest",
+      "category": "apparel",
+      "price_inr": 549,
+      "stock": 27,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-ACC-001",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Reflective Running Cap",
+      "category": "accessories",
+      "price_inr": 499,
+      "stock": 40,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-ACC-002",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Cushioned Ankle Socks (3 pack)",
+      "category": "accessories",
+      "price_inr": 399,
+      "stock": 60,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-ACC-003",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Hydration Waist Belt",
+      "category": "accessories",
+      "price_inr": 1249,
+      "stock": 8,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-ACC-004",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Silicone Sports Watch Strap",
+      "category": "accessories",
+      "price_inr": 349,
+      "stock": 35,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-ACC-005",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Foam Roller 45cm",
+      "category": "accessories",
+      "price_inr": 1099,
+      "stock": 7,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-ACC-006",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Quick-Dry Gym Towel",
+      "category": "accessories",
+      "price_inr": 299,
+      "stock": 50,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "SF-ACC-007",
+      "merchant_id": "m_stridefit",
+      "merchant_name": "StrideFit Sportswear",
+      "name": "Anti-Blister Insole Pair",
+      "category": "accessories",
+      "price_inr": 449,
+      "stock": 25,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "560001",
+        "560034",
+        "560103",
+        "400001",
+        "110001"
+      ],
+      "return_days": 14
+    },
+    {
+      "sku": "LM-KIT-001",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Triply Stainless Frying Pan 24cm",
+      "category": "kitchen",
+      "price_inr": 1449,
+      "stock": 16,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-KIT-002",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Cast Iron Dosa Tawa 28cm",
+      "category": "kitchen",
+      "price_inr": 1199,
+      "stock": 22,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-KIT-003",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Borosilicate Storage Jar Set of 4",
+      "category": "kitchen",
+      "price_inr": 899,
+      "stock": 30,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-KIT-004",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Copper Bottom Pressure Cooker 3L",
+      "category": "kitchen",
+      "price_inr": 2299,
+      "stock": 9,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-KIT-005",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Bamboo Chopping Board Large",
+      "category": "kitchen",
+      "price_inr": 649,
+      "stock": 25,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-KIT-006",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Insulated Steel Casserole 2.5L",
+      "category": "kitchen",
+      "price_inr": 1099,
+      "stock": 14,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-KIT-007",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Manual Coffee Grinder",
+      "category": "kitchen",
+      "price_inr": 1899,
+      "stock": 5,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-KIT-008",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Silicone Spatula Set of 5",
+      "category": "kitchen",
+      "price_inr": 399,
+      "stock": 48,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-HOM-001",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Cotton Dhurrie Rug 4x6",
+      "category": "home_decor",
+      "price_inr": 2799,
+      "stock": 6,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-HOM-002",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Terracotta Planter Trio",
+      "category": "home_decor",
+      "price_inr": 1249,
+      "stock": 18,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-HOM-003",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Jute Table Runner",
+      "category": "home_decor",
+      "price_inr": 549,
+      "stock": 33,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-HOM-004",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Brass Diya Set of 6",
+      "category": "home_decor",
+      "price_inr": 799,
+      "stock": 20,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-HOM-005",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Linen Cushion Cover Pair",
+      "category": "home_decor",
+      "price_inr": 949,
+      "stock": 24,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-HOM-006",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Wall Mounted Floating Shelf",
+      "category": "home_decor",
+      "price_inr": 1349,
+      "stock": 11,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-HOM-007",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Handloom Cotton Bedsheet Double",
+      "category": "home_decor",
+      "price_inr": 1799,
+      "stock": 13,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-STO-001",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Stackable Grocery Container Set",
+      "category": "storage",
+      "price_inr": 1149,
+      "stock": 19,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-STO-002",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Under-Bed Storage Bag XL",
+      "category": "storage",
+      "price_inr": 699,
+      "stock": 26,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-STO-003",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Foldable Laundry Hamper",
+      "category": "storage",
+      "price_inr": 849,
+      "stock": 17,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-STO-004",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Shoe Rack 4 Tier",
+      "category": "storage",
+      "price_inr": 1999,
+      "stock": 4,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "LM-STO-005",
+      "merchant_id": "m_lumen",
+      "merchant_name": "Lumen Home & Kitchen",
+      "name": "Vacuum Compression Bags (5 pack)",
+      "category": "storage",
+      "price_inr": 599,
+      "stock": 29,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "400001",
+        "400050",
+        "400703",
+        "560001",
+        "411001"
+      ],
+      "return_days": 7
+    },
+    {
+      "sku": "PB-AUD-001",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Bassline Wireless Earbuds",
+      "category": "audio",
+      "price_inr": 1499,
+      "stock": 20,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-AUD-002",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Bassline Pro ANC Earbuds",
+      "category": "audio",
+      "price_inr": 3299,
+      "stock": 7,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-AUD-003",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Studio Over-Ear Headphones",
+      "category": "audio",
+      "price_inr": 4599,
+      "stock": 4,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-AUD-004",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Clip-On Bluetooth Speaker",
+      "category": "audio",
+      "price_inr": 999,
+      "stock": 28,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-AUD-005",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Wired Earphones with Mic",
+      "category": "audio",
+      "price_inr": 449,
+      "stock": 55,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-AUD-006",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Desk Condenser Microphone",
+      "category": "audio",
+      "price_inr": 2799,
+      "stock": 6,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-CMP-001",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "65W GaN Fast Charger",
+      "category": "computer_accessories",
+      "price_inr": 1799,
+      "stock": 15,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-CMP-002",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "USB-C to HDMI Hub 6-in-1",
+      "category": "computer_accessories",
+      "price_inr": 2199,
+      "stock": 10,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-CMP-003",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Mechanical Keyboard TKL",
+      "category": "computer_accessories",
+      "price_inr": 3999,
+      "stock": 5,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-CMP-004",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Silent Wireless Mouse",
+      "category": "computer_accessories",
+      "price_inr": 849,
+      "stock": 31,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-CMP-005",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Laptop Stand Aluminium",
+      "category": "computer_accessories",
+      "price_inr": 1299,
+      "stock": 12,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-CMP-006",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Braided USB-C Cable 2m",
+      "category": "computer_accessories",
+      "price_inr": 399,
+      "stock": 60,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-CMP-007",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "1TB Portable NVMe SSD",
+      "category": "computer_accessories",
+      "price_inr": 6999,
+      "stock": 3,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-MOB-001",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "10000mAh Slim Power Bank",
+      "category": "mobile_accessories",
+      "price_inr": 1349,
+      "stock": 23,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-MOB-002",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "20000mAh Power Bank 22.5W",
+      "category": "mobile_accessories",
+      "price_inr": 2099,
+      "stock": 11,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-MOB-003",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Magnetic Car Phone Mount",
+      "category": "mobile_accessories",
+      "price_inr": 699,
+      "stock": 34,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-MOB-004",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Tempered Glass Screen Guard",
+      "category": "mobile_accessories",
+      "price_inr": 299,
+      "stock": 70,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-MOB-005",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Foldable Phone Stand",
+      "category": "mobile_accessories",
+      "price_inr": 449,
+      "stock": 42,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-MOB-006",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Wireless Charging Pad 15W",
+      "category": "mobile_accessories",
+      "price_inr": 1199,
+      "stock": 16,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    },
+    {
+      "sku": "PB-MOB-007",
+      "merchant_id": "m_pixelbyte",
+      "merchant_name": "PixelByte Electronics",
+      "name": "Selfie Tripod with Remote",
+      "category": "mobile_accessories",
+      "price_inr": 1099,
+      "stock": 21,
+      "sizes": [],
+      "serviceable_pincodes": [
+        "110001",
+        "110019",
+        "122001",
+        "560001",
+        "400001"
+      ],
+      "return_days": 10
+    }
+  ]
+}
