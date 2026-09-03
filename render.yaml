@@ -1,0 +1,32 @@
+# Render Blueprint — the public demo deployment.
+#
+# What this URL is for: letting a reviewer click through the Trusted Surface
+# approval page and read /audit, so the gateway is demonstrably a running
+# service rather than a screenshot. The six-attempt batch still runs locally
+# with `make demo`.
+#
+# Safety: PAYMENT_RAIL is pinned to `fake` and no Razorpay credentials exist in
+# this environment. Money cannot move here even deliberately — RazorpayRail
+# refuses to construct without a test key, and the codebase has no live path at
+# all. LLM_PROVIDER is pinned to `fake` for the same reason: no key, no calls.
+services:
+  - type: web
+    name: ap2-razorpay-gateway
+    runtime: python
+    plan: free
+    region: singapore          # closest to the Indian merchants this models
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m gateway.app
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: PAYMENT_RAIL
+        value: fake            # the only safe default; never change this here
+      - key: LLM_PROVIDER
+        value: fake
+      - key: GATEWAY_DB
+        value: /tmp/gateway.db # Render's free disk is ephemeral; that is fine
+                               # for a demo, and LIMITATIONS.md says receipts
+                               # belong on durable storage in production.
