@@ -9,6 +9,7 @@
 #                attempts 1 and 4 against the real Razorpay TEST sandbox
 #   make mcp     run the Merchant MCP server on stdio
 #   make serve   run the gateway (Razorpay webhooks + Trusted Surface page)
+#   make keys    check your Razorpay test keys work (30s, before LIVE=1)
 #   make smoke   fresh-clone smoke test in a temp dir
 # ---------------------------------------------------------------------------
 
@@ -17,7 +18,7 @@ PIP     := .venv/bin/pip
 VENV    := .venv
 
 .DEFAULT_GOAL := help
-.PHONY: help setup test lint fmt demo mcp serve smoke clean
+.PHONY: help setup test lint fmt demo mcp serve keys smoke clean
 
 help:
 	@grep -E '^#   make' Makefile | sed 's/^#   //'
@@ -61,6 +62,9 @@ mcp:
 
 serve:
 	@$(PY) -m gateway.app
+
+keys:
+	@bash scripts/check_keys.sh
 
 smoke:
 	@bash scripts/smoke.sh
