@@ -61,20 +61,43 @@ def verify_webhook_signature(raw_body: bytes, signature: str, secret: str) -> bo
 
 
 class WebhookReceiver:
-    """Resolves pending payments from verified Razorpay callbacks."""
+    """Resolves pending payments from verified Razorpay callbacks.
+
+    Replay protection
+    -----------------
+    A valid signature proves a webhook *came from Razorpay*. It does not prove it
+    has not been delivered before. Razorpay retries on any non-2xx, so duplicates
+    are normal rather than exceptional, and anybody who captures one body can
+    replay it verbatim for as long as the secret lives.
+
+    So every delivery is keyed on ``X-Razorpay-Event-Id`` and answered exactly
+    once. A repeat returns 200 with ``duplicate: true`` — 200 because the delivery
+    genuinely succeeded and Razorpay should stop retrying, and ``duplicate``
+    because an operator watching the audit trail should be able to tell a retry
+    storm from real traffic.
+
+    A delivery with no event id is still processed (older Razorpay integrations
+    omit it) but is recorded as un-deduplicable, so the gap is visible rather than
+    silent.
+    """
 
     def __init__(self, *, audit: AuditLog, secret: str | None = None) -> None:
         self.audit = audit
         self.secret = (
             secret if secret is not None else os.environ.get("RAZORPAY_WEBHOOK_SECRET", "")
         )
+        #: Event ids already answered. In a multi-process deployment this belongs
+        #: in the database next to the idempotency store; it is in memory here
+        #: because the gateway is a single process, and that is recorded in
+        #: LIMITATIONS.md rather than glossed over.
+        self._seen_event_ids: set[str] = set()
 
     @property
     def configured(self) -> bool:
         return bool(self.secret)
 
-    def handle(self, raw_body: bytes, signature: str) -> dict[str, Any]:
-        """Verify, then record. Returns what the endpoint should reply.
+    def handle(self, raw_body: bytes, signature: str, event_id: str = "") -> dict[str, Any]:
+        """Verify, then deduplicate, then record. Returns what the endpoint replies.
 
         Raises :class:`fastapi.HTTPException` 400 on a bad signature, which is the
         correct answer: we are telling Razorpay we did not accept the delivery, so
@@ -98,6 +121,22 @@ class WebhookReceiver:
             raise HTTPException(status_code=400, detail="webhook body is not JSON") from exc
 
         event = str(body.get("event", "unknown"))
+
+        # Signature first, deduplication second. Checking the id before the
+        # signature would let an unauthenticated caller poison the seen-set and
+        # suppress a genuine webhook.
+        if event_id and event_id in self._seen_event_ids:
+            self.audit.append(
+                ROLE_MPP,
+                Event.WEBHOOK_REPLAYED,
+                {"event": event, "event_id": event_id},
+                f"Razorpay re-delivered event {event_id} ({event}). It was already "
+                "answered, so it was acknowledged and ignored.",
+            )
+            return {"received": True, "event": event, "handled": False, "duplicate": True}
+        if event_id:
+            self._seen_event_ids.add(event_id)
+
         entity = _first_entity(body)
         payload = {
             "event": event,
@@ -107,6 +146,8 @@ class WebhookReceiver:
             "amount": entity.get("amount"),
             "status": entity.get("status"),
             "method": entity.get("method"),
+            "event_id": event_id or None,
+            "deduplicable": bool(event_id),
         }
         self.audit.append(
             ROLE_MPP,
@@ -117,7 +158,12 @@ class WebhookReceiver:
                 "Recorded as information — a webhook resolves a payment, it never authorises one."
             ),
         )
-        return {"received": True, "event": event, "handled": payload["handled"]}
+        return {
+            "received": True,
+            "event": event,
+            "handled": payload["handled"],
+            "duplicate": False,
+        }
 
 
 def _first_entity(body: dict[str, Any]) -> dict[str, Any]:
@@ -145,10 +191,11 @@ def build_router(receiver: WebhookReceiver) -> APIRouter:
     async def razorpay_webhook(
         request: Request,
         x_razorpay_signature: str = Header(default=""),
+        x_razorpay_event_id: str = Header(default=""),
     ) -> JSONResponse:
-        """Receive a Razorpay webhook. Signature first, parsing second."""
+        """Receive a Razorpay webhook. Signature first, deduplication second."""
         raw = await request.body()
-        return JSONResponse(receiver.handle(raw, x_razorpay_signature))
+        return JSONResponse(receiver.handle(raw, x_razorpay_signature, x_razorpay_event_id))
 
     @router.get("/razorpay/health")
     async def webhook_health() -> JSONResponse:

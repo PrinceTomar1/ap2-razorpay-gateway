@@ -164,6 +164,7 @@ class Event:
     ORDER_CREATED = "mpp.order_created"
     WEBHOOK_RECEIVED = "mpp.webhook_received"
     WEBHOOK_REJECTED = "mpp.webhook_signature_rejected"
+    WEBHOOK_REPLAYED = "mpp.webhook_replayed"
 
     # Recovery
     RECOVERY_STARTED = "recovery.started"
