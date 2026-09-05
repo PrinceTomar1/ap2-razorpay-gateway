@@ -23,10 +23,10 @@ everything — correctly.
 |---|---|
 | `search_inventory` | 4 results under ₹1,500 |
 | `check_product` | SF-ACC-001 → Reflective Running Cap |
-| `assemble_cart` | cart cart_5762aa3cc23748b2 total ₹499.00 |
+| `assemble_cart` | cart cart_afc862d0ba0b4864 total ₹499.00 |
 | `create_checkout` | merchant-signed eyJhbGciOiJFUzI1NiIsImtp… |
 | `complete_checkout` | status=confirmed |
-| `sign closed Payment Mandate` | vct=mandate.payment.1 amount=49900 payee=m_stridefit checkout_hash=6856691cd97a0d73… |
+| `sign closed Payment Mandate` | vct=mandate.payment.1 amount=49900 payee=m_stridefit checkout_hash=94a7e77a6ee3e5a6… |
 | `initiate_payment` | status=captured |
 | `verifier` | 14 checks passed on a mandate this gateway's own code never built |
 | `audit` | chain intact=True over 26 rows |
@@ -56,7 +56,7 @@ everything — correctly.
 
 ```json
 {
-  "checkout_hash": "6856691cd97a0d735b1d8fb5f185f4d9…"
+  "checkout_hash": "94a7e77a6ee3e5a6e2941ac6e23934ec…"
 }
 ```
 
@@ -65,16 +65,16 @@ everything — correctly.
 ```json
 {
   "vct": "mandate.payment.1",
-  "mandate_id": "pm_1fc07f64e37d444e",
-  "nonce": "6c1c9506585842e6b1b0c5b8dea988b1",
-  "transaction_id": "txn_1991bacd43db4afa",
+  "mandate_id": "pm_837a5b303a774d1c",
+  "nonce": "60f4b130206e47bab18e88ae4ab07dfc",
+  "transaction_id": "txn_833c84aac22e46d1",
   "payee": "m_stridefit",
   "payee_name": "StrideFit Sportswear",
   "payment_amount": 49900,
   "currency": "INR",
   "payment_instrument": "upi",
-  "checkout_hash": "6856691cd97a0d735b1d8fb5f185f4d9f26954e71bdd66218bfb1c7acbd14cbe",
-  "execution_date": "2026-09-05T06:40:07Z"
+  "checkout_hash": "94a7e77a6ee3e5a6e2941ac6e23934ece54978d29c8cbd34bdf48ef6df17f526",
+  "execution_date": "2026-09-05T06:43:33Z"
 }
 ```
 
@@ -83,21 +83,21 @@ everything — correctly.
 ```json
 {
   "vct": "receipt.payment.razorpay.1",
-  "receipt_id": "rcpt_85c6c18e23ac452d",
+  "receipt_id": "rcpt_aba63ca749ab4ed5",
   "status": "captured",
-  "payment_mandate_id": "pm_1fc07f64e37d444e",
-  "idempotency_key": "1987002144175d60f08a3276b7f6951a1078cdf273dc368c6df47a6af6c567c1",
+  "payment_mandate_id": "pm_837a5b303a774d1c",
+  "idempotency_key": "9da8ee7ebf8e4a49e71bcb065f5497d920c31d83fc7eb3bd4c449ef125c7d338",
   "amount": 49900,
   "currency": "INR",
   "payee": "m_stridefit",
   "order_id": "order_fake_000001",
   "payment_id": "pay_fake_000001",
   "method": "upi",
-  "checkout_hash": "6856691cd97a0d735b1d8fb5f185f4d9f26954e71bdd66218bfb1c7acbd14cbe",
+  "checkout_hash": "94a7e77a6ee3e5a6e2941ac6e23934ece54978d29c8cbd34bdf48ef6df17f526",
   "attempts": 1,
   "failure_code": null,
   "failure_reason": null,
-  "ts": "2026-09-05T06:40:07Z"
+  "ts": "2026-09-05T06:43:33Z"
 }
 ```
 
