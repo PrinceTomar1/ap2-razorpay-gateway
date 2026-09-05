@@ -212,7 +212,7 @@ produce. See [docs/RAZORPAY_TESTING.md](docs/RAZORPAY_TESTING.md).
 
 ## Video
 
-📹 **Pitch video:** <!-- PASTE THE HOSTED LINK HERE BEFORE SUBMITTING -->
+📹 **Pitch video:** https://youtu.be/TrSVEULHCmg
 
 Also in the repo at
 [`video/ap2-razorpay-pitch.mp4`](video/ap2-razorpay-pitch.mp4) — 4:57, 1920×1080,
