@@ -213,8 +213,9 @@ produce. See [docs/RAZORPAY_TESTING.md](docs/RAZORPAY_TESTING.md).
 ## Video
 
 📹 **Pitch video:** [`video/ap2-razorpay-pitch.mp4`](video/ap2-razorpay-pitch.mp4)
-— 4:56, 1920×1080, narrated by Prince Tomar over ten slides. An unaltered-pace
-cut is alongside it at `video/ap2-razorpay-pitch-natural.mp4` (5:54).
+— 4:57, 1920×1080, narrated by Prince Tomar over ten slides, mastered to
+−14.2 LUFS. Build notes and the audio chain are in
+[video/README.md](video/README.md).
 
 **Repository:** https://github.com/PrinceTomar1/ap2-razorpay-gateway
 

@@ -44,3 +44,8 @@ video/clip_*.mp4
 video/concat.txt
 video/durations.json
 video/voice/.DS_Store
+
+# scratch from the audio pass (wavs, STT output)
+video/work/
+video/clip_*.mp4
+video/concat.txt

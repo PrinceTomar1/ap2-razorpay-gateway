@@ -1,12 +1,15 @@
 """The narration, one entry per slide. Written to be spoken, not read."""
 
 SCRIPT = [
- ("00_intro", """
+    (
+        "00_intro",
+        """
 Hi, I'm Prince Tomar, a third year B.Tech Computer Science student at Bennett
 University, Greater Noida. This is my submission for Track One of the Razorpay
 A.I. Buildathon: an implementation of Google's Agent Payments Protocol for
 Razorpay.
-"""),
+""",
+    ),
     (
         "01_problem",
         """

@@ -1,27 +1,25 @@
 # The pitch video
 
-Two builds of the same recording:
+`ap2-razorpay-pitch.mp4` — **4:57**, 1920×1080, narrated by Prince Tomar over ten
+slides.
 
-| File | Length | |
-|---|---|---|
-| `ap2-razorpay-pitch.mp4` | **4:56** | 1.20× pace, fits the five-minute bar |
-| `ap2-razorpay-pitch-natural.mp4` | 5:54 | unaltered pace |
-
-Both use Prince Tomar's own narration from `voice/`. The pace change is `atempo`,
-which shortens speech without shifting pitch — the voice is unchanged, it just
-moves along.
+The recordings in `voice/` run 5:50 at their natural pace, and the submission bar
+is five minutes. `atempo` closes that gap: it shortens speech without shifting
+pitch, so the voice is unchanged, it just moves along. `--fit` solves for the
+tempo rather than guessing one.
 
 ## Rebuilding
 
 ```bash
 cd video
-python3 build.py                 # natural pace
-python3 build.py --tempo 1.20    # fits five minutes
+python3 build.py                 # natural pace, whatever length that lands on
+python3 build.py --fit 298       # solve for the tempo that fits five minutes
+python3 build.py --lufs -16      # broadcast target instead of YouTube's -14
 ```
 
-`build.py` prefers the recordings in `voice/` and falls back to a synthetic voice
-only when the set is incomplete — so a half-finished recording session cannot
-silently ship a video that is half one voice and half another.
+There is no synthetic fallback. If `voice/` is missing any of the ten clips the
+build stops, because a video that is half one voice and half another is worse than
+no video.
 
 Each slide is held for exactly as long as its own audio, so re-recording one clip
 changes that slide's timing and nothing else.
@@ -31,5 +29,26 @@ changes that slide's timing and nothing else.
 - `voice/00.mp3` … `09.mp3` — the recordings.
 - `slides/00.png` … `09.png` — frames from `../slides/index.html?clean`, captured
   with headless Chrome at 1920×1080. `?clean` hides the deck's nav chrome.
-- Audio is loudness-normalised per clip (`loudnorm I=-16`), which evens out level
-  between takes recorded at slightly different distances from the mic.
+
+## The audio chain
+
+Every clip runs through the same restoration chain, in this order, before it
+reaches the timeline. The order is the point — each step assumes the previous one
+has already run.
+
+| | | why here |
+|---|---|---|
+| `highpass=f=85` | rumble | first, so nothing downstream spends headroom on energy nobody can hear |
+| `afftdn=nf=-25` | denoise | gentle. Harder settings buy a few more dB and sound underwater |
+| `equalizer 6.5 kHz −4 dB` | de-ess | sibilance lives here; a narrow notch beats a compressor that pumps the whole track |
+| `acompressor 2.5:1` | evenness | quiet words come up, loud ones stop short of clipping, delivery still breathes |
+| `equalizer 3.5 kHz +3 dB` | presence | the band that decides whether consonants land |
+| `loudnorm` two-pass | level | last, always — anything after it invalidates the measurement |
+
+Measured: room tone drops **4–5 dB** in the pauses; the finished file reads
+**−14.2 LUFS, −1.3 dBTP**, which is YouTube's target, so the platform leaves the
+track alone on playback.
+
+`loudnorm` runs twice on purpose. A single pass estimates from a running window
+and drifts on clips this short; measuring first and correcting second costs one
+extra decode and lands on the number.
