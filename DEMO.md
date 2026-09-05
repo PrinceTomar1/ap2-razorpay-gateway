@@ -215,3 +215,10 @@ produce. See [docs/RAZORPAY_TESTING.md](docs/RAZORPAY_TESTING.md).
 📹 **Walkthrough:** _(link to be added — see [VIDEO_SCRIPT.md](VIDEO_SCRIPT.md))_
 
 **Repository:** https://github.com/PrinceTomar1/ap2-razorpay-gateway
+
+**Live gateway:** https://ap2-razorpay-gateway.onrender.com — the Trusted Surface
+approval page and `/audit` running for real. Free tier, so the first request
+takes ~45 seconds to wake it.
+
+**Slides:** `slides/index.html` — open it, press `F` for fullscreen, arrow keys to
+advance. Nine slides matching the beats in VIDEO_SCRIPT.md.

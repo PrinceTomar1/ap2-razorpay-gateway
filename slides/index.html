@@ -1,0 +1,356 @@
+<title>Bounded Agent Payments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+/* A slide deck for screen recording. Single dark visual world on purpose: the
+   video intercuts these with terminal footage, and a light deck between dark
+   terminal shots reads as a flash. Every colour is painted explicitly. */
+:root{
+  --ink:#0B0E13;          /* ground — near-black, faint blue bias */
+  --ink-2:#131820;        /* raised surface */
+  --line:#242C38;
+  --paper:#EEF1F5;        /* primary text */
+  --muted:#8B97A8;        /* secondary text, blue-biased grey */
+  --verified:#3FD07E;     /* the deterministic money path */
+  --gate:#F0B429;         /* the human gate */
+  --refuse:#F2685A;       /* a refusal */
+  --rzp:#5B8DEF;          /* Razorpay blue, used sparingly */
+  --slide-w:1280px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--ink); color:var(--paper);
+  font:400 20px/1.55 "Source Sans 3",ui-sans-serif,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+h1,h2,h3{font-family:"Bricolage Grotesque","Source Sans 3",sans-serif;text-wrap:balance;letter-spacing:-.02em}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+/* --- deck mechanics ------------------------------------------------------ */
+#deck{position:relative;height:100%;width:100%}
+.slide{
+  position:absolute;inset:0;
+  display:none;
+  place-content:center;
+  padding:5vh 7vw;
+  max-width:var(--slide-w);margin:0 auto;
+  animation:rise .32s cubic-bezier(.2,.7,.3,1) both;
+}
+.slide.on{display:grid}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.slide{animation:none}}
+
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:1.4rem;
+}
+.slide h1{font-size:clamp(2.4rem,5.2vw,4.1rem);line-height:1.04;font-weight:700}
+.slide h2{font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.12;font-weight:700;margin-bottom:1.5rem}
+.lede{font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--muted);max-width:60ch;margin-top:1.3rem}
+.slide p+p{margin-top:.9rem}
+strong{font-weight:600;color:var(--paper)}
+em{font-style:italic;color:var(--paper)}
+
+/* --- reusable pieces ----------------------------------------------------- */
+.rule{height:1px;background:var(--line);margin:1.8rem 0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.6rem;margin-top:2rem}
+.stack{display:flex;flex-direction:column;gap:.85rem}
+.row{display:flex;align-items:baseline;gap:.9rem}
+
+.tile{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.25rem}
+.tile .k{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:1.85rem;
+  line-height:1.1;margin-top:.3rem;font-variant-numeric:tabular-nums}
+
+.chip{
+  display:inline-flex;align-items:center;gap:.45rem;
+  font-family:"IBM Plex Mono",monospace;font-size:.78rem;
+  padding:.22rem .6rem;border-radius:999px;border:1px solid currentColor;
+}
+.ok{color:var(--verified)} .warn{color:var(--gate)} .bad{color:var(--refuse)} .rzp{color:var(--rzp)}
+
+/* the report line — the one thing read aloud verbatim */
+.report{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:clamp(.82rem,1.55vw,1.28rem);
+  line-height:1.7;
+  background:var(--ink-2);border:1px solid var(--verified);
+  border-radius:10px;padding:1.1rem 1.3rem;
+  color:var(--verified);
+  overflow-x:auto;
+}
+
+/* terminal-ish block */
+.term{
+  background:var(--ink-2);border:1px solid var(--line);border-radius:10px;
+  padding:1rem 1.2rem;font-family:"IBM Plex Mono",monospace;
+  font-size:clamp(.72rem,1.15vw,.95rem);line-height:1.75;overflow-x:auto;
+}
+.term .c{color:var(--muted)}
+.term .g{color:var(--verified)}
+.term .a{color:var(--gate)}
+.term .r{color:var(--refuse)}
+
+/* the six attempts */
+.attempts{display:flex;flex-direction:column;gap:.4rem;margin-top:1.6rem}
+.attempt{
+  display:grid;grid-template-columns:1.6rem 1fr auto;gap:1rem;align-items:baseline;
+  padding:.55rem .9rem;border-radius:8px;background:var(--ink-2);
+  border-left:3px solid var(--line);
+}
+.attempt.p{border-left-color:var(--verified)}
+.attempt.h{border-left-color:var(--gate)}
+.attempt.d{border-left-color:var(--refuse)}
+.attempt .n{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.85rem}
+.attempt .amt{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:.92rem}
+.attempt .what{font-size:.98rem}
+.attempt .what b{font-weight:600}
+.attempt .tag{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted);display:block}
+
+/* flow diagram */
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:.6rem;margin-top:1.8rem}
+.node{
+  flex:1 1 8.5rem;background:var(--ink-2);border:1px solid var(--line);
+  border-radius:10px;padding:.85rem .95rem;min-width:8.5rem;
+}
+.node.green{border-color:var(--verified)}
+.node.amber{border-color:var(--gate)}
+.node .t{font-weight:600;font-size:.98rem}
+.node .s{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--muted);margin-top:.25rem;
+  display:block;word-break:break-word}
+.arrow{display:flex;align-items:center;color:var(--muted);font-size:1.1rem}
+
+ul{list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-top:1.4rem}
+li{display:grid;grid-template-columns:auto 1fr;gap:.8rem;align-items:baseline;font-size:1.05rem}
+li .m{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--muted);white-space:nowrap}
+
+.quote{
+  border-left:3px solid var(--verified);padding-left:1.2rem;
+  font-size:clamp(1.05rem,2vw,1.5rem);line-height:1.45;max-width:52ch;
+}
+.quote cite{display:block;font-style:normal;font-family:"IBM Plex Mono",monospace;
+  font-size:.75rem;color:var(--muted);margin-top:.9rem;letter-spacing:.04em}
+
+/* --- chrome -------------------------------------------------------------- */
+#bar{position:fixed;left:0;right:0;bottom:0;height:2px;background:var(--line);z-index:5}
+#fill{height:100%;background:var(--verified);width:0;transition:width .3s ease}
+#num{position:fixed;right:1.4rem;bottom:1.1rem;font-family:"IBM Plex Mono",monospace;
+  font-size:.72rem;color:var(--muted);z-index:5;font-variant-numeric:tabular-nums}
+#hint{position:fixed;left:1.4rem;bottom:1.1rem;font-family:"IBM Plex Mono",monospace;
+  font-size:.72rem;color:var(--muted);z-index:5}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid var(--verified);outline-offset:3px;border-radius:4px}
+</style>
+
+<div id="deck">
+
+  <!-- 0:00 -->
+  <section class="slide on">
+    <p class="eyebrow">Razorpay AI Buildathon · Track 01</p>
+    <h1>An AI agent holding a payment&nbsp;credential is unbounded&nbsp;liability.</h1>
+    <p class="lede">Give a shopping agent a card number and nothing technical limits what it
+    spends, where, how many times, or what it does when a payment fails halfway through.
+    “Are you sure?” is a control on a <em>human</em> checkout. An agent hits it at machine
+    speed with nobody watching.</p>
+    <div class="cols">
+      <div class="tile"><div class="k">AP2 published</div><div class="v">Sept 2025</div></div>
+      <div class="tile"><div class="k">Organisations backing it</div><div class="v">60+</div></div>
+      <div class="tile"><div class="k">AP2 gateways for Razorpay</div><div class="v">0</div></div>
+    </div>
+  </section>
+
+  <!-- context -->
+  <section class="slide">
+    <p class="eyebrow">What AP2 fixes</p>
+    <h2>A purchase carries a <em>mandate</em>, not a credential.</h2>
+    <p class="lede">A signed, constrained, verifiable statement of what the buyer actually
+    authorised — checked by every party in deterministic code before money moves.</p>
+    <div class="cols">
+      <div class="tile">
+        <div class="k">Open — signed once by the buyer</div>
+        <div class="v" style="font-size:1.15rem">₹5,000/day · ₹1,500/purchase</div>
+        <p style="color:var(--muted);font-size:.92rem;margin-top:.5rem">3 merchants · ships to 560001 · 24 hours · bound to the agent’s key</p>
+      </div>
+      <div class="tile">
+        <div class="k">Closed — signed per purchase</div>
+        <div class="v" style="font-size:1.15rem">₹1,299 → StrideFit</div>
+        <p style="color:var(--muted);font-size:.92rem;margin-top:.5rem">this cart, this hash, now, 10 minutes</p>
+      </div>
+    </div>
+    <p class="lede" style="margin-top:1.8rem">The agent can shop. It cannot pay. It holds a
+    keypair and no money — every purchase is a closed mandate under the buyer’s standing
+    authorisation, and the verifier checks it before a rupee moves.</p>
+  </section>
+
+  <!-- 0:40 -->
+  <section class="slide">
+    <p class="eyebrow">Architecture · AP2 Merchant + Merchant Payment Processor</p>
+    <h2>Fourteen checks stand between an agent and a&nbsp;rupee.</h2>
+    <div class="flow">
+      <div class="node"><span class="t">Shopping Agent</span><span class="s">holds a key, holds no money</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><span class="t">Merchant</span><span class="s">7 MCP tools · signs the cart</span></div>
+      <div class="arrow">→</div>
+      <div class="node green"><span class="t">Verifier</span><span class="s">no LLM · no network · 0.3 ms</span></div>
+      <div class="arrow">→</div>
+      <div class="node green"><span class="t">Processor</span><span class="s">idempotent · bounded recovery</span></div>
+      <div class="arrow">→</div>
+      <div class="node rzp" style="border-color:var(--rzp)"><span class="t">Razorpay</span><span class="s">Orders · Payment Links · Webhooks</span></div>
+    </div>
+    <div class="row" style="margin-top:1.5rem;flex-wrap:wrap;gap:.6rem">
+      <span class="chip ok">ALLOW — funds may move, once</span>
+      <span class="chip bad">DENY — a bound was violated</span>
+      <span class="chip warn">UNRESOLVED_CONSTRAINT — ask a human</span>
+    </div>
+    <p class="lede" style="margin-top:1.4rem">The third one is the design. An agent that
+    <em>asks</em> gets a human. An agent that <em>forces</em> gets refused.</p>
+  </section>
+
+  <!-- 0:40 continued — the spec quote -->
+  <section class="slide">
+    <p class="eyebrow">The load-bearing decision</p>
+    <blockquote class="quote">
+      “When this document refers to validation or processing for a particular role, it
+      <strong>MUST</strong> happen in deterministic code — regardless of whether the role is
+      agentic or not.”
+      <cite>AP2 v0.2 · docs/ap2/specification.md</cite>
+    </blockquote>
+    <div class="term" style="margin-top:2rem">
+<span class="c">$</span> grep -rn "anthropic\|reason(" gateway/verify.py gateway/payments.py gateway/recovery.py
+<span class="c">$</span> echo $?
+<span class="g">1</span>   <span class="c">← empty. and that grep is a test.</span>
+    </div>
+    <p class="lede">A verifier is a classifier over a small, fully specified domain. Does this
+    signature check out. Is this integer below that integer. Code does that perfectly and
+    explains what it compared. A model does it probabilistically, can’t be audited afterwards,
+    and adds a network dependency to the one path that must never be down.</p>
+  </section>
+
+  <!-- 1:30 -->
+  <section class="slide">
+    <p class="eyebrow">make demo · six attempts · zero network</p>
+    <h2>One buyer’s day, end to end.</h2>
+    <div class="attempts">
+      <div class="attempt p"><span class="n">1</span><span class="what"><b>Running shoes</b> — asked for a SKU that doesn’t exist, re-planned<span class="tag">failure mode 7 · hallucinated SKU</span></span><span class="amt ok">₹1,299 paid</span></div>
+      <div class="attempt p"><span class="n">2</span><span class="what"><b>Running shorts</b> — clean<span class="tag">the happy path</span></span><span class="amt ok">₹899 paid</span></div>
+      <div class="attempt h"><span class="n">3</span><span class="what"><b>Carbon-plate racer</b> — over the ₹1,500 cap → human gate → <b>declined</b><span class="tag">failure mode 8 · out-of-band request</span></span><span class="amt warn">₹0 charged</span></div>
+      <div class="attempt p"><span class="n">4</span><span class="what"><b>Cast iron tawa</b> — bank declined UPI → fell back to a payment link<span class="tag">failure mode 1 · two orders, one capture</span></span><span class="amt ok">₹1,199 recovered</span></div>
+      <div class="attempt p"><span class="n">5</span><span class="what"><b>Phone mount</b> — clean<span class="tag">third merchant</span></span><span class="amt ok">₹699 paid</span></div>
+      <div class="attempt d"><span class="n">6</span><span class="what"><b>Reflective cap</b> — sold out between checkout and payment<span class="tag">failure mode 5 · rail never contacted</span></span><span class="amt bad">₹0 charged</span></div>
+    </div>
+  </section>
+
+  <!-- the idempotency moment -->
+  <section class="slide">
+    <p class="eyebrow">Attempt 4 · the audit trail</p>
+    <h2>Two orders. One capture.</h2>
+    <div class="term">
+<span class="c">verifier</span>      <span class="g">14 checks passed</span>
+<span class="c">verifier</span>      <span class="g">verifier.decision</span>  <span class="c">Approved ₹1,199.00 to Lumen Home &amp; Kitchen</span>
+<span class="c">mpp</span>           mpp.order_created     <span class="c">order_fake_000003 · upi</span>
+<span class="c">mpp</span>           <span class="r">mpp.payment_declined</span>  <span class="c">the bank declined this payment. No money moved.</span>
+<span class="c">mpp</span>           <span class="a">recovery.method_fallback</span>  <span class="c">falling back to payment_link</span>
+<span class="c">mpp</span>           mpp.order_created     <span class="c">order_fake_000004 · payment_link</span>
+<span class="c">mpp</span>           <span class="g">mpp.payment_captured</span>  <span class="c">Captured ₹1,199.00</span>
+<span class="c">mpp</span>           <span class="g">recovery.succeeded</span>    <span class="c">Same idempotency root. Nothing charged twice.</span>
+    </div>
+    <p class="lede">Idempotency key is <code>sha256(payment_mandate.id)</code>. Before creating
+    that second order it asks the rail whether the first one captured — because the dangerous
+    case in payments isn’t a decline, it’s a <em>timeout</em>, where you don’t know whether the
+    money moved.</p>
+  </section>
+
+  <!-- audit chain -->
+  <section class="slide">
+    <p class="eyebrow">The audit trail</p>
+    <h2>Tamper-evident, and the explanation is inside the&nbsp;hash.</h2>
+    <div class="term">hash<sub>n</sub> = sha256( hash<sub>n-1</sub> + canonical( actor, event, payload, ts, <span class="g">human_reason</span> ) )</div>
+    <div class="cols">
+      <div class="tile"><div class="k">Audit rows per run</div><div class="v">132</div></div>
+      <div class="tile"><div class="k">Chain</div><div class="v ok" style="color:var(--verified)">intact</div></div>
+      <div class="tile"><div class="k">Tampers caught</div><div class="v">6 / 6</div></div>
+      <div class="tile"><div class="k">Rows without a reason</div><div class="v">0</div></div>
+    </div>
+    <p class="lede">Edit a payload, edit a reason, delete a row, reorder two, re-hash a row and
+    forge its link, splice one in — each is caught and the damaged row is named. The tests drop
+    the database’s append-only triggers first, because a tamper-evidence claim you haven’t
+    tried to break is a hope, not a property.</p>
+  </section>
+
+  <!-- 3:30 -->
+  <section class="slide">
+    <p class="eyebrow">The measured result</p>
+    <h2 style="margin-bottom:1.9rem">Every number derived, none written.</h2>
+    <div class="report">6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained</div>
+    <div class="cols" style="margin-top:1.9rem">
+      <div class="tile"><div class="k">Tests</div><div class="v">570</div></div>
+      <div class="tile"><div class="k">Red-team attacks blocked</div><div class="v">21 / 21</div></div>
+      <div class="tile"><div class="k">False accepts in 500</div><div class="v ok" style="color:var(--verified)">0</div></div>
+      <div class="tile"><div class="k">Verifier p99</div><div class="v">0.34 ms</div></div>
+    </div>
+    <p class="lede">Money is reconciled three ways — the payment rail, the spend ledger, the
+    signed receipts. If they disagree the demo refuses to print a report at all. That guard has
+    fired for real.</p>
+  </section>
+
+  <!-- 4:00 -->
+  <section class="slide">
+    <p class="eyebrow">Honest limits · what’s next</p>
+    <h2>What this is, and what it isn’t.</h2>
+    <ul>
+      <li><span class="m">verified</span><span>570 tests, deterministic demo, fresh clone runs offline, third-party AP2 agent completes a purchase over MCP</span></li>
+      <li><span class="m">razorpay</span><span>Official SDK — Orders, Order Payments, Payment Links, webhook HMAC verification. Test mode only; a live key is refused in code.</span></li>
+      <li><span class="m">not proved</span><span><code>make demo LIVE=1</code> has never run against a real sandbox. Correct by review, not by observation — and the README says so.</span></li>
+      <li><span class="m">next</span><span>SD-JWT selective disclosure · UPI Reserve Pay when the pilot opens · multi-merchant routing · an external anchor for the audit chain</span></li>
+    </ul>
+    <div class="rule"></div>
+    <p class="mono" style="font-size:.85rem;color:var(--muted)">github.com/PrinceTomar1/ap2-razorpay-gateway&nbsp; · &nbsp;ap2-razorpay-gateway.onrender.com</p>
+  </section>
+
+</div>
+
+<div id="bar"><div id="fill"></div></div>
+<div id="num"></div>
+<div id="hint">← → to move · F for fullscreen</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  var num = document.getElementById('num');
+  var fill = document.getElementById('fill');
+
+  function show(next){
+    if (next < 0 || next >= slides.length) return;
+    slides[i].classList.remove('on');
+    i = next;
+    slides[i].classList.add('on');
+    num.textContent = (i + 1) + ' / ' + slides.length;
+    fill.style.width = ((i + 1) / slides.length * 100) + '%';
+    try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+  }
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') { show(0); }
+    else if (e.key === 'End') { show(slides.length - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) { document.exitFullscreen(); }
+      else if (document.documentElement.requestFullscreen) { document.documentElement.requestFullscreen(); }
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    show(e.clientX < window.innerWidth * 0.25 ? i - 1 : i + 1);
+  });
+
+  var start = parseInt((location.hash || '#1').slice(1), 10);
+  show(isNaN(start) || start < 1 || start > slides.length ? 0 : start - 1);
+})();
+</script>
