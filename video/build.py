@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -42,8 +43,47 @@ AUDIO_EXTS = ("mp3", "m4a", "wav", "aiff", "aac", "flac")
 DEFAULT_LUFS = -14.0
 TRUE_PEAK = -1.5
 
+
+def stronger_channel(audio: pathlib.Path) -> str:
+    """Which side of a stereo recording actually holds the voice.
+
+    These were recorded on a two-mic device where one capsule sat closer to the
+    speaker. The far channel is 4-5 dB down *and* 3 dB worse on signal-to-noise,
+    so a plain stereo-to-mono downmix averages the good capture with the bad one
+    and throws away about 3 dB — which is why the track measured at target and
+    still sounded distant on any speaker that sums to mono.
+
+    Measured per clip rather than hard-coded, so re-recording one on different
+    gear cannot silently reintroduce the problem.
+    """
+    levels = []
+    for pan in ("c0", "c1"):
+        out = subprocess.run(
+            [
+                "ffmpeg",
+                "-hide_banner",
+                "-nostats",
+                "-i",
+                str(audio),
+                "-af",
+                f"pan=mono|c0={pan},astats=metadata=1",
+                "-f",
+                "null",
+                "-",
+            ],
+            capture_output=True,
+            text=True,
+        ).stderr
+        match = re.search(r"RMS level dB:\s*(-?[\d.]+)", out)
+        levels.append(float(match.group(1)) if match else -99.0)
+    return "c0" if levels[0] > levels[1] else "c1"
+
+
 #: The restoration chain, in the only order that makes sense:
 #:
+#:   pan        collapse to the better channel first, duplicated to both sides.
+#:              A single voice has no stereo information worth keeping, and
+#:              dual-mono cannot cancel or go quiet when a device sums it
 #:   highpass   kill rumble and desk thump first, so nothing downstream wastes
 #:              headroom on energy nobody can hear
 #:   afftdn     spectral denoise on the now-clean low end. nf=-25 is gentle; it
@@ -54,7 +94,11 @@ TRUE_PEAK = -1.5
 #:              clipping. Gentle enough that the delivery still breathes
 #:   equalizer  +3 dB centred at 3.5 kHz — presence. This is the band that decides
 #:              whether consonants land, which is what "make the words clear" means
-#:   loudnorm   last, always. Anything after it would undo the measurement
+#:   loudnorm   measured target, applied linearly
+#:   alimiter   last. Catches the handful of peaks that stand between the speech
+#:              and a usable level. Speech this evenly delivered (LRA under 2 LU)
+#:              takes several dB of makeup before a limiter ever audibly works,
+#:              which is what buys the loudness without pumping
 CHAIN = (
     "highpass=f=85,"
     "afftdn=nf=-25,"
@@ -121,19 +165,24 @@ def build(tracks: list[pathlib.Path], tempo: float, lufs: float) -> float:
         held = seconds + PAD
         total += held
 
-        stats = measure(audio, CHAIN, lufs)
+        keep = stronger_channel(audio)
+        chain_in = f"pan=stereo|c0={keep}|c1={keep},{CHAIN}"
+        stats = measure(audio, chain_in, lufs)
         norm = (
             f"loudnorm=I={lufs}:TP={TRUE_PEAK}:LRA=11"
             f":measured_I={stats['input_i']}:measured_TP={stats['input_tp']}"
             f":measured_LRA={stats['input_lra']}:measured_thresh={stats['input_thresh']}"
             f":offset={stats['target_offset']}:linear=true"
+            f",alimiter=limit={TRUE_PEAK}dB:level=disabled"
         )
-        chain = f"{CHAIN},{norm}"
+        chain = f"{chain_in},{norm}"
         # atempo last among the time-domain filters: it changes pace without
         # shifting pitch, and doing it after normalisation keeps the measurement
         # valid because tempo does not change loudness.
         if abs(tempo - 1.0) > 1e-3:
             chain = f"{chain},atempo={tempo:.3f}"
+
+        print(f"  {index:02d}  voice on {'left' if keep == 'c0' else 'right'} channel")
 
         clip = HERE / f"clip_{index:02d}.mp4"
         subprocess.run(

@@ -38,16 +38,24 @@ has already run.
 
 | | | why here |
 |---|---|---|
+| `pan=stereo` | dual-mono | first. These were two-mic recordings with the far capsule 4-5 dB down and 3 dB worse on SNR; a plain downmix averaged the good capture with the bad one |
 | `highpass=f=85` | rumble | first, so nothing downstream spends headroom on energy nobody can hear |
 | `afftdn=nf=-25` | denoise | gentle. Harder settings buy a few more dB and sound underwater |
 | `equalizer 6.5 kHz −4 dB` | de-ess | sibilance lives here; a narrow notch beats a compressor that pumps the whole track |
 | `acompressor 2.5:1` | evenness | quiet words come up, loud ones stop short of clipping, delivery still breathes |
 | `equalizer 3.5 kHz +3 dB` | presence | the band that decides whether consonants land |
-| `loudnorm` two-pass | level | last, always — anything after it invalidates the measurement |
+| `loudnorm` two-pass | level | measured target, applied linearly |
+| `alimiter` | headroom | last. Buys several dB of level that peaks would otherwise block |
 
-Measured: room tone drops **4–5 dB** in the pauses; the finished file reads
-**−14.2 LUFS, −1.3 dBTP**, which is YouTube's target, so the platform leaves the
-track alone on playback.
+Measured on the finished file: room tone drops **4–5 dB** in the pauses;
+**−11.2 LUFS, −1.3 dBTP**, LRA 2.4, zero clipped samples.
+
+The number that actually mattered is the **mono downmix: −14.2 LUFS, up from
+−18.3**. Every laptop and phone speaker sums to mono, and the original stereo pair
+lost 4.1 dB when it did — so the track measured on target and was still hard to
+hear on the devices people actually use. Dual-mono plus the limiter closed that.
+`moov` leads the file (`+faststart`) so a player knows there is an audio track
+before it has read 12 MB.
 
 `loudnorm` runs twice on purpose. A single pass estimates from a running window
 and drifts on clips this short; measuring first and correcting second costs one
