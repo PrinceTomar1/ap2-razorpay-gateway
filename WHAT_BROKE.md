@@ -293,10 +293,19 @@ did not contain.
 
 ## What is still not proved
 
-`make demo LIVE=1` has never been run against a real Razorpay sandbox — no test
-credentials were available. The live path is **correct by review**, endpoint by
-endpoint against the official API and the SDK's own resolved URLs
-(`VERIFICATION_REPORT.md` §5), and **not correct by observation**.
+**Verified against the live Razorpay test sandbox on 5 September 2026.**
+Order created, payment link issued, paid, and captured end to end through the
+official `razorpay==2.0.1` SDK:
+
+```
+pay_TYNaItwzj64Pm8   ₹1,299.00   captured   order_TYNZxwDdPi5ikF
+pay_TYNYpCUmLfbDb3   ₹1,299.00   captured   order_TYNXKhFnwhv1rt
+order_TYNZxwDdPi5ikF ₹1,299.00   paid       attempts=1  amount_paid=₹1,299.00
+```
+
+An earlier run with no one paying the links exercised the recovery ladder against
+the same live rail: `rail.timeout` detected, UPI→payment_link fallback, circuit
+breaker opened, mandate deferred unspent, ₹0 unauthorised, chain intact.
 
 Everything else — 570 tests, 21 red-team attacks blocked, 0 false accepts in 500
 mandates, a deterministic demo, a third-party AP2 agent completing a purchase — is

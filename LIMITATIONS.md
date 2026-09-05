@@ -7,8 +7,8 @@ harder to trust about the parts it gets right.
 
 ## Verified in fake mode only
 
-`make demo LIVE=1` against a real Razorpay sandbox has never been run by the
-author — no test credentials were available. The live path is correct-by-review
+`make demo LIVE=1` has now been run against the real Razorpay test sandbox and
+two payments captured (see WHAT_BROKE.md for ids). What remains correct-by-review
 (VERIFICATION_REPORT.md §5, endpoint by endpoint against the official API and the
 SDK's own resolved URLs) and not correct-by-observation. Everything else in this
 repository is proved against `FakeRail`.

@@ -37,7 +37,8 @@ below and writes `demo/audit_chain.html` — open it, that is the whole run.
 > `FakeRail`, a deterministic in-memory payment rail — that is what `make demo`,
 > `make test` and the three gates below all run against. The real Razorpay path
 > (`make demo LIVE=1`) is implemented and reviewed endpoint-by-endpoint against
-> the official API, but has **not** been run against a live sandbox by the author.
+> the official API, and **has now been run against the live Razorpay test sandbox**
+> — two ₹1,299.00 payments captured end to end (ids in WHAT_BROKE.md).
 > LIMITATIONS.md says so too.
 
 ```

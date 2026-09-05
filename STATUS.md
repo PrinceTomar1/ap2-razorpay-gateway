@@ -70,8 +70,9 @@ would have deleted proved functionality for no gain.
 
 ## What is not proved
 
-**The live Razorpay path.** `make demo LIVE=1` has never been run against a real
-sandbox — no test credentials were available. It is correct-by-review, endpoint
+**The live Razorpay path.** `make demo LIVE=1` has been run against the real
+Razorpay test sandbox; two ₹1,299.00 payments captured. Beyond that it is
+correct-by-review, endpoint
 by endpoint against the official API and the SDK's own resolved URLs
 (VERIFICATION_REPORT.md §5), and **not** correct-by-observation. README and
 LIMITATIONS.md both say so in plain sight.
