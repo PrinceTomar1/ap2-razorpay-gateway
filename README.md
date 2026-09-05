@@ -50,6 +50,14 @@ Three more commands, each a gate that exits non-zero rather than a document:
 | `make bench` | 500 mandates through the verifier | **0 false accepts, p99 0.67 ms, ~3,400/sec** → [BENCHMARK.md](BENCHMARK.md) |
 | `make interop` | an AP2 agent that imports none of this code | **purchase completed** → [transcript](scenarios/ap2_reference/transcript.md) |
 
+**Slides:** [`slides/index.html`](slides/index.html) — nine slides walking through
+the problem, the architecture, the demo and the measured result. Open it, press
+`F` for fullscreen, arrow keys to advance.
+
+**Live gateway:** [ap2-razorpay-gateway.onrender.com](https://ap2-razorpay-gateway.onrender.com)
+— the Trusted Surface approval page and `/audit` running for real. Free tier, so
+the first request takes ~45 seconds to wake it.
+
 If you only read one file: [WHAT_BROKE.md](WHAT_BROKE.md) — sixteen real defects
 found during development, what each would have cost, and how each was fixed.
 Then [CONFORMANCE.md](CONFORMANCE.md) — every AP2 requirement mapped to code and
