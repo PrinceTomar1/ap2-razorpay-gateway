@@ -143,6 +143,9 @@ li .m{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--muted);w
   font-size:.72rem;color:var(--muted);z-index:5;font-variant-numeric:tabular-nums}
 #hint{position:fixed;left:1.4rem;bottom:1.1rem;font-family:"IBM Plex Mono",monospace;
   font-size:.72rem;color:var(--muted);z-index:5}
+/* ?clean hides the deck's own chrome, for frame capture into a video. */
+body.clean #hint,body.clean #num,body.clean #bar{display:none}
+body.clean .slide{max-width:76rem}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 button:focus-visible{outline:2px solid var(--verified);outline-offset:3px;border-radius:4px}
 </style>
@@ -349,6 +352,8 @@ button:focus-visible{outline:2px solid var(--verified);outline-offset:3px;border
   document.addEventListener('click', function(e){
     show(e.clientX < window.innerWidth * 0.25 ? i - 1 : i + 1);
   });
+
+  if (location.search.indexOf('clean') !== -1) { document.body.classList.add('clean'); }
 
   var start = parseInt((location.hash || '#1').slice(1), 10);
   show(isNaN(start) || start < 1 || start > slides.length ? 0 : start - 1);

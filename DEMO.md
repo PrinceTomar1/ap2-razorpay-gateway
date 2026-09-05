@@ -212,7 +212,13 @@ produce. See [docs/RAZORPAY_TESTING.md](docs/RAZORPAY_TESTING.md).
 
 ## Video
 
-📹 **Walkthrough:** _(link to be added — see [VIDEO_SCRIPT.md](VIDEO_SCRIPT.md))_
+📹 **Pitch video:** [`video/ap2-razorpay-pitch.mp4`](video/ap2-razorpay-pitch.mp4)
+— 4:49, 1920×1080, nine slides with narration. The voice is synthetic (macOS
+`Aman`, en-IN); `video/build.py` regenerates the whole thing from
+`video/narration.py`, so the script is editable and the timing follows it.
+
+If you would rather record it yourself, [VIDEO_SCRIPT.md](VIDEO_SCRIPT.md) has the
+same beats written to be read aloud.
 
 **Repository:** https://github.com/PrinceTomar1/ap2-razorpay-gateway
 
