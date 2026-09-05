@@ -302,3 +302,23 @@ def test_security_document_links_each_threat_to_a_real_test() -> None:
 
     missing = {n for n in named if n not in existing}
     assert missing == set(), f"SECURITY.md cites tests that do not exist: {sorted(missing)}"
+
+
+def test_every_script_that_asserts_the_report_line_uses_the_current_one() -> None:
+    """Shell scripts drift silently — they are not imported, linted or type-checked.
+
+    `scripts/smoke.sh` hardcodes the expected report line, and when the line changed
+    from `Rs 0` to `₹0` the script kept the old one and `make smoke` began failing
+    while every other gate stayed green. Nothing else in the suite would have
+    caught it, because nothing else reads shell.
+    """
+    for script in (REPO_ROOT / "scripts").glob("*.sh"):
+        text = script.read_text(encoding="utf-8")
+        if "attempts ·" not in text:
+            continue
+        quoted = re.findall(r"\d+ attempts ·[^\"']*explained", text)
+        assert quoted, f"{script.name} references the report line but not verbatim"
+        for line in quoted:
+            assert line == EXPECTED_LINE, (
+                f"{script.name} expects a stale report line:\n  {line}\nwant:\n  {EXPECTED_LINE}"
+            )
