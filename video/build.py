@@ -196,6 +196,12 @@ def build(tracks: list[pathlib.Path], tempo: float, lufs: float) -> float:
             str(listing),
             "-c",
             "copy",
+            # moov before mdat. Without this a player has to read the whole file
+            # before it knows there is an audio track, and several of them —
+            # browsers, preview panes, upload thumbnailers — give up and play the
+            # video silently instead.
+            "-movflags",
+            "+faststart",
             str(OUTPUT),
         ],
         check=True,
