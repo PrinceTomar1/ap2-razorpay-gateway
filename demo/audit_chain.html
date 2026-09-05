@@ -71,7 +71,7 @@ chain — not written by hand.</p>
   <label><input type="checkbox" id="pivotal"> show only decisions, payments and gates</label>
 </div>
 
-<ol><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#1</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: running shoes, size 9, under ₹1,500, ship to 560001</div><details><summary>payload &amp; chain link</summary><pre>{
+<ol><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#1</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: running shoes, size 9, under ₹1,500, ship to 560001</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;filters&quot;: {
     &quot;category&quot;: &quot;running_shoes&quot;,
     &quot;max_price_inr&quot;: 1500,
@@ -79,44 +79,44 @@ chain — not written by hand.</p>
   },
   &quot;goal&quot;: &quot;running shoes, size 9, under ₹1,500, ship to 560001&quot;,
   &quot;query&quot;: &quot;running&quot;
-}</pre><div class="hash">hash 85a8aebddaf9e4d2bb24f568e14d0fdbc038013699ecc8b4eb2fd6dae732bc23<br>prev 0000000000000000000000000000000000000000000000000000000000000000</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#2</div><div class="body"><span class="ev">merchant.product_not_found</span><span class="who">merchant</span><div class="why">The agent asked for SF-RUN-999, which does not exist in this catalogue.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 4df9b86b2747a5a422637a171d0f8775938b3a0414bdffb40dd2e29f84c01e6c<br>prev 0000000000000000000000000000000000000000000000000000000000000000</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#2</div><div class="body"><span class="ev">merchant.product_not_found</span><span class="who">merchant</span><div class="why">The agent asked for SF-RUN-999, which does not exist in this catalogue.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;sku&quot;: &quot;SF-RUN-999&quot;
-}</pre><div class="hash">hash 33513a61b273316bb84fad359f07fdd9bd2f352864813da1ca498ed9fe53122c<br>prev 85a8aebddaf9e4d2bb24f568e14d0fdbc038013699ecc8b4eb2fd6dae732bc23</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#3</div><div class="body"><span class="ev">agent.replanned</span><span class="who">agent</span><div class="why">SF-RUN-999 is not a real product, so the agent went back to search instead of building a cart around it.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 4ee98e7f5307c0816dddc7725d7c569e466fe29bd143fee672db1329bba78360<br>prev 4df9b86b2747a5a422637a171d0f8775938b3a0414bdffb40dd2e29f84c01e6c</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#3</div><div class="body"><span class="ev">agent.replanned</span><span class="who">agent</span><div class="why">SF-RUN-999 is not a real product, so the agent went back to search instead of building a cart around it.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;goal&quot;: &quot;running shoes, size 9, under ₹1,500, ship to 560001&quot;,
   &quot;missing_sku&quot;: &quot;SF-RUN-999&quot;,
   &quot;reason&quot;: &quot;SF-RUN-999 does not exist; falling back to search&quot;
-}</pre><div class="hash">hash d502503ca6577ea0370c69559811b58efdb3b0059c43646ffaf314f99f1929b1<br>prev 33513a61b273316bb84fad359f07fdd9bd2f352864813da1ca498ed9fe53122c</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#4</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from StrideFit Sportswear for ₹1,299.00.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_e45c248f3b1a48d9&quot;,
+}</pre><div class="hash">hash b64f0ce4fb4d3701a3dcad59e7ba89eab40598ff3508a52dcd5cb939efc70d4b<br>prev 4ee98e7f5307c0816dddc7725d7c569e466fe29bd143fee672db1329bba78360</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#4</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from StrideFit Sportswear for ₹1,299.00.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_0716134f7f9643f4&quot;,
   &quot;item_count&quot;: 1,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;ship_to_pincode&quot;: &quot;560001&quot;,
   &quot;total&quot;: 129900
-}</pre><div class="hash">hash 8d1668ee7fdeb36c98b88cb28d72789f35e2fcfc5cd14b006f81e876a50566fc<br>prev d502503ca6577ea0370c69559811b58efdb3b0059c43646ffaf314f99f1929b1</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#5</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹1,299.00 at StrideFit Sportswear, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_e45c248f3b1a48d9&quot;,
-  &quot;checkout_hash&quot;: &quot;4f016dae1d3a36ba&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+}</pre><div class="hash">hash 09d922fb8c0a8466ac1d27ed92ceee12a0d6a6b3310f888c9c6b5b8db3e17278<br>prev b64f0ce4fb4d3701a3dcad59e7ba89eab40598ff3508a52dcd5cb939efc70d4b</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#5</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹1,299.00 at StrideFit Sportswear, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_0716134f7f9643f4&quot;,
+  &quot;checkout_hash&quot;: &quot;1d842f686e63fdd2&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;total&quot;: 129900,
   &quot;ttl_minutes&quot;: 15
-}</pre><div class="hash">hash 7b4dd7731d8214bcff238ed89fc684f5a64ce7b49ec95bc75e6c85f534f20d74<br>prev 8d1668ee7fdeb36c98b88cb28d72789f35e2fcfc5cd14b006f81e876a50566fc</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#6</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹1,299.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
-  &quot;mandate_id&quot;: &quot;cmo_0779db6e7ccd4554&quot;,
+}</pre><div class="hash">hash 260da5c68dd0946c575a515516a788fdf7e0ced472b8b488ec0ad32a60f4218c<br>prev 09d922fb8c0a8466ac1d27ed92ceee12a0d6a6b3310f888c9c6b5b8db3e17278</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#6</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹1,299.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
+  &quot;mandate_id&quot;: &quot;cmo_3f3a269204004875&quot;,
   &quot;total&quot;: 129900,
   &quot;vct&quot;: &quot;mandate.checkout.open.1&quot;
-}</pre><div class="hash">hash 374fbf1fa66809d9bb443d51a67b66be608109cfc807cbe8221b48117c937355<br>prev 7b4dd7731d8214bcff238ed89fc684f5a64ce7b49ec95bc75e6c85f534f20d74</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#7</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹1,299.00 at StrideFit Sportswear.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+}</pre><div class="hash">hash 25ff079d021ef89f409a110b31c8e4f08dd6a020b0a928f896cd710074a60bcc<br>prev 260da5c68dd0946c575a515516a788fdf7e0ced472b8b488ec0ad32a60f4218c</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#7</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹1,299.00 at StrideFit Sportswear.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
-  &quot;receipt_id&quot;: &quot;crcpt_7c50f67cc3ed4d5c&quot;,
+  &quot;receipt_id&quot;: &quot;crcpt_1be4d08a91ed46d1&quot;,
   &quot;total&quot;: 129900
-}</pre><div class="hash">hash 182bc923e5bba3a9a7a4bf0d90356cbbd44c9d7296646768da9da3c207ef6982<br>prev 374fbf1fa66809d9bb443d51a67b66be608109cfc807cbe8221b48117c937355</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#8</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹1,299.00 to m_stridefit, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 7e4e46e52381169519aab73673804d50b0ee27e30d2747ce5cb3fb22083a2f35<br>prev 25ff079d021ef89f409a110b31c8e4f08dd6a020b0a928f896cd710074a60bcc</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#8</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹1,299.00 to m_stridefit, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 129900,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;payee&quot;: &quot;m_stridefit&quot;,
-  &quot;payment_mandate_id&quot;: &quot;pm_3dbe1f3782f74906&quot;,
+  &quot;payment_mandate_id&quot;: &quot;pm_b69e69eea2fb4ea7&quot;,
   &quot;vct&quot;: &quot;mandate.payment.1&quot;
-}</pre><div class="hash">hash c6891bcb454b962c7f84f4339fd8bd8fce232ee2bdb0d72193b1142228bf6a73<br>prev 182bc923e5bba3a9a7a4bf0d90356cbbd44c9d7296646768da9da3c207ef6982</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#9</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;signature&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash bb033ff6ba9e7a64a3da8b07e58c3b3172251ea043700b5d620bf3703c06451a<br>prev 7e4e46e52381169519aab73673804d50b0ee27e30d2747ce5cb3fb22083a2f35</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#9</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;signature&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;signature&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;alg&quot;: &quot;ES256&quot;,
@@ -125,76 +125,76 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 6f41215ce9f35d47ad994c7ef06109a75d2cae4f6607f2ea838e75c24864c741<br>prev c6891bcb454b962c7f84f4339fd8bd8fce232ee2bdb0d72193b1142228bf6a73</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#10</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 041fa93e65c120d6121977f041116a961f4e328855a95647dbe96f3d8e9309f7<br>prev bb033ff6ba9e7a64a3da8b07e58c3b3172251ea043700b5d620bf3703c06451a</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#10</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;vct&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;vct&quot;: &quot;mandate.payment.1&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 258545d3331684413da77ea550e61411f7178fe0d0a827435b2ad38d59b8c8a6<br>prev 6f41215ce9f35d47ad994c7ef06109a75d2cae4f6607f2ea838e75c24864c741</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#11</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;presenter_role&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 3dae40c7e4277553635cbc0f671e127961edc8be23a81a86ab3b10c4192901a9<br>prev 041fa93e65c120d6121977f041116a961f4e328855a95647dbe96f3d8e9309f7</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#11</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;presenter_role&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;presenter_role&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;role&quot;: &quot;shopping_agent&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 5265e70ac7f4fda91765834121f9a60e9203cce788c15a96d295a464de416951<br>prev 258545d3331684413da77ea550e61411f7178fe0d0a827435b2ad38d59b8c8a6</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#12</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 165b5c977126c86428f576c0f6acc0d69ac8a5892f6b05b9ba585c46dea031cb<br>prev 3dae40c7e4277553635cbc0f671e127961edc8be23a81a86ab3b10c4192901a9</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#12</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;not_expired&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;exp&quot;: 1788589851.0,
+    &quot;exp&quot;: 1788590006.0,
     &quot;seconds_remaining&quot;: 600,
     &quot;which&quot;: &quot;payment mandate&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash a2c837ae4c5868927636999d5b5fc6d02f69810975323b58d9a5def6e793f50c<br>prev 5265e70ac7f4fda91765834121f9a60e9203cce788c15a96d295a464de416951</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#13</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash b14c80ea4e93921ef9b2f8a7741a16f396c297f38d0f2ea47ec23f4a257599e9<br>prev 165b5c977126c86428f576c0f6acc0d69ac8a5892f6b05b9ba585c46dea031cb</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#13</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;vct&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;vct&quot;: &quot;mandate.payment.open.1&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 63e46f80ec6e4ef44c71f6c6ef42727d33eaa9df6ca4d88f6d496427691d3a4a<br>prev a2c837ae4c5868927636999d5b5fc6d02f69810975323b58d9a5def6e793f50c</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#14</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 1fa2a22f25aca769b911f0ac0b1af202bd8deee9ef10863830f917d391e058bd<br>prev b14c80ea4e93921ef9b2f8a7741a16f396c297f38d0f2ea47ec23f4a257599e9</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#14</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;not_expired&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;exp&quot;: 1788675651.0,
+    &quot;exp&quot;: 1788675806.0,
     &quot;seconds_remaining&quot;: 86400,
     &quot;which&quot;: &quot;standing authorisation&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 985ecbe0f6a3c6a33d87bdcc42aa7115ca01f8de848f67f939ac011035b332c3<br>prev 63e46f80ec6e4ef44c71f6c6ef42727d33eaa9df6ca4d88f6d496427691d3a4a</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#15</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;key_binding&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 059c2bec9fb381d882e43ec86c7c24d8fcfa71e6c5d45ebc6c3909c3d50896ab<br>prev 1fa2a22f25aca769b911f0ac0b1af202bd8deee9ef10863830f917d391e058bd</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#15</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;key_binding&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;key_binding&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;presenter_kid&quot;: &quot;key_agent_shopper&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash e2a876bd9d14e2524181287a9c98dbe482109315c5613bdfba30da1fb8bf14ef<br>prev 985ecbe0f6a3c6a33d87bdcc42aa7115ca01f8de848f67f939ac011035b332c3</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#16</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;currency&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 3894e05dc5dc11109716501b80e9a4e55faf850af7a8272fb5086b124bff6c65<br>prev 059c2bec9fb381d882e43ec86c7c24d8fcfa71e6c5d45ebc6c3909c3d50896ab</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#16</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;currency&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;currency&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;currency&quot;: &quot;INR&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 4096668e681e29b66968a9a455f906e9a341cf96a9b45ad334a3a12253f04613<br>prev e2a876bd9d14e2524181287a9c98dbe482109315c5613bdfba30da1fb8bf14ef</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#17</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;allowed_payees&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 8d7f47ea2e02f8da15eb59f8dc2269f4a7691937cb60cf448246bfe9a9779b66<br>prev 3894e05dc5dc11109716501b80e9a4e55faf850af7a8272fb5086b124bff6c65</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#17</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;allowed_payees&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;allowed_payees&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;allowed&quot;: [
@@ -206,9 +206,9 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 350831a5b57c572787c066687723efe647cdf25d0b645b1191ff7b4e64c6f595<br>prev 4096668e681e29b66968a9a455f906e9a341cf96a9b45ad334a3a12253f04613</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#18</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;amount_range&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 71010bbbdcbe1a5da4f0ebd7742ea07adb5b4e147ab7ac6ee54e04a2e2745ad3<br>prev 8d7f47ea2e02f8da15eb59f8dc2269f4a7691937cb60cf448246bfe9a9779b66</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#18</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;amount_range&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;amount_range&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;amount&quot;: 129900,
@@ -217,9 +217,9 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 9aa481621d9a94968ccf9f617c72d744ba7f91d4ca6f7e9344b6c0c9b0f8505e<br>prev 350831a5b57c572787c066687723efe647cdf25d0b645b1191ff7b4e64c6f595</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#19</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;budget&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 204056f13324b4c77b3c436ac31165e3749b6082bfef23e226473b42cd19430e<br>prev 71010bbbdcbe1a5da4f0ebd7742ea07adb5b4e147ab7ac6ee54e04a2e2745ad3</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#19</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;budget&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;budget&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;already_spent&quot;: 0,
@@ -230,43 +230,43 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 5eb9047cff1521226ea571a6078e12d207785b090ce7b4d235546a502bad8bf2<br>prev 9aa481621d9a94968ccf9f617c72d744ba7f91d4ca6f7e9344b6c0c9b0f8505e</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#20</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;execution_date&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash a753ad25ef9bc11803e4d4c93c2064aeef8f5d597e65e22bce28045079293f93<br>prev 204056f13324b4c77b3c436ac31165e3749b6082bfef23e226473b42cd19430e</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#20</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;execution_date&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;execution_date&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;constrained&quot;: true,
-    &quot;execution_date&quot;: &quot;2026-09-05T06:20:51+00:00&quot;
+    &quot;execution_date&quot;: &quot;2026-09-05T06:23:26+00:00&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash f065c69e2abcb9e3ebdff1777882f45cf3e954ce6586dc640e51d4cf17a524a6<br>prev 5eb9047cff1521226ea571a6078e12d207785b090ce7b4d235546a502bad8bf2</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#21</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;checkout_reference&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 5feba5a763bb02097149156910a4fd918a6bb93e731520dd77a09432a0dbd595<br>prev a753ad25ef9bc11803e4d4c93c2064aeef8f5d597e65e22bce28045079293f93</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#21</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;checkout_reference&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;checkout_reference&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;checkout_hash&quot;: &quot;4f016dae1d3a36ba5c09786046b82bbd56b6ef2e628ce452bf70ad3b8f232f88&quot;,
+    &quot;checkout_hash&quot;: &quot;1d842f686e63fdd2c37340a6d020fb19b8124c313f4bcba4c4a642bbcd33a241&quot;,
     &quot;pinned&quot;: false
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 685c1e3ec7724980ecc8ed6576b91ab0810b657dd79aa0d6c764803c87d7ddeb<br>prev f065c69e2abcb9e3ebdff1777882f45cf3e954ce6586dc640e51d4cf17a524a6</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#22</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;nonce&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash ddb1ed4bf1c6b38148429c159200bd9be48c6d5548d14e60c8625741318130ed<br>prev 5feba5a763bb02097149156910a4fd918a6bb93e731520dd77a09432a0dbd595</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#22</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;nonce&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;nonce&quot;,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;first_use&quot;: true,
-    &quot;nonce&quot;: &quot;ff8fc5c2188b4ff29a987a0c5b49b985&quot;
+    &quot;nonce&quot;: &quot;e28a011d14874fa385bed5116b329f9d&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 5f6189b3715062723430ed6ce218e7699618fe133cd9e04139f4b90ed03ad8b6<br>prev 685c1e3ec7724980ecc8ed6576b91ab0810b657dd79aa0d6c764803c87d7ddeb</div></details></div></li><li class="row pivotal" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#23</div><div class="body"><span class="ev">verifier.decision</span><span class="who">verifier</span><div class="why">Approved ₹1,299.00 to StrideFit Sportswear: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash e59f5d1fd296b3b6098be5edfaf6060c7e89a4c35959cb3466bc83051267d1d1<br>prev ddb1ed4bf1c6b38148429c159200bd9be48c6d5548d14e60c8625741318130ed</div></details></div></li><li class="row pivotal" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#23</div><div class="body"><span class="ev">verifier.decision</span><span class="who">verifier</span><div class="why">Approved ₹1,299.00 to StrideFit Sportswear: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 129900,
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;outcome&quot;: &quot;ALLOW&quot;,
   &quot;reason&quot;: &quot;Approved ₹1,299.00 to StrideFit Sportswear: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.&quot;
-}</pre><div class="hash">hash 6002e25dcd3d78a5d46af66ba26e174d446eabcd405f8c4f915313d3996c8096<br>prev 5f6189b3715062723430ed6ce218e7699618fe133cd9e04139f4b90ed03ad8b6</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#24</div><div class="body"><span class="ev">recovery.started</span><span class="who">processor</span><div class="why">Paying ₹1,299.00 with at most 3 attempt(s), trying upi then payment_link then card.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash eaa294fbc663b5935f96ba3129f23df015187ec9295d47b5f3b19205060a236e<br>prev e59f5d1fd296b3b6098be5edfaf6060c7e89a4c35959cb3466bc83051267d1d1</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#24</div><div class="body"><span class="ev">recovery.started</span><span class="who">processor</span><div class="why">Paying ₹1,299.00 with at most 3 attempt(s), trying upi then payment_link then card.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 129900,
   &quot;breaker&quot;: {
     &quot;consecutive_failures&quot;: 0,
@@ -279,83 +279,83 @@ chain — not written by hand.</p>
     &quot;card&quot;
   ],
   &quot;max_attempts&quot;: 3,
-  &quot;payment_mandate_id&quot;: &quot;pm_3dbe1f3782f74906&quot;
-}</pre><div class="hash">hash cf9d2b72fb7be91d8d470223e9490329f70a3c2e7548131a469886ec0d068298<br>prev 6002e25dcd3d78a5d46af66ba26e174d446eabcd405f8c4f915313d3996c8096</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#25</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹1,299.00 order on the fake rail for m_stridefit, to be paid by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;payment_mandate_id&quot;: &quot;pm_b69e69eea2fb4ea7&quot;
+}</pre><div class="hash">hash 844bd6bee98e66fb15c93960a64b512a561bbbb1bc523419b2f1683a2765127a<br>prev eaa294fbc663b5935f96ba3129f23df015187ec9295d47b5f3b19205060a236e</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#25</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹1,299.00 order on the fake rail for m_stridefit, to be paid by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 129900,
-  &quot;cart_id&quot;: &quot;cart_e45c248f3b1a48d9&quot;,
+  &quot;cart_id&quot;: &quot;cart_0716134f7f9643f4&quot;,
   &quot;currency&quot;: &quot;INR&quot;,
-  &quot;idempotency_key&quot;: &quot;127482d51a860e69084d35f50f825627efb49af0e21fe1e5b1712ebba19a905a&quot;,
+  &quot;idempotency_key&quot;: &quot;9d5727746d3534feeb6d8f6fd8ba45e44a2f5559de602b40a683431ae3dbd934&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000001&quot;,
   &quot;rail&quot;: &quot;fake&quot;
-}</pre><div class="hash">hash 42c801e49eeb42ca2fd2e53cc71125fe8eafc4c9c0d15c880b53eba6b915895a<br>prev cf9d2b72fb7be91d8d470223e9490329f70a3c2e7548131a469886ec0d068298</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#26</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 1 on order_fake_000001 using upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 6ffaa9f657b448c56a945ec311edd127344963eedd142d5460e67557aae04092<br>prev 844bd6bee98e66fb15c93960a64b512a561bbbb1bc523419b2f1683a2765127a</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#26</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 1 on order_fake_000001 using upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;attempt&quot;: 1,
-  &quot;idempotency_key&quot;: &quot;127482d51a860e69084d35f50f825627efb49af0e21fe1e5b1712ebba19a905a&quot;,
+  &quot;idempotency_key&quot;: &quot;9d5727746d3534feeb6d8f6fd8ba45e44a2f5559de602b40a683431ae3dbd934&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000001&quot;
-}</pre><div class="hash">hash 92db58d04ee4cef5a628d80d4236f4432f955eddd82bea54f04d09ec5e4a8ec2<br>prev 42c801e49eeb42ca2fd2e53cc71125fe8eafc4c9c0d15c880b53eba6b915895a</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#27</div><div class="body"><span class="ev">mpp.payment_captured</span><span class="who">processor</span><div class="why">Captured ₹1,299.00 for StrideFit Sportswear (pay_fake_000001) by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 60f8843dac5302079353b624537f231d5189ff96d32486fd4ddde7f4a34e2efe<br>prev 6ffaa9f657b448c56a945ec311edd127344963eedd142d5460e67557aae04092</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#27</div><div class="body"><span class="ev">mpp.payment_captured</span><span class="who">processor</span><div class="why">Captured ₹1,299.00 for StrideFit Sportswear (pay_fake_000001) by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 129900,
-  &quot;cart_id&quot;: &quot;cart_e45c248f3b1a48d9&quot;,
+  &quot;cart_id&quot;: &quot;cart_0716134f7f9643f4&quot;,
   &quot;currency&quot;: &quot;INR&quot;,
-  &quot;idempotency_key&quot;: &quot;127482d51a860e69084d35f50f825627efb49af0e21fe1e5b1712ebba19a905a&quot;,
+  &quot;idempotency_key&quot;: &quot;9d5727746d3534feeb6d8f6fd8ba45e44a2f5559de602b40a683431ae3dbd934&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000001&quot;,
   &quot;payment_id&quot;: &quot;pay_fake_000001&quot;
-}</pre><div class="hash">hash 3e6751445c0456826a84d4eab3de57d3572ee8a8dbfa021d131a0f7f00408c96<br>prev 92db58d04ee4cef5a628d80d4236f4432f955eddd82bea54f04d09ec5e4a8ec2</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#28</div><div class="body"><span class="ev">mpp.payment_receipt_issued</span><span class="who">processor</span><div class="why">Issued a signed receipt: ₹1,299.00 captured after 1 attempt(s).</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 3931ccc9d75ca37b000e2439a5425db8c3791ea10e4cc8ec10a33bed664061de<br>prev 60f8843dac5302079353b624537f231d5189ff96d32486fd4ddde7f4a34e2efe</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#28</div><div class="body"><span class="ev">mpp.payment_receipt_issued</span><span class="who">processor</span><div class="why">Issued a signed receipt: ₹1,299.00 captured after 1 attempt(s).</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 129900,
   &quot;attempts&quot;: 1,
   &quot;failure_code&quot;: null,
-  &quot;idempotency_key&quot;: &quot;127482d51a860e69084d35f50f825627efb49af0e21fe1e5b1712ebba19a905a&quot;,
+  &quot;idempotency_key&quot;: &quot;9d5727746d3534feeb6d8f6fd8ba45e44a2f5559de602b40a683431ae3dbd934&quot;,
   &quot;order_id&quot;: &quot;order_fake_000001&quot;,
   &quot;payment_id&quot;: &quot;pay_fake_000001&quot;,
-  &quot;receipt_id&quot;: &quot;rcpt_531422a86211456a&quot;,
+  &quot;receipt_id&quot;: &quot;rcpt_d3af237db86d4135&quot;,
   &quot;status&quot;: &quot;captured&quot;
-}</pre><div class="hash">hash 124e4c27b348e1cfc00e0931bf1aef173e97ec958b89cfd38469ae5524f5b1e6<br>prev 3e6751445c0456826a84d4eab3de57d3572ee8a8dbfa021d131a0f7f00408c96</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#29</div><div class="body"><span class="ev">merchant.stock_decremented</span><span class="who">merchant</span><div class="why">Reduced stock after payment cleared: SF-RUN-001=13</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_64d2d126726d43a5&quot;,
+}</pre><div class="hash">hash 60c96b17bb9c71a8a8cd5c4d4e863b6a4184f80004733e0e5d06e15ca543e3b1<br>prev 3931ccc9d75ca37b000e2439a5425db8c3791ea10e4cc8ec10a33bed664061de</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#29</div><div class="body"><span class="ev">merchant.stock_decremented</span><span class="who">merchant</span><div class="why">Reduced stock after payment cleared: SF-RUN-001=13</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_bde6ed6905ab45e5&quot;,
   &quot;detail&quot;: &quot;SF-RUN-001=13&quot;,
   &quot;remaining_stock&quot;: {
     &quot;SF-RUN-001&quot;: 13
   }
-}</pre><div class="hash">hash e8ad831b1d1fa1abd323b34542a8cba23e98cfb49b07abb5852965b6e771bc59<br>prev 124e4c27b348e1cfc00e0931bf1aef173e97ec958b89cfd38469ae5524f5b1e6</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#30</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: running shorts under ₹1,000</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash a09268a51e80bdbcc0733c8e113fa1fc7db55f6ad61ae4be4740d4baf56b8cc1<br>prev 60c96b17bb9c71a8a8cd5c4d4e863b6a4184f80004733e0e5d06e15ca543e3b1</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#30</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: running shorts under ₹1,000</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;filters&quot;: {
     &quot;category&quot;: &quot;apparel&quot;,
     &quot;max_price_inr&quot;: 1000
   },
   &quot;goal&quot;: &quot;running shorts under ₹1,000&quot;,
   &quot;query&quot;: &quot;shorts&quot;
-}</pre><div class="hash">hash edfa73cdaf8e5bc0ffade922855be2c7a8732947098cedfe2af1995eafb4a6ab<br>prev e8ad831b1d1fa1abd323b34542a8cba23e98cfb49b07abb5852965b6e771bc59</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#31</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from StrideFit Sportswear for ₹899.00.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_af8b8fe3d9e4408d&quot;,
+}</pre><div class="hash">hash 866fc4e60b14fc02d54fab256aec9053c843d210276b77e4ce3f0262cdc98058<br>prev a09268a51e80bdbcc0733c8e113fa1fc7db55f6ad61ae4be4740d4baf56b8cc1</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#31</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from StrideFit Sportswear for ₹899.00.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_732b27a4d7324f2e&quot;,
   &quot;item_count&quot;: 1,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;ship_to_pincode&quot;: &quot;560001&quot;,
   &quot;total&quot;: 89900
-}</pre><div class="hash">hash 5c8ece3c25d304632e5076104225cef44003df03eddc51419d05d2b7b6e2953f<br>prev edfa73cdaf8e5bc0ffade922855be2c7a8732947098cedfe2af1995eafb4a6ab</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#32</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹899.00 at StrideFit Sportswear, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_af8b8fe3d9e4408d&quot;,
-  &quot;checkout_hash&quot;: &quot;2201092a66b456b2&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+}</pre><div class="hash">hash ecb8ffc920d55fcb93c5c1c368991c4f6d3dd142c15a2e109f4f43b39af11160<br>prev 866fc4e60b14fc02d54fab256aec9053c843d210276b77e4ce3f0262cdc98058</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#32</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹899.00 at StrideFit Sportswear, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_732b27a4d7324f2e&quot;,
+  &quot;checkout_hash&quot;: &quot;224684db7ae86e06&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;total&quot;: 89900,
   &quot;ttl_minutes&quot;: 15
-}</pre><div class="hash">hash 889bf9db78db65eddc05160dc9465d8979fd797495ac8d25df030c261c881295<br>prev 5c8ece3c25d304632e5076104225cef44003df03eddc51419d05d2b7b6e2953f</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#33</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹899.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
-  &quot;mandate_id&quot;: &quot;cmo_0779db6e7ccd4554&quot;,
+}</pre><div class="hash">hash 9e1efea5fa3b5a804528c9bd52349579b2be864b8ae8cb722b659695d00842ba<br>prev ecb8ffc920d55fcb93c5c1c368991c4f6d3dd142c15a2e109f4f43b39af11160</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#33</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹899.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
+  &quot;mandate_id&quot;: &quot;cmo_3f3a269204004875&quot;,
   &quot;total&quot;: 89900,
   &quot;vct&quot;: &quot;mandate.checkout.open.1&quot;
-}</pre><div class="hash">hash e4940a11f1097c1c8cb950065d999fea264870fe9161ea089e65a0177bb1a2a8<br>prev 889bf9db78db65eddc05160dc9465d8979fd797495ac8d25df030c261c881295</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#34</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹899.00 at StrideFit Sportswear.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+}</pre><div class="hash">hash 44b2df2e0bd0b651bc163df789dc8fbc91f7332c29b6083c9cd783ae28c99784<br>prev 9e1efea5fa3b5a804528c9bd52349579b2be864b8ae8cb722b659695d00842ba</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#34</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹899.00 at StrideFit Sportswear.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
-  &quot;receipt_id&quot;: &quot;crcpt_c5a11f74ccbb4c5a&quot;,
+  &quot;receipt_id&quot;: &quot;crcpt_a6f754332ddb4e54&quot;,
   &quot;total&quot;: 89900
-}</pre><div class="hash">hash cc4134d8e6821bf7e6e3603f7d8bdc2669495151741b60436095d5207fe10852<br>prev e4940a11f1097c1c8cb950065d999fea264870fe9161ea089e65a0177bb1a2a8</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#35</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹899.00 to m_stridefit, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 6c38644a4eea08bbf871763d61db7dee1e0f4dbed3efd8a16ac3c098cdeebf45<br>prev 44b2df2e0bd0b651bc163df789dc8fbc91f7332c29b6083c9cd783ae28c99784</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#35</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹899.00 to m_stridefit, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 89900,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;payee&quot;: &quot;m_stridefit&quot;,
-  &quot;payment_mandate_id&quot;: &quot;pm_0d3dcdc290b840f5&quot;,
+  &quot;payment_mandate_id&quot;: &quot;pm_37fd3f3de61d44b1&quot;,
   &quot;vct&quot;: &quot;mandate.payment.1&quot;
-}</pre><div class="hash">hash 7db36726e61c541805a7a8d7ae6fdde1c8a9b85a1729a1c398e2b01b1a78d413<br>prev cc4134d8e6821bf7e6e3603f7d8bdc2669495151741b60436095d5207fe10852</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#36</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;signature&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 5c27beb786e134a68a720bfbfccb91df7402e82a23e561cb60c866634a15b941<br>prev 6c38644a4eea08bbf871763d61db7dee1e0f4dbed3efd8a16ac3c098cdeebf45</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#36</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;signature&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;signature&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;alg&quot;: &quot;ES256&quot;,
@@ -364,76 +364,76 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash ad047a3af6fe54e632ddffc0c6a859dda9d12e45e5dd842083c7e2a73ab805bf<br>prev 7db36726e61c541805a7a8d7ae6fdde1c8a9b85a1729a1c398e2b01b1a78d413</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#37</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash d6a2a60c99ec5b478c9f61d82cc41ecf39c724831c5519c02683eecc15d6964c<br>prev 5c27beb786e134a68a720bfbfccb91df7402e82a23e561cb60c866634a15b941</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#37</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;vct&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;vct&quot;: &quot;mandate.payment.1&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 29a7d5d48f14041811007a77362e2f0a05384a2b489ac9151b8007f3e2e367bb<br>prev ad047a3af6fe54e632ddffc0c6a859dda9d12e45e5dd842083c7e2a73ab805bf</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#38</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;presenter_role&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash ae0de798ed94e287dc9ed435709d12785cd81d9ba350c1fc7447668d6a432a06<br>prev d6a2a60c99ec5b478c9f61d82cc41ecf39c724831c5519c02683eecc15d6964c</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#38</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;presenter_role&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;presenter_role&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;role&quot;: &quot;shopping_agent&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash bb42f715e22e0242eefa329038df652334a01f6a5ddac34780d8f6321688b6c5<br>prev 29a7d5d48f14041811007a77362e2f0a05384a2b489ac9151b8007f3e2e367bb</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#39</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 99175447af9c3239469148f65a171c3caafa728f6842f3036a0f7ea3426f8b67<br>prev ae0de798ed94e287dc9ed435709d12785cd81d9ba350c1fc7447668d6a432a06</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#39</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;not_expired&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;exp&quot;: 1788589851.0,
+    &quot;exp&quot;: 1788590006.0,
     &quot;seconds_remaining&quot;: 600,
     &quot;which&quot;: &quot;payment mandate&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 00ff5d2b0c06c8635425127685ca05a5c7403161378f92017f2bab34f410e54c<br>prev bb42f715e22e0242eefa329038df652334a01f6a5ddac34780d8f6321688b6c5</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#40</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 45782927a65d8d7fa3a641d458a7cd45da68e38f97ea5aeed582a0cecd623daa<br>prev 99175447af9c3239469148f65a171c3caafa728f6842f3036a0f7ea3426f8b67</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#40</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;vct&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;vct&quot;: &quot;mandate.payment.open.1&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 9054ae5153084e0fca91e795719f6d85679e47c064f70daa92a43dc611cebd8a<br>prev 00ff5d2b0c06c8635425127685ca05a5c7403161378f92017f2bab34f410e54c</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#41</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash f98be245e422ffdd47456bd0b27c04e46d870a7dbac32af0354ee34f44c1c6ce<br>prev 45782927a65d8d7fa3a641d458a7cd45da68e38f97ea5aeed582a0cecd623daa</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#41</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;not_expired&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;exp&quot;: 1788675651.0,
+    &quot;exp&quot;: 1788675806.0,
     &quot;seconds_remaining&quot;: 86400,
     &quot;which&quot;: &quot;standing authorisation&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 469012100138c14a46415dd2562e028cf3c5cee3ce2555b13509b80d581b5f75<br>prev 9054ae5153084e0fca91e795719f6d85679e47c064f70daa92a43dc611cebd8a</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#42</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;key_binding&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash f2e204fe65f1b8a1439924f312b50ff67a40f5fbb84614dcc2d696249377c7e4<br>prev f98be245e422ffdd47456bd0b27c04e46d870a7dbac32af0354ee34f44c1c6ce</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#42</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;key_binding&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;key_binding&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;presenter_kid&quot;: &quot;key_agent_shopper&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 70ddffad3710228d3532d4968f24aed92c604f75a5f16465fd838c2a16def2a3<br>prev 469012100138c14a46415dd2562e028cf3c5cee3ce2555b13509b80d581b5f75</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#43</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;currency&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 0afcc20d77ea0d538f2d190b654a80d0ca64d98ecf315899100a8212329af3b2<br>prev f2e204fe65f1b8a1439924f312b50ff67a40f5fbb84614dcc2d696249377c7e4</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#43</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;currency&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;currency&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;currency&quot;: &quot;INR&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 140b5a0273ea7cd3acf97595dd3b6b127b26d7a0b183484c84580af567fe1ecf<br>prev 70ddffad3710228d3532d4968f24aed92c604f75a5f16465fd838c2a16def2a3</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#44</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;allowed_payees&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 6afd19c3fe75e5ec8a5787a7aa2d1d24530765cadd7a38d60791b1f9dfe16687<br>prev 0afcc20d77ea0d538f2d190b654a80d0ca64d98ecf315899100a8212329af3b2</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#44</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;allowed_payees&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;allowed_payees&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;allowed&quot;: [
@@ -445,9 +445,9 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 22ce54caf2894eada02aa44aacbcb79a153d202b6cba5642de2ee03e00d5f026<br>prev 140b5a0273ea7cd3acf97595dd3b6b127b26d7a0b183484c84580af567fe1ecf</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#45</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;amount_range&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 292d440613bd09abae1bcf0ff2895fcc16f7fe7e7a0a1f89dc70a04262e5a927<br>prev 6afd19c3fe75e5ec8a5787a7aa2d1d24530765cadd7a38d60791b1f9dfe16687</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#45</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;amount_range&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;amount_range&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;amount&quot;: 89900,
@@ -456,9 +456,9 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash bc27fa7a32203eb9629618f747788208d70ddf6a7f74fac70d7f1219a0fe2c96<br>prev 22ce54caf2894eada02aa44aacbcb79a153d202b6cba5642de2ee03e00d5f026</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#46</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;budget&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash e2bcd759907194685bcfc671b495683f8bebbd98f36783b023ceeb3b65bc63fa<br>prev 292d440613bd09abae1bcf0ff2895fcc16f7fe7e7a0a1f89dc70a04262e5a927</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#46</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;budget&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;budget&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;already_spent&quot;: 129900,
@@ -469,43 +469,43 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 6ab2fbc3dfbb7d22fa9c936a3fe87561427f6f18cb0dfa4faeb384fbf88b4e48<br>prev bc27fa7a32203eb9629618f747788208d70ddf6a7f74fac70d7f1219a0fe2c96</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#47</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;execution_date&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash a2ed04dde1a9464bb9b3f75be4fe9d9444c5e3298a22f3f74a2401d0952bd280<br>prev e2bcd759907194685bcfc671b495683f8bebbd98f36783b023ceeb3b65bc63fa</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#47</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;execution_date&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;execution_date&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;constrained&quot;: true,
-    &quot;execution_date&quot;: &quot;2026-09-05T06:20:51+00:00&quot;
+    &quot;execution_date&quot;: &quot;2026-09-05T06:23:26+00:00&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash fa83bafc310587ae5625330b80f59f869e2b18213e72336622f1a5780e447de0<br>prev 6ab2fbc3dfbb7d22fa9c936a3fe87561427f6f18cb0dfa4faeb384fbf88b4e48</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#48</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;checkout_reference&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 8e7a3c60981531f525c637261faf5abec23abf1e65c5e053c22cb84daa6156bc<br>prev a2ed04dde1a9464bb9b3f75be4fe9d9444c5e3298a22f3f74a2401d0952bd280</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#48</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;checkout_reference&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;checkout_reference&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;checkout_hash&quot;: &quot;2201092a66b456b2e74bc03fb5a48382dc92919848beba5ac5d276f182a24152&quot;,
+    &quot;checkout_hash&quot;: &quot;224684db7ae86e068ecfaceecb786f9a92a2bf96ac747f552071675090f4157b&quot;,
     &quot;pinned&quot;: false
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 48611679be4162bf9646f01918d3462267793f63a9479e9f6854f9cc75cf7422<br>prev fa83bafc310587ae5625330b80f59f869e2b18213e72336622f1a5780e447de0</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#49</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;nonce&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash ace103880ef1b447ca1e807cf8d6c1067baa00bdf1a6e6aeefaed84f0444c8bd<br>prev 8e7a3c60981531f525c637261faf5abec23abf1e65c5e053c22cb84daa6156bc</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#49</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;nonce&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;nonce&quot;,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;first_use&quot;: true,
-    &quot;nonce&quot;: &quot;445408cedd8242af97cf145963ed3eda&quot;
+    &quot;nonce&quot;: &quot;09409b752b804e709f5af3a8fa7fcb82&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 6d33ebf82c60623933cb2ff758f402e4a3afc81fe4fb410bc42c2a00afde0621<br>prev 48611679be4162bf9646f01918d3462267793f63a9479e9f6854f9cc75cf7422</div></details></div></li><li class="row pivotal" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#50</div><div class="body"><span class="ev">verifier.decision</span><span class="who">verifier</span><div class="why">Approved ₹899.00 to StrideFit Sportswear: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash f195047b9349f86bdfb5ee476248f8ac8134ea394acdd91e3ecc8ab9de131761<br>prev ace103880ef1b447ca1e807cf8d6c1067baa00bdf1a6e6aeefaed84f0444c8bd</div></details></div></li><li class="row pivotal" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#50</div><div class="body"><span class="ev">verifier.decision</span><span class="who">verifier</span><div class="why">Approved ₹899.00 to StrideFit Sportswear: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 89900,
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;outcome&quot;: &quot;ALLOW&quot;,
   &quot;reason&quot;: &quot;Approved ₹899.00 to StrideFit Sportswear: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.&quot;
-}</pre><div class="hash">hash 80ba4b51b8cce0207bbda6873e11350996c78bcd8da71e3bd536bcfaa0caa769<br>prev 6d33ebf82c60623933cb2ff758f402e4a3afc81fe4fb410bc42c2a00afde0621</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#51</div><div class="body"><span class="ev">recovery.started</span><span class="who">processor</span><div class="why">Paying ₹899.00 with at most 3 attempt(s), trying upi then payment_link then card.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 52f9d1ba870c3d5e6ad202e98b654ec5f54a2112ea6308f2514cc4a529defb32<br>prev f195047b9349f86bdfb5ee476248f8ac8134ea394acdd91e3ecc8ab9de131761</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#51</div><div class="body"><span class="ev">recovery.started</span><span class="who">processor</span><div class="why">Paying ₹899.00 with at most 3 attempt(s), trying upi then payment_link then card.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 89900,
   &quot;breaker&quot;: {
     &quot;consecutive_failures&quot;: 0,
@@ -518,133 +518,133 @@ chain — not written by hand.</p>
     &quot;card&quot;
   ],
   &quot;max_attempts&quot;: 3,
-  &quot;payment_mandate_id&quot;: &quot;pm_0d3dcdc290b840f5&quot;
-}</pre><div class="hash">hash b9d908241646355e9fb3c3eda34e4f147f53257fb8d292ece6e2d904ee2de908<br>prev 80ba4b51b8cce0207bbda6873e11350996c78bcd8da71e3bd536bcfaa0caa769</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#52</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹899.00 order on the fake rail for m_stridefit, to be paid by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;payment_mandate_id&quot;: &quot;pm_37fd3f3de61d44b1&quot;
+}</pre><div class="hash">hash 3a30aa12dd6f614624a54993506d55053864cfe9016a4da0438f4fba6a0c2089<br>prev 52f9d1ba870c3d5e6ad202e98b654ec5f54a2112ea6308f2514cc4a529defb32</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#52</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹899.00 order on the fake rail for m_stridefit, to be paid by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 89900,
-  &quot;cart_id&quot;: &quot;cart_af8b8fe3d9e4408d&quot;,
+  &quot;cart_id&quot;: &quot;cart_732b27a4d7324f2e&quot;,
   &quot;currency&quot;: &quot;INR&quot;,
-  &quot;idempotency_key&quot;: &quot;25eb9fa78f64aba4fcace3d4e8d9018851bc646b66df1e1f2d9d8e3c3a668b84&quot;,
+  &quot;idempotency_key&quot;: &quot;bb35ab2684b07b9e552bb837c0104233a68ae82d978bfe8ffb16d91b5d1e12c9&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000002&quot;,
   &quot;rail&quot;: &quot;fake&quot;
-}</pre><div class="hash">hash 9a1497367c3605983af23fa96ea182338c3e9c3f9b21983072df17e3ed2a357e<br>prev b9d908241646355e9fb3c3eda34e4f147f53257fb8d292ece6e2d904ee2de908</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#53</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 1 on order_fake_000002 using upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 91f151bcefc9cf684721998fbac8bd1103423aba4a9628e30fcf1e5e49931c92<br>prev 3a30aa12dd6f614624a54993506d55053864cfe9016a4da0438f4fba6a0c2089</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#53</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 1 on order_fake_000002 using upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;attempt&quot;: 1,
-  &quot;idempotency_key&quot;: &quot;25eb9fa78f64aba4fcace3d4e8d9018851bc646b66df1e1f2d9d8e3c3a668b84&quot;,
+  &quot;idempotency_key&quot;: &quot;bb35ab2684b07b9e552bb837c0104233a68ae82d978bfe8ffb16d91b5d1e12c9&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000002&quot;
-}</pre><div class="hash">hash 94765df6f4feb768b148a925a239e6cb508938a094af8a66111efa41f5b8a908<br>prev 9a1497367c3605983af23fa96ea182338c3e9c3f9b21983072df17e3ed2a357e</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#54</div><div class="body"><span class="ev">mpp.payment_captured</span><span class="who">processor</span><div class="why">Captured ₹899.00 for StrideFit Sportswear (pay_fake_000002) by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 6de39f96d85ce203063d50179c6c276605dce28ce40a4dc98cd07d50b2330835<br>prev 91f151bcefc9cf684721998fbac8bd1103423aba4a9628e30fcf1e5e49931c92</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#54</div><div class="body"><span class="ev">mpp.payment_captured</span><span class="who">processor</span><div class="why">Captured ₹899.00 for StrideFit Sportswear (pay_fake_000002) by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 89900,
-  &quot;cart_id&quot;: &quot;cart_af8b8fe3d9e4408d&quot;,
+  &quot;cart_id&quot;: &quot;cart_732b27a4d7324f2e&quot;,
   &quot;currency&quot;: &quot;INR&quot;,
-  &quot;idempotency_key&quot;: &quot;25eb9fa78f64aba4fcace3d4e8d9018851bc646b66df1e1f2d9d8e3c3a668b84&quot;,
+  &quot;idempotency_key&quot;: &quot;bb35ab2684b07b9e552bb837c0104233a68ae82d978bfe8ffb16d91b5d1e12c9&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000002&quot;,
   &quot;payment_id&quot;: &quot;pay_fake_000002&quot;
-}</pre><div class="hash">hash 261c4501f2712d890ffef765c48398d5ea6f4a06d9a644eb8d09652d9258b183<br>prev 94765df6f4feb768b148a925a239e6cb508938a094af8a66111efa41f5b8a908</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#55</div><div class="body"><span class="ev">mpp.payment_receipt_issued</span><span class="who">processor</span><div class="why">Issued a signed receipt: ₹899.00 captured after 1 attempt(s).</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 031e9127a854362420396d8bc0325e35be2531bcd949107ee8cf365d80661f1f<br>prev 6de39f96d85ce203063d50179c6c276605dce28ce40a4dc98cd07d50b2330835</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#55</div><div class="body"><span class="ev">mpp.payment_receipt_issued</span><span class="who">processor</span><div class="why">Issued a signed receipt: ₹899.00 captured after 1 attempt(s).</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 89900,
   &quot;attempts&quot;: 1,
   &quot;failure_code&quot;: null,
-  &quot;idempotency_key&quot;: &quot;25eb9fa78f64aba4fcace3d4e8d9018851bc646b66df1e1f2d9d8e3c3a668b84&quot;,
+  &quot;idempotency_key&quot;: &quot;bb35ab2684b07b9e552bb837c0104233a68ae82d978bfe8ffb16d91b5d1e12c9&quot;,
   &quot;order_id&quot;: &quot;order_fake_000002&quot;,
   &quot;payment_id&quot;: &quot;pay_fake_000002&quot;,
-  &quot;receipt_id&quot;: &quot;rcpt_f7fa790e42894d64&quot;,
+  &quot;receipt_id&quot;: &quot;rcpt_c633757c07b242e9&quot;,
   &quot;status&quot;: &quot;captured&quot;
-}</pre><div class="hash">hash 8f5417f1947e99319cbd3b979eb19b7ffe7ff52c35c9d88927004e77fcd27d33<br>prev 261c4501f2712d890ffef765c48398d5ea6f4a06d9a644eb8d09652d9258b183</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#56</div><div class="body"><span class="ev">merchant.stock_decremented</span><span class="who">merchant</span><div class="why">Reduced stock after payment cleared: SF-APP-001=31</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_bf0029dd29e5470d&quot;,
+}</pre><div class="hash">hash 13d11a56de157855681ee68817671029ddbfc57a7c52b3344a503809ef1c312f<br>prev 031e9127a854362420396d8bc0325e35be2531bcd949107ee8cf365d80661f1f</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#56</div><div class="body"><span class="ev">merchant.stock_decremented</span><span class="who">merchant</span><div class="why">Reduced stock after payment cleared: SF-APP-001=31</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_fe43af0e80cc402a&quot;,
   &quot;detail&quot;: &quot;SF-APP-001=31&quot;,
   &quot;remaining_stock&quot;: {
     &quot;SF-APP-001&quot;: 31
   }
-}</pre><div class="hash">hash 71cdefc4cce329bd7af33080980385ef2414176993974134b760635195aed333<br>prev 8f5417f1947e99319cbd3b979eb19b7ffe7ff52c35c9d88927004e77fcd27d33</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#57</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: the carbon-plate marathon racing shoe</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash e0c3e15a86b5230d01a62b418721a83070631e738c16c63522d92665bfc517e6<br>prev 13d11a56de157855681ee68817671029ddbfc57a7c52b3344a503809ef1c312f</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#57</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: the carbon-plate marathon racing shoe</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;filters&quot;: {
     &quot;category&quot;: &quot;running_shoes&quot;
   },
   &quot;goal&quot;: &quot;the carbon-plate marathon racing shoe&quot;,
   &quot;query&quot;: &quot;marathon&quot;
-}</pre><div class="hash">hash 1b2e93ed44c031dac854c810827772a0b6b8ff80ecd59b166ef8238dd94a3a94<br>prev 71cdefc4cce329bd7af33080980385ef2414176993974134b760635195aed333</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#58</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from StrideFit Sportswear for ₹4,999.00.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_fb8926cad7d647f0&quot;,
+}</pre><div class="hash">hash e4acc9b980c0a5591fe9487eec2e35a111960d0c66533fcc51192473e9f2fbaa<br>prev e0c3e15a86b5230d01a62b418721a83070631e738c16c63522d92665bfc517e6</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#58</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from StrideFit Sportswear for ₹4,999.00.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_71d82e5c837f4fc5&quot;,
   &quot;item_count&quot;: 1,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;ship_to_pincode&quot;: &quot;560001&quot;,
   &quot;total&quot;: 499900
-}</pre><div class="hash">hash 561dc54814c34584b80a75280537152db85e4ef84254e0e06077de9dfe5351db<br>prev 1b2e93ed44c031dac854c810827772a0b6b8ff80ecd59b166ef8238dd94a3a94</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#59</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹4,999.00 at StrideFit Sportswear, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_fb8926cad7d647f0&quot;,
-  &quot;checkout_hash&quot;: &quot;11b992526fc70933&quot;,
-  &quot;checkout_id&quot;: &quot;chk_be58cc2f08ed4f03&quot;,
+}</pre><div class="hash">hash 225c0d0d5f171f102a5844784954cac9f1b800594d0b08e9749d59aba122e5cf<br>prev e4acc9b980c0a5591fe9487eec2e35a111960d0c66533fcc51192473e9f2fbaa</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#59</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹4,999.00 at StrideFit Sportswear, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_71d82e5c837f4fc5&quot;,
+  &quot;checkout_hash&quot;: &quot;6679fa83626415b5&quot;,
+  &quot;checkout_id&quot;: &quot;chk_ca495153332349d7&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;total&quot;: 499900,
   &quot;ttl_minutes&quot;: 15
-}</pre><div class="hash">hash e908b7582d5877957a1f4d5a6ebee0ec609973f39923ab0bf04c807415a4af63<br>prev 561dc54814c34584b80a75280537152db85e4ef84254e0e06077de9dfe5351db</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#60</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹4,999.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_be58cc2f08ed4f03&quot;,
-  &quot;mandate_id&quot;: &quot;cmo_0779db6e7ccd4554&quot;,
+}</pre><div class="hash">hash 13c7ab09b9dbfe7b878885b9710169de36d335a9f65e53c19a501d167e2e46cd<br>prev 225c0d0d5f171f102a5844784954cac9f1b800594d0b08e9749d59aba122e5cf</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#60</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹4,999.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_ca495153332349d7&quot;,
+  &quot;mandate_id&quot;: &quot;cmo_3f3a269204004875&quot;,
   &quot;total&quot;: 499900,
   &quot;vct&quot;: &quot;mandate.checkout.open.1&quot;
-}</pre><div class="hash">hash 707d2cb4d6b4cbbd44e827293ae91b20e659989bf6a119ceab33b46312e54556<br>prev e908b7582d5877957a1f4d5a6ebee0ec609973f39923ab0bf04c807415a4af63</div></details></div></li><li class="row pivotal" style="--dot:#b45309"><div class="when">06:20:51<br>#61</div><div class="body"><span class="ev">trusted_surface.gate_requested</span><span class="who">human gate</span><div class="why">Held ₹4,999.00 at StrideFit Sportswear for the buyer to decide: ₹4,999.00 is above the ₹1,500.00 per-checkout limit on this standing authorisation, so it needs your approval.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 937e85e929e8b8449f65423e355cd3631e5b2efc6ef08509e08c97dbcbeb1885<br>prev 13c7ab09b9dbfe7b878885b9710169de36d335a9f65e53c19a501d167e2e46cd</div></details></div></li><li class="row pivotal" style="--dot:#b45309"><div class="when">06:23:26<br>#61</div><div class="body"><span class="ev">trusted_surface.gate_requested</span><span class="who">human gate</span><div class="why">Held ₹4,999.00 at StrideFit Sportswear for the buyer to decide: ₹4,999.00 is above the ₹1,500.00 per-checkout limit on this standing authorisation, so it needs your approval.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 499900,
-  &quot;checkout_id&quot;: &quot;chk_be58cc2f08ed4f03&quot;,
+  &quot;checkout_id&quot;: &quot;chk_ca495153332349d7&quot;,
   &quot;constraint&quot;: &quot;checkout.amount_exceeds_standing_limit&quot;,
-  &quot;hold_id&quot;: &quot;gate_91277c2e52ae4aa1&quot;,
+  &quot;hold_id&quot;: &quot;gate_c03e7a6910f6408c&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
-  &quot;url&quot;: &quot;http://127.0.0.1:8000/trusted-surface/gate_91277c2e52ae4aa1&quot;
-}</pre><div class="hash">hash 643b495d5505c5b50df18133bab73261790ed43c40cd6d09fc67b752f1287b57<br>prev 707d2cb4d6b4cbbd44e827293ae91b20e659989bf6a119ceab33b46312e54556</div></details></div></li><li class="row pivotal" style="--dot:#7c3aed"><div class="when">06:20:51<br>#62</div><div class="body"><span class="ev">merchant.checkout_unresolved_constraint</span><span class="who">merchant</span><div class="why">This checkout needs the buyer&#x27;s approval: ₹4,999.00 is above the ₹1,500.00 per-checkout limit on this standing authorisation, so it needs your approval.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_be58cc2f08ed4f03&quot;,
+  &quot;url&quot;: &quot;http://127.0.0.1:8000/trusted-surface/gate_c03e7a6910f6408c&quot;
+}</pre><div class="hash">hash aa69c0767038b36a9c71a4b52669d092b235fb4b979f3d5f34c35b63afa3b096<br>prev 937e85e929e8b8449f65423e355cd3631e5b2efc6ef08509e08c97dbcbeb1885</div></details></div></li><li class="row pivotal" style="--dot:#7c3aed"><div class="when">06:23:26<br>#62</div><div class="body"><span class="ev">merchant.checkout_unresolved_constraint</span><span class="who">merchant</span><div class="why">This checkout needs the buyer&#x27;s approval: ₹4,999.00 is above the ₹1,500.00 per-checkout limit on this standing authorisation, so it needs your approval.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_ca495153332349d7&quot;,
   &quot;constraint&quot;: &quot;checkout.amount_exceeds_standing_limit&quot;,
-  &quot;hold_id&quot;: &quot;gate_91277c2e52ae4aa1&quot;,
+  &quot;hold_id&quot;: &quot;gate_c03e7a6910f6408c&quot;,
   &quot;reason&quot;: &quot;₹4,999.00 is above the ₹1,500.00 per-checkout limit on this standing authorisation, so it needs your approval.&quot;
-}</pre><div class="hash">hash 1d9003bb53e6130675faac41ceb82e47607fcb3b54f705a72e9cf2e7013476d3<br>prev 643b495d5505c5b50df18133bab73261790ed43c40cd6d09fc67b752f1287b57</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#63</div><div class="body"><span class="ev">agent.escalated</span><span class="who">agent</span><div class="why">The agent stopped and asked for approval: ₹4,999.00 is above the ₹1,500.00 per-checkout limit on this standing authorisation, so it needs your approval.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash a4f57c8f2ddb1a8e3adb230743901ad591c0461b055df9e1123c77f8a718ef9d<br>prev aa69c0767038b36a9c71a4b52669d092b235fb4b979f3d5f34c35b63afa3b096</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#63</div><div class="body"><span class="ev">agent.escalated</span><span class="who">agent</span><div class="why">The agent stopped and asked for approval: ₹4,999.00 is above the ₹1,500.00 per-checkout limit on this standing authorisation, so it needs your approval.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 499900,
-  &quot;approval_url&quot;: &quot;http://127.0.0.1:8000/trusted-surface/gate_91277c2e52ae4aa1&quot;,
-  &quot;checkout_id&quot;: &quot;chk_be58cc2f08ed4f03&quot;,
+  &quot;approval_url&quot;: &quot;http://127.0.0.1:8000/trusted-surface/gate_c03e7a6910f6408c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_ca495153332349d7&quot;,
   &quot;constraint&quot;: &quot;checkout.amount_exceeds_standing_limit&quot;,
   &quot;reason&quot;: &quot;₹4,999.00 is above the ₹1,500.00 per-checkout limit on this standing authorisation, so it needs your approval.&quot;
-}</pre><div class="hash">hash d480141fb8805fe36e756e3c5ab69d72f373e69b83209623095b8aaed7bd7c6d<br>prev 1d9003bb53e6130675faac41ceb82e47607fcb3b54f705a72e9cf2e7013476d3</div></details></div></li><li class="row pivotal" style="--dot:#b45309"><div class="when">06:20:51<br>#64</div><div class="body"><span class="ev">trusted_surface.gate_denied</span><span class="who">human gate</span><div class="why">The buyer declined ₹4,999.00 at StrideFit Sportswear. Nothing was charged and no mandate was issued.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash ccc89c92414a49f357f637a3cc7a002e5fc89960a80cab1297a98d25ca044fd1<br>prev a4f57c8f2ddb1a8e3adb230743901ad591c0461b055df9e1123c77f8a718ef9d</div></details></div></li><li class="row pivotal" style="--dot:#b45309"><div class="when">06:23:26<br>#64</div><div class="body"><span class="ev">trusted_surface.gate_denied</span><span class="who">human gate</span><div class="why">The buyer declined ₹4,999.00 at StrideFit Sportswear. Nothing was charged and no mandate was issued.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 499900,
-  &quot;checkout_id&quot;: &quot;chk_be58cc2f08ed4f03&quot;,
-  &quot;hold_id&quot;: &quot;gate_91277c2e52ae4aa1&quot;,
+  &quot;checkout_id&quot;: &quot;chk_ca495153332349d7&quot;,
+  &quot;hold_id&quot;: &quot;gate_c03e7a6910f6408c&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;
-}</pre><div class="hash">hash ad4573040063edde5ec99f6420393de4cf33fcd5e63a9e01eb5e01abcdfbdfa7<br>prev d480141fb8805fe36e756e3c5ab69d72f373e69b83209623095b8aaed7bd7c6d</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#65</div><div class="body"><span class="ev">agent.gave_up</span><span class="who">agent</span><div class="why">The buyer declined ₹4,999.00 at StrideFit Sportswear. Nothing was charged.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 40f8fe80714430fdda410b94080fc10d2d6b274f31f3286fb41c33d73d99d5d9<br>prev ccc89c92414a49f357f637a3cc7a002e5fc89960a80cab1297a98d25ca044fd1</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#65</div><div class="body"><span class="ev">agent.gave_up</span><span class="who">agent</span><div class="why">The buyer declined ₹4,999.00 at StrideFit Sportswear. Nothing was charged.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 499900,
-  &quot;checkout_id&quot;: &quot;chk_be58cc2f08ed4f03&quot;,
+  &quot;checkout_id&quot;: &quot;chk_ca495153332349d7&quot;,
   &quot;reason&quot;: &quot;the buyer declined&quot;
-}</pre><div class="hash">hash c1c55bee4e3905f30ebacab50646f6ee3ef5272fdd4ed0d63580833e9b13ddcd<br>prev ad4573040063edde5ec99f6420393de4cf33fcd5e63a9e01eb5e01abcdfbdfa7</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#66</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: a cast iron dosa tawa</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash b424bd4e0b5379203124837aeb794294daa9c5eb01d9ad016e4f3f48baca1e12<br>prev 40f8fe80714430fdda410b94080fc10d2d6b274f31f3286fb41c33d73d99d5d9</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#66</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: a cast iron dosa tawa</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;filters&quot;: {
     &quot;category&quot;: &quot;kitchen&quot;
   },
   &quot;goal&quot;: &quot;a cast iron dosa tawa&quot;,
   &quot;query&quot;: &quot;dosa tawa&quot;
-}</pre><div class="hash">hash 45bd7740889c5e537a98ec3d689a6af0ecf9417ecbf25393874c8178c016a7cd<br>prev c1c55bee4e3905f30ebacab50646f6ee3ef5272fdd4ed0d63580833e9b13ddcd</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#67</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from Lumen Home &amp; Kitchen for ₹1,199.00.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_54642d40a9bc49c1&quot;,
+}</pre><div class="hash">hash 912ca26fabc5a2c203b42b8a96d2e37ae132e038a53e1d79f70533e5e47f8381<br>prev b424bd4e0b5379203124837aeb794294daa9c5eb01d9ad016e4f3f48baca1e12</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#67</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from Lumen Home &amp; Kitchen for ₹1,199.00.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_2123a9e634e745b3&quot;,
   &quot;item_count&quot;: 1,
   &quot;merchant&quot;: &quot;Lumen Home &amp; Kitchen&quot;,
   &quot;ship_to_pincode&quot;: &quot;560001&quot;,
   &quot;total&quot;: 119900
-}</pre><div class="hash">hash 2543d3fa4a444735ebba59f6fd30f1fa05e135d715e9cd7a9addbeef883f70e5<br>prev 45bd7740889c5e537a98ec3d689a6af0ecf9417ecbf25393874c8178c016a7cd</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#68</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹1,199.00 at Lumen Home &amp; Kitchen, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_54642d40a9bc49c1&quot;,
-  &quot;checkout_hash&quot;: &quot;b2e9d7a12b7af29b&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+}</pre><div class="hash">hash 2d085a33428f421b6fc5d3140cf531c41904e0f44a49264b10b7000373c36a26<br>prev 912ca26fabc5a2c203b42b8a96d2e37ae132e038a53e1d79f70533e5e47f8381</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#68</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹1,199.00 at Lumen Home &amp; Kitchen, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_2123a9e634e745b3&quot;,
+  &quot;checkout_hash&quot;: &quot;71e76d817f4cf606&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;merchant&quot;: &quot;Lumen Home &amp; Kitchen&quot;,
   &quot;total&quot;: 119900,
   &quot;ttl_minutes&quot;: 15
-}</pre><div class="hash">hash f7097a7945f49c445f90d81c67ad354aac6d9f27dd71f96d2023cddf1de5a5d5<br>prev 2543d3fa4a444735ebba59f6fd30f1fa05e135d715e9cd7a9addbeef883f70e5</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#69</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹1,199.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
-  &quot;mandate_id&quot;: &quot;cmo_0779db6e7ccd4554&quot;,
+}</pre><div class="hash">hash 7192dc81a3208bf2e743100507c62453e82f3f591792305d785816804f393192<br>prev 2d085a33428f421b6fc5d3140cf531c41904e0f44a49264b10b7000373c36a26</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#69</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹1,199.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
+  &quot;mandate_id&quot;: &quot;cmo_3f3a269204004875&quot;,
   &quot;total&quot;: 119900,
   &quot;vct&quot;: &quot;mandate.checkout.open.1&quot;
-}</pre><div class="hash">hash 9630358b2ea1be7224f1d9b6b268c7501166fb3c69479d65ca2402a4c23029b4<br>prev f7097a7945f49c445f90d81c67ad354aac6d9f27dd71f96d2023cddf1de5a5d5</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#70</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹1,199.00 at Lumen Home &amp; Kitchen.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+}</pre><div class="hash">hash b4b4bc93410df5826c242250506546723ad650354b2b72e16529fa66b26e73d8<br>prev 7192dc81a3208bf2e743100507c62453e82f3f591792305d785816804f393192</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#70</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹1,199.00 at Lumen Home &amp; Kitchen.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;merchant&quot;: &quot;Lumen Home &amp; Kitchen&quot;,
-  &quot;receipt_id&quot;: &quot;crcpt_ea7aa0b56c8540e3&quot;,
+  &quot;receipt_id&quot;: &quot;crcpt_2f036b603ce84444&quot;,
   &quot;total&quot;: 119900
-}</pre><div class="hash">hash d87b30b2621e936cfd3ebed624fe2f37e8fcff76de54203cd203c4db3c091126<br>prev 9630358b2ea1be7224f1d9b6b268c7501166fb3c69479d65ca2402a4c23029b4</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#71</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹1,199.00 to m_lumen, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash a0d1f7e990125d20f4393e5f5a82d65ac972c28cc78e1524703e7bb0732e45f0<br>prev b4b4bc93410df5826c242250506546723ad650354b2b72e16529fa66b26e73d8</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#71</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹1,199.00 to m_lumen, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 119900,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;payee&quot;: &quot;m_lumen&quot;,
-  &quot;payment_mandate_id&quot;: &quot;pm_045318e28a164949&quot;,
+  &quot;payment_mandate_id&quot;: &quot;pm_a9f0968b092f41b2&quot;,
   &quot;vct&quot;: &quot;mandate.payment.1&quot;
-}</pre><div class="hash">hash 02ba9302b65f3f83acc78eb03632a92abbd9da12a648f67f721d590eafd28b2a<br>prev d87b30b2621e936cfd3ebed624fe2f37e8fcff76de54203cd203c4db3c091126</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#72</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;signature&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 99878e821eb93b6c11bfbaff364b2874ec4eab69ebc7b744a0d74f963867cf83<br>prev a0d1f7e990125d20f4393e5f5a82d65ac972c28cc78e1524703e7bb0732e45f0</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#72</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;signature&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;signature&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;alg&quot;: &quot;ES256&quot;,
@@ -653,76 +653,76 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 950a63e50959ceae4e0d3fb9acd9ba780884d48ca387933dfb83d15b5fd0a3e0<br>prev 02ba9302b65f3f83acc78eb03632a92abbd9da12a648f67f721d590eafd28b2a</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#73</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash aa80bef4c65d9e5c2d63b766bf3c6e06fd3622ac5ccc4efad45c1f5ab40d7159<br>prev 99878e821eb93b6c11bfbaff364b2874ec4eab69ebc7b744a0d74f963867cf83</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#73</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;vct&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;vct&quot;: &quot;mandate.payment.1&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash c218e82d60d92487faf90d1564571d4ebe1f5c757cd2a30914b9011efe223b29<br>prev 950a63e50959ceae4e0d3fb9acd9ba780884d48ca387933dfb83d15b5fd0a3e0</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#74</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;presenter_role&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 47e15643c8cb520f3c868bc4993a77aed15f5f5204e9209e852772179b3eec10<br>prev aa80bef4c65d9e5c2d63b766bf3c6e06fd3622ac5ccc4efad45c1f5ab40d7159</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#74</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;presenter_role&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;presenter_role&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;role&quot;: &quot;shopping_agent&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash e1cf521fbfdf4b20e7afb10ee09de448793a42bc94e395d8bfa4e5fe7c346268<br>prev c218e82d60d92487faf90d1564571d4ebe1f5c757cd2a30914b9011efe223b29</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#75</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 86188742616f9a3b768cfc783b6a031991974f39253afb9fa787582db366f909<br>prev 47e15643c8cb520f3c868bc4993a77aed15f5f5204e9209e852772179b3eec10</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#75</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;not_expired&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;exp&quot;: 1788589851.0,
+    &quot;exp&quot;: 1788590006.0,
     &quot;seconds_remaining&quot;: 600,
     &quot;which&quot;: &quot;payment mandate&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 84bdc99de11b85d4d474bbeda4938a387791e54a02e7b0e43119b6d6faf671da<br>prev e1cf521fbfdf4b20e7afb10ee09de448793a42bc94e395d8bfa4e5fe7c346268</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#76</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 8655de6cb3b5253c8b0d589d88bba4b6ae0e726296b4dfbc0b8571338e274415<br>prev 86188742616f9a3b768cfc783b6a031991974f39253afb9fa787582db366f909</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#76</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;vct&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;vct&quot;: &quot;mandate.payment.open.1&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash e7dade15114747e5be7624de910f9dbb1d4f41e5304ccababcef52af70f3cb9d<br>prev 84bdc99de11b85d4d474bbeda4938a387791e54a02e7b0e43119b6d6faf671da</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#77</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash d649a28d1057b0d74af32d36dd377db8d71a9aa3390bbab708c2001e481e7f08<br>prev 8655de6cb3b5253c8b0d589d88bba4b6ae0e726296b4dfbc0b8571338e274415</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#77</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;not_expired&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;exp&quot;: 1788675651.0,
+    &quot;exp&quot;: 1788675806.0,
     &quot;seconds_remaining&quot;: 86400,
     &quot;which&quot;: &quot;standing authorisation&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 453ce94e6b7da6a616d1738a2de261e00eb50c33868d6974883631155c12d89e<br>prev e7dade15114747e5be7624de910f9dbb1d4f41e5304ccababcef52af70f3cb9d</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#78</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;key_binding&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash e23b20f2a9f4adf2a801c5483f6dabd899850c92efc700d5475dd63c4d4e9229<br>prev d649a28d1057b0d74af32d36dd377db8d71a9aa3390bbab708c2001e481e7f08</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#78</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;key_binding&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;key_binding&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;presenter_kid&quot;: &quot;key_agent_shopper&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 59f60ebd3fb4718be275318b9c34ec3cc509f5ab24aab0ef8921cb5d10f2e275<br>prev 453ce94e6b7da6a616d1738a2de261e00eb50c33868d6974883631155c12d89e</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#79</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;currency&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash d3931e6215d3d7178665739367839e52ef5ec546280615c8747eb55975a85454<br>prev e23b20f2a9f4adf2a801c5483f6dabd899850c92efc700d5475dd63c4d4e9229</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#79</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;currency&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;currency&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;currency&quot;: &quot;INR&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash d434b75ff8d6b78400afcfc1f0c490b81003a56b342a704338c48003cdc84c39<br>prev 59f60ebd3fb4718be275318b9c34ec3cc509f5ab24aab0ef8921cb5d10f2e275</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#80</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;allowed_payees&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash ed484ea8d0a406fc37b7b7e9ca8ab2bbe4b4991d3173e02e594c7838d9c5db83<br>prev d3931e6215d3d7178665739367839e52ef5ec546280615c8747eb55975a85454</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#80</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;allowed_payees&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;allowed_payees&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;allowed&quot;: [
@@ -734,9 +734,9 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 242659322efcfeef9b0a88550856268ab0296268edc7ff5e23322ce7b127c57b<br>prev d434b75ff8d6b78400afcfc1f0c490b81003a56b342a704338c48003cdc84c39</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#81</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;amount_range&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 08b891ceb6f085cdd5d800f1463b4d4830ff6adf2a33c6d8a96d221e29c46cce<br>prev ed484ea8d0a406fc37b7b7e9ca8ab2bbe4b4991d3173e02e594c7838d9c5db83</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#81</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;amount_range&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;amount_range&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;amount&quot;: 119900,
@@ -745,9 +745,9 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 8e43907cf691cabf2ee5287166fa5cce9db4dc2e01f996813a07582b643500a6<br>prev 242659322efcfeef9b0a88550856268ab0296268edc7ff5e23322ce7b127c57b</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#82</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;budget&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 8d79546f967a5be065e1181ab34e911ba0a8c219b3bc3d5955d8c7c4fa0a8b78<br>prev 08b891ceb6f085cdd5d800f1463b4d4830ff6adf2a33c6d8a96d221e29c46cce</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#82</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;budget&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;budget&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;already_spent&quot;: 219800,
@@ -758,43 +758,43 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash b160fc19e58399ee58dc005a8ec9a16169b372e3f6229de26cbfc62aee15aea6<br>prev 8e43907cf691cabf2ee5287166fa5cce9db4dc2e01f996813a07582b643500a6</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#83</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;execution_date&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 2962b0c6219c1e31192cbc4adbbfbec06a809ceaaa0c1621c1b9c93165b65187<br>prev 8d79546f967a5be065e1181ab34e911ba0a8c219b3bc3d5955d8c7c4fa0a8b78</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#83</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;execution_date&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;execution_date&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;constrained&quot;: true,
-    &quot;execution_date&quot;: &quot;2026-09-05T06:20:51+00:00&quot;
+    &quot;execution_date&quot;: &quot;2026-09-05T06:23:26+00:00&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 5607c63af62ac48a287f4467cd1e71fe491d3ad6578b37bff66ff5ffcb78e558<br>prev b160fc19e58399ee58dc005a8ec9a16169b372e3f6229de26cbfc62aee15aea6</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#84</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;checkout_reference&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash cce3475d72cf4ac2cca1e8aabd9ffea41fdfe7dd3dbf09b64acda2ad6b16828f<br>prev 2962b0c6219c1e31192cbc4adbbfbec06a809ceaaa0c1621c1b9c93165b65187</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#84</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;checkout_reference&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;checkout_reference&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;checkout_hash&quot;: &quot;b2e9d7a12b7af29b514f513d9b54637ab9020a692781426b15df0c9ead81e617&quot;,
+    &quot;checkout_hash&quot;: &quot;71e76d817f4cf606fb8d8a141c1be55b7eac72c38303dd045ee0a9b7043237aa&quot;,
     &quot;pinned&quot;: false
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash a1df1eb938a392df4b8378a2d003d51a01ebeb9bbecfb61c4bd1d7e60d8802e5<br>prev 5607c63af62ac48a287f4467cd1e71fe491d3ad6578b37bff66ff5ffcb78e558</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#85</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;nonce&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 51dde7b5d251bb858bc51bd1d7360a3982fee699507c1b24c463bcc12038135d<br>prev cce3475d72cf4ac2cca1e8aabd9ffea41fdfe7dd3dbf09b64acda2ad6b16828f</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#85</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;nonce&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;nonce&quot;,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;first_use&quot;: true,
-    &quot;nonce&quot;: &quot;e03c5f28c3e9441d825fb7a187e612dc&quot;
+    &quot;nonce&quot;: &quot;e14f09432e764f7f8aad14b4890d082e&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash ddc12b2cd8fd137dbe3508a27c24fb85daeb840b5a2d5333d5f8efdf4200457f<br>prev a1df1eb938a392df4b8378a2d003d51a01ebeb9bbecfb61c4bd1d7e60d8802e5</div></details></div></li><li class="row pivotal" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#86</div><div class="body"><span class="ev">verifier.decision</span><span class="who">verifier</span><div class="why">Approved ₹1,199.00 to Lumen Home &amp; Kitchen: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 2e1d26fca9f32acdc29acfa1b1054883ba8f33844926c67f71f5d475205f571f<br>prev 51dde7b5d251bb858bc51bd1d7360a3982fee699507c1b24c463bcc12038135d</div></details></div></li><li class="row pivotal" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#86</div><div class="body"><span class="ev">verifier.decision</span><span class="who">verifier</span><div class="why">Approved ₹1,199.00 to Lumen Home &amp; Kitchen: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 119900,
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;outcome&quot;: &quot;ALLOW&quot;,
   &quot;reason&quot;: &quot;Approved ₹1,199.00 to Lumen Home &amp; Kitchen: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.&quot;
-}</pre><div class="hash">hash 91b6afdfafd6901ac5d4f4165323d93abbd37daa99da837403444fab7c8a8d00<br>prev ddc12b2cd8fd137dbe3508a27c24fb85daeb840b5a2d5333d5f8efdf4200457f</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#87</div><div class="body"><span class="ev">recovery.started</span><span class="who">processor</span><div class="why">Paying ₹1,199.00 with at most 3 attempt(s), trying upi then payment_link then card.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash e05f867745d79f1906427acb03c7e160fcc6eff3a0ff0772c5a1c7dd36e3f59e<br>prev 2e1d26fca9f32acdc29acfa1b1054883ba8f33844926c67f71f5d475205f571f</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#87</div><div class="body"><span class="ev">recovery.started</span><span class="who">processor</span><div class="why">Paying ₹1,199.00 with at most 3 attempt(s), trying upi then payment_link then card.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 119900,
   &quot;breaker&quot;: {
     &quot;consecutive_failures&quot;: 0,
@@ -807,116 +807,116 @@ chain — not written by hand.</p>
     &quot;card&quot;
   ],
   &quot;max_attempts&quot;: 3,
-  &quot;payment_mandate_id&quot;: &quot;pm_045318e28a164949&quot;
-}</pre><div class="hash">hash 4cec0f6e00d7188b6b2affaf1e0b310982893bc7c7d8865a12d81ff91fa58910<br>prev 91b6afdfafd6901ac5d4f4165323d93abbd37daa99da837403444fab7c8a8d00</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#88</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹1,199.00 order on the fake rail for m_lumen, to be paid by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;payment_mandate_id&quot;: &quot;pm_a9f0968b092f41b2&quot;
+}</pre><div class="hash">hash fba2c2e24c4bcf11df8fb3e010cc4d4496161836f5d667a5baea7def59a0b7b5<br>prev e05f867745d79f1906427acb03c7e160fcc6eff3a0ff0772c5a1c7dd36e3f59e</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#88</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹1,199.00 order on the fake rail for m_lumen, to be paid by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 119900,
-  &quot;cart_id&quot;: &quot;cart_54642d40a9bc49c1&quot;,
+  &quot;cart_id&quot;: &quot;cart_2123a9e634e745b3&quot;,
   &quot;currency&quot;: &quot;INR&quot;,
-  &quot;idempotency_key&quot;: &quot;9be27ae69f65a59db86cb21fbb9319df72b2d81ce8c422339326dd172638cd13&quot;,
+  &quot;idempotency_key&quot;: &quot;9ed21318ab75b521a9e0053f78f48d4e7d73b2e742d76621486283f517ecaf57&quot;,
   &quot;merchant&quot;: &quot;Lumen Home &amp; Kitchen&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000003&quot;,
   &quot;rail&quot;: &quot;fake&quot;
-}</pre><div class="hash">hash 84b6304cbeb2f841cf088c06c7707dfc448eae6343d155818ea2053cc0a2295c<br>prev 4cec0f6e00d7188b6b2affaf1e0b310982893bc7c7d8865a12d81ff91fa58910</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#89</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 1 on order_fake_000003 using upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 6526b50e047a3f0012ebe7c3ed76fcbfb0d1b71d5182b487223c1869b2b48edf<br>prev fba2c2e24c4bcf11df8fb3e010cc4d4496161836f5d667a5baea7def59a0b7b5</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#89</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 1 on order_fake_000003 using upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;attempt&quot;: 1,
-  &quot;idempotency_key&quot;: &quot;9be27ae69f65a59db86cb21fbb9319df72b2d81ce8c422339326dd172638cd13&quot;,
+  &quot;idempotency_key&quot;: &quot;9ed21318ab75b521a9e0053f78f48d4e7d73b2e742d76621486283f517ecaf57&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000003&quot;
-}</pre><div class="hash">hash 63e73176178a7094838f8608de799b9726a74c08158d1170f43e9d06fcea60d2<br>prev 84b6304cbeb2f841cf088c06c7707dfc448eae6343d155818ea2053cc0a2295c</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#90</div><div class="body"><span class="ev">mpp.payment_declined</span><span class="who">processor</span><div class="why">upi was declined on order_fake_000003: the bank declined this payment. No money moved.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 5d1c1f3c8f91c44758f030869e6f7ea89c903ec968f731a7497cc66ce1ee0157<br>prev 6526b50e047a3f0012ebe7c3ed76fcbfb0d1b71d5182b487223c1869b2b48edf</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#90</div><div class="body"><span class="ev">mpp.payment_declined</span><span class="who">processor</span><div class="why">upi was declined on order_fake_000003: the bank declined this payment. No money moved.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;error&quot;: &quot;rail.declined&quot;,
-  &quot;idempotency_key&quot;: &quot;9be27ae69f65a59db86cb21fbb9319df72b2d81ce8c422339326dd172638cd13&quot;,
+  &quot;idempotency_key&quot;: &quot;9ed21318ab75b521a9e0053f78f48d4e7d73b2e742d76621486283f517ecaf57&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000003&quot;,
   &quot;payment_id&quot;: &quot;pay_fake_000003&quot;
-}</pre><div class="hash">hash a39354b348e79ff9a454bfa362aba945858a44b1b0057e46d058f1756f380838<br>prev 63e73176178a7094838f8608de799b9726a74c08158d1170f43e9d06fcea60d2</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#91</div><div class="body"><span class="ev">recovery.method_fallback</span><span class="who">processor</span><div class="why">upi failed (the bank declined this payment); falling back to payment_link.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 5c02aba46f1c40bcf9fb3be2252ff08833afc7f221b0715c8116486d31f9ff77<br>prev 5d1c1f3c8f91c44758f030869e6f7ea89c903ec968f731a7497cc66ce1ee0157</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#91</div><div class="body"><span class="ev">recovery.method_fallback</span><span class="who">processor</span><div class="why">upi failed (the bank declined this payment); falling back to payment_link.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;attempt&quot;: 1,
   &quot;error&quot;: &quot;the bank declined this payment&quot;,
   &quot;failed_method&quot;: &quot;upi&quot;,
   &quot;next_method&quot;: &quot;payment_link&quot;
-}</pre><div class="hash">hash 8e387711473e91c5c74df60dc934225245fb8312a892d7740236498e07dd82eb<br>prev a39354b348e79ff9a454bfa362aba945858a44b1b0057e46d058f1756f380838</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#92</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹1,199.00 order on the fake rail for m_lumen, to be paid by payment_link.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 03271838efca7e1aebe1d88e82a506ba2c1a0ee13c73c0478784101b131f07d8<br>prev 5c02aba46f1c40bcf9fb3be2252ff08833afc7f221b0715c8116486d31f9ff77</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#92</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹1,199.00 order on the fake rail for m_lumen, to be paid by payment_link.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 119900,
-  &quot;cart_id&quot;: &quot;cart_54642d40a9bc49c1&quot;,
+  &quot;cart_id&quot;: &quot;cart_2123a9e634e745b3&quot;,
   &quot;currency&quot;: &quot;INR&quot;,
-  &quot;idempotency_key&quot;: &quot;9be27ae69f65a59db86cb21fbb9319df72b2d81ce8c422339326dd172638cd13&quot;,
+  &quot;idempotency_key&quot;: &quot;9ed21318ab75b521a9e0053f78f48d4e7d73b2e742d76621486283f517ecaf57&quot;,
   &quot;merchant&quot;: &quot;Lumen Home &amp; Kitchen&quot;,
   &quot;method&quot;: &quot;payment_link&quot;,
   &quot;order_id&quot;: &quot;order_fake_000004&quot;,
   &quot;rail&quot;: &quot;fake&quot;
-}</pre><div class="hash">hash c936e771bcce43d22efd7b40d12158f943461f4d9aa0c3a64aecfa4b622af19a<br>prev 8e387711473e91c5c74df60dc934225245fb8312a892d7740236498e07dd82eb</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#93</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 2 on order_fake_000004 using payment_link.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash d2594fed2440fe41dfbb743fe4790cd1b2b2ed249d8f27c4ddb070f387dc0084<br>prev 03271838efca7e1aebe1d88e82a506ba2c1a0ee13c73c0478784101b131f07d8</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#93</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 2 on order_fake_000004 using payment_link.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;attempt&quot;: 2,
-  &quot;idempotency_key&quot;: &quot;9be27ae69f65a59db86cb21fbb9319df72b2d81ce8c422339326dd172638cd13&quot;,
+  &quot;idempotency_key&quot;: &quot;9ed21318ab75b521a9e0053f78f48d4e7d73b2e742d76621486283f517ecaf57&quot;,
   &quot;method&quot;: &quot;payment_link&quot;,
   &quot;order_id&quot;: &quot;order_fake_000004&quot;
-}</pre><div class="hash">hash 00b4db4aad83f73ab95631f918b8a56e01a4feccfa4c1abc21d43c1fb88dd05c<br>prev c936e771bcce43d22efd7b40d12158f943461f4d9aa0c3a64aecfa4b622af19a</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#94</div><div class="body"><span class="ev">mpp.payment_captured</span><span class="who">processor</span><div class="why">Captured ₹1,199.00 for Lumen Home &amp; Kitchen (pay_fake_000004) by payment_link.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash da9bf01acde91e97b22b6d8472f8c25c85e380dd9c4dd77b5960544a649a06f9<br>prev d2594fed2440fe41dfbb743fe4790cd1b2b2ed249d8f27c4ddb070f387dc0084</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#94</div><div class="body"><span class="ev">mpp.payment_captured</span><span class="who">processor</span><div class="why">Captured ₹1,199.00 for Lumen Home &amp; Kitchen (pay_fake_000004) by payment_link.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 119900,
-  &quot;cart_id&quot;: &quot;cart_54642d40a9bc49c1&quot;,
+  &quot;cart_id&quot;: &quot;cart_2123a9e634e745b3&quot;,
   &quot;currency&quot;: &quot;INR&quot;,
-  &quot;idempotency_key&quot;: &quot;9be27ae69f65a59db86cb21fbb9319df72b2d81ce8c422339326dd172638cd13&quot;,
+  &quot;idempotency_key&quot;: &quot;9ed21318ab75b521a9e0053f78f48d4e7d73b2e742d76621486283f517ecaf57&quot;,
   &quot;method&quot;: &quot;payment_link&quot;,
   &quot;order_id&quot;: &quot;order_fake_000004&quot;,
   &quot;payment_id&quot;: &quot;pay_fake_000004&quot;
-}</pre><div class="hash">hash 4c4013dd6de0319d6235bafbad418e351e6c639715d59b95052ca411c63db3cd<br>prev 00b4db4aad83f73ab95631f918b8a56e01a4feccfa4c1abc21d43c1fb88dd05c</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#95</div><div class="body"><span class="ev">mpp.payment_receipt_issued</span><span class="who">processor</span><div class="why">Issued a signed receipt: ₹1,199.00 captured after 2 attempt(s).</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 9dd59f37efc3f801c6b85e4d68a56ddd794c05c4870b91bb542fd927f0e4d546<br>prev da9bf01acde91e97b22b6d8472f8c25c85e380dd9c4dd77b5960544a649a06f9</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#95</div><div class="body"><span class="ev">mpp.payment_receipt_issued</span><span class="who">processor</span><div class="why">Issued a signed receipt: ₹1,199.00 captured after 2 attempt(s).</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 119900,
   &quot;attempts&quot;: 2,
   &quot;failure_code&quot;: null,
-  &quot;idempotency_key&quot;: &quot;9be27ae69f65a59db86cb21fbb9319df72b2d81ce8c422339326dd172638cd13&quot;,
+  &quot;idempotency_key&quot;: &quot;9ed21318ab75b521a9e0053f78f48d4e7d73b2e742d76621486283f517ecaf57&quot;,
   &quot;order_id&quot;: &quot;order_fake_000004&quot;,
   &quot;payment_id&quot;: &quot;pay_fake_000004&quot;,
-  &quot;receipt_id&quot;: &quot;rcpt_76fe24e11ba2450f&quot;,
+  &quot;receipt_id&quot;: &quot;rcpt_30147cbc4c314a3e&quot;,
   &quot;status&quot;: &quot;captured&quot;
-}</pre><div class="hash">hash 2cc157fafa6a85e9dca7bc221c3a2bfbd2efb8a83c579775d0179db676fd2ffd<br>prev 4c4013dd6de0319d6235bafbad418e351e6c639715d59b95052ca411c63db3cd</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#96</div><div class="body"><span class="ev">recovery.succeeded</span><span class="who">processor</span><div class="why">Recovered: payment_link succeeded on attempt 2 after upi failed. Same idempotency root throughout, so nothing was charged twice.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 36af42f56df5365411c513d7f842b45d3e39ab06e19ba009fb607e70330523a8<br>prev 9dd59f37efc3f801c6b85e4d68a56ddd794c05c4870b91bb542fd927f0e4d546</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#96</div><div class="body"><span class="ev">recovery.succeeded</span><span class="who">processor</span><div class="why">Recovered: payment_link succeeded on attempt 2 after upi failed. Same idempotency root throughout, so nothing was charged twice.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;attempts&quot;: 2,
-  &quot;idempotency_key&quot;: &quot;9be27ae69f65a59db86cb21fbb9319df72b2d81ce8c422339326dd172638cd13&quot;,
+  &quot;idempotency_key&quot;: &quot;9ed21318ab75b521a9e0053f78f48d4e7d73b2e742d76621486283f517ecaf57&quot;,
   &quot;methods_tried&quot;: [
     &quot;upi&quot;,
     &quot;payment_link&quot;
   ],
   &quot;payment_id&quot;: &quot;pay_fake_000004&quot;,
   &quot;succeeded_on&quot;: &quot;payment_link&quot;
-}</pre><div class="hash">hash f294bdb660946ac3af635abafe4f6aa9458375755bc7b0eb59c7b44e3d3d26a8<br>prev 2cc157fafa6a85e9dca7bc221c3a2bfbd2efb8a83c579775d0179db676fd2ffd</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#97</div><div class="body"><span class="ev">merchant.stock_decremented</span><span class="who">merchant</span><div class="why">Reduced stock after payment cleared: LM-KIT-002=21</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_8aa6755c579544eb&quot;,
+}</pre><div class="hash">hash 3fd03a77bf21ad783a7ca7b2358befae429d872f3a30a472731b91a4aa4334eb<br>prev 36af42f56df5365411c513d7f842b45d3e39ab06e19ba009fb607e70330523a8</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#97</div><div class="body"><span class="ev">merchant.stock_decremented</span><span class="who">merchant</span><div class="why">Reduced stock after payment cleared: LM-KIT-002=21</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_60f4fcd7320d4463&quot;,
   &quot;detail&quot;: &quot;LM-KIT-002=21&quot;,
   &quot;remaining_stock&quot;: {
     &quot;LM-KIT-002&quot;: 21
   }
-}</pre><div class="hash">hash 0dade650a77f727518f4ea8160f1f84d6fb962c2fc650e308dfc5cc7c2ca1260<br>prev f294bdb660946ac3af635abafe4f6aa9458375755bc7b0eb59c7b44e3d3d26a8</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#98</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: a magnetic car phone mount</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash fa8b80b955d3644717a8a346bffced1b442c06f2a085eb8375030ccd66688540<br>prev 3fd03a77bf21ad783a7ca7b2358befae429d872f3a30a472731b91a4aa4334eb</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#98</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: a magnetic car phone mount</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;filters&quot;: {
     &quot;category&quot;: &quot;mobile_accessories&quot;
   },
   &quot;goal&quot;: &quot;a magnetic car phone mount&quot;,
   &quot;query&quot;: &quot;car phone mount&quot;
-}</pre><div class="hash">hash 7a72fa28188d47baf24e732d4d357a7203202cf07f7958966a739b8498e7c24f<br>prev 0dade650a77f727518f4ea8160f1f84d6fb962c2fc650e308dfc5cc7c2ca1260</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#99</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from PixelByte Electronics for ₹699.00.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_1fe52397606741e9&quot;,
+}</pre><div class="hash">hash 68d9757bcb39a40126ba788eb85b18d25a94caae0b9d4861608fab49585231a0<br>prev fa8b80b955d3644717a8a346bffced1b442c06f2a085eb8375030ccd66688540</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#99</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from PixelByte Electronics for ₹699.00.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_e7604f5e202c482e&quot;,
   &quot;item_count&quot;: 1,
   &quot;merchant&quot;: &quot;PixelByte Electronics&quot;,
   &quot;ship_to_pincode&quot;: &quot;560001&quot;,
   &quot;total&quot;: 69900
-}</pre><div class="hash">hash 1c39a39534f288716ecfbbdde9bca0780f5becef5830bea5031b2b89b8db40cd<br>prev 7a72fa28188d47baf24e732d4d357a7203202cf07f7958966a739b8498e7c24f</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#100</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹699.00 at PixelByte Electronics, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_1fe52397606741e9&quot;,
-  &quot;checkout_hash&quot;: &quot;a77d82d9d23c942b&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+}</pre><div class="hash">hash 7038880c37e71d1f2c0194bbfc5e97789e62cad4ba38a4e2091d9f1f44816011<br>prev 68d9757bcb39a40126ba788eb85b18d25a94caae0b9d4861608fab49585231a0</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#100</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹699.00 at PixelByte Electronics, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_e7604f5e202c482e&quot;,
+  &quot;checkout_hash&quot;: &quot;73bd387094f1063c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;merchant&quot;: &quot;PixelByte Electronics&quot;,
   &quot;total&quot;: 69900,
   &quot;ttl_minutes&quot;: 15
-}</pre><div class="hash">hash 732a0e548c636d74b04e8bcf76feb87d401d58dad65015503f44d3bc451da4d3<br>prev 1c39a39534f288716ecfbbdde9bca0780f5becef5830bea5031b2b89b8db40cd</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#101</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹699.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
-  &quot;mandate_id&quot;: &quot;cmo_0779db6e7ccd4554&quot;,
+}</pre><div class="hash">hash 2a555304c4b8c0a1eb0798eb97e740ab9b1199b0664d908abbbce568083dd067<br>prev 7038880c37e71d1f2c0194bbfc5e97789e62cad4ba38a4e2091d9f1f44816011</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#101</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹699.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
+  &quot;mandate_id&quot;: &quot;cmo_3f3a269204004875&quot;,
   &quot;total&quot;: 69900,
   &quot;vct&quot;: &quot;mandate.checkout.open.1&quot;
-}</pre><div class="hash">hash 4c690cd1403dc7e44c7e6ae17ef55e468cad2456701b94088e195249ec9ecf22<br>prev 732a0e548c636d74b04e8bcf76feb87d401d58dad65015503f44d3bc451da4d3</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#102</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹699.00 at PixelByte Electronics.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+}</pre><div class="hash">hash 466f2f4361aa71b5a7ef3a1bc981160cb68c62216713cc560bd27babd2683967<br>prev 2a555304c4b8c0a1eb0798eb97e740ab9b1199b0664d908abbbce568083dd067</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#102</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹699.00 at PixelByte Electronics.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;merchant&quot;: &quot;PixelByte Electronics&quot;,
-  &quot;receipt_id&quot;: &quot;crcpt_6977c9c816474608&quot;,
+  &quot;receipt_id&quot;: &quot;crcpt_b760e53e6d1d4c93&quot;,
   &quot;total&quot;: 69900
-}</pre><div class="hash">hash bf4b20c64a00e50350dceab6935cba751e023e53e0741a88777238ce48aa54e6<br>prev 4c690cd1403dc7e44c7e6ae17ef55e468cad2456701b94088e195249ec9ecf22</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#103</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹699.00 to m_pixelbyte, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 8021f5c0c3b1b49b65530a1b9f7000b37760a6c13b62e029b6115a855e7c8231<br>prev 466f2f4361aa71b5a7ef3a1bc981160cb68c62216713cc560bd27babd2683967</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#103</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹699.00 to m_pixelbyte, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 69900,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;payee&quot;: &quot;m_pixelbyte&quot;,
-  &quot;payment_mandate_id&quot;: &quot;pm_763dd9f0914d47ce&quot;,
+  &quot;payment_mandate_id&quot;: &quot;pm_2d45307f624e465d&quot;,
   &quot;vct&quot;: &quot;mandate.payment.1&quot;
-}</pre><div class="hash">hash 2ac54b32d5da9aaf48192b8f720b9cff4f6a37511b0f4e8bb98aa0ad3cbab7a0<br>prev bf4b20c64a00e50350dceab6935cba751e023e53e0741a88777238ce48aa54e6</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#104</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;signature&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 8c03c5eac0624e07ea0d6b777f3b9e89a885da61487b1ec2fa9677711acf724b<br>prev 8021f5c0c3b1b49b65530a1b9f7000b37760a6c13b62e029b6115a855e7c8231</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#104</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;signature&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;signature&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;alg&quot;: &quot;ES256&quot;,
@@ -925,76 +925,76 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash ed0a80cc3398a011dc00b3d679e95ea7199f862412c20cced12b98acb76de664<br>prev 2ac54b32d5da9aaf48192b8f720b9cff4f6a37511b0f4e8bb98aa0ad3cbab7a0</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#105</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 7dfe082d102759a742eda111816776379c1de57f4f78ca3ad03f3fbb614330ff<br>prev 8c03c5eac0624e07ea0d6b777f3b9e89a885da61487b1ec2fa9677711acf724b</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#105</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;vct&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;vct&quot;: &quot;mandate.payment.1&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 1c117baa7937ce6e2d0c6e071914059e2256d69c91db61d414c6ec10b63ea0d7<br>prev ed0a80cc3398a011dc00b3d679e95ea7199f862412c20cced12b98acb76de664</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#106</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;presenter_role&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 4c21c77e3ae1afb4933174c8b62bb985473a9f0e5d4f526dfb5152200e016147<br>prev 7dfe082d102759a742eda111816776379c1de57f4f78ca3ad03f3fbb614330ff</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#106</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;presenter_role&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;presenter_role&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;role&quot;: &quot;shopping_agent&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 022518ab371dff7aa9d96793dfa3893426e27aa293f88d26375ae9f0497879fe<br>prev 1c117baa7937ce6e2d0c6e071914059e2256d69c91db61d414c6ec10b63ea0d7</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#107</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash ccf61d9577b0fc003e5b057402a7579905f6899397769930988d9ecb787eb336<br>prev 4c21c77e3ae1afb4933174c8b62bb985473a9f0e5d4f526dfb5152200e016147</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#107</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;not_expired&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;exp&quot;: 1788589851.0,
+    &quot;exp&quot;: 1788590006.0,
     &quot;seconds_remaining&quot;: 600,
     &quot;which&quot;: &quot;payment mandate&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash bd831a38744cb7d9fadfbed2cfe194acd12017df40d8a7387c178c26caead494<br>prev 022518ab371dff7aa9d96793dfa3893426e27aa293f88d26375ae9f0497879fe</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#108</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 4b55c59a7c981bf9af9b70e1c068676b750ee210d0993ca45a337baa348e6d9f<br>prev ccf61d9577b0fc003e5b057402a7579905f6899397769930988d9ecb787eb336</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#108</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;vct&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;vct&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;vct&quot;: &quot;mandate.payment.open.1&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash f33f4a0a51dec2610c7659576ee128323621e6a258a8d1ed46466637345a8145<br>prev bd831a38744cb7d9fadfbed2cfe194acd12017df40d8a7387c178c26caead494</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#109</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 0cb18e712813e6fb2fd118bb54f6e5378a6ac5ec61790f7d2a2f7208bc758dc3<br>prev 4b55c59a7c981bf9af9b70e1c068676b750ee210d0993ca45a337baa348e6d9f</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#109</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;not_expired&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;not_expired&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;exp&quot;: 1788675651.0,
+    &quot;exp&quot;: 1788675806.0,
     &quot;seconds_remaining&quot;: 86400,
     &quot;which&quot;: &quot;standing authorisation&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 12e0cb697bdb3b2b4bb0a771870cd5e76eda6af91550f3835895d3401b7dc7ff<br>prev f33f4a0a51dec2610c7659576ee128323621e6a258a8d1ed46466637345a8145</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#110</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;key_binding&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash d6c54e5e1e5851d602bc9e5f93d4ef5616ae438aa6f5fa652c25bcfb2b3f218c<br>prev 0cb18e712813e6fb2fd118bb54f6e5378a6ac5ec61790f7d2a2f7208bc758dc3</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#110</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;key_binding&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;key_binding&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;presenter_kid&quot;: &quot;key_agent_shopper&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash dfb4149eb89884a5b274c75dbe33edac48e80ff3f2b520d6bcb331f84be5c616<br>prev 12e0cb697bdb3b2b4bb0a771870cd5e76eda6af91550f3835895d3401b7dc7ff</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#111</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;currency&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 873087614579c3c737bc1f077cf8d40f346c980158006f02dced6b3510037db9<br>prev d6c54e5e1e5851d602bc9e5f93d4ef5616ae438aa6f5fa652c25bcfb2b3f218c</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#111</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;currency&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;currency&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;currency&quot;: &quot;INR&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash d5a183d0916ca2cc8f2f40eef047832a8f0e3ab8c4998b94339b85566c859a54<br>prev dfb4149eb89884a5b274c75dbe33edac48e80ff3f2b520d6bcb331f84be5c616</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#112</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;allowed_payees&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 7ac5fa75e1ed3517384a3c649b2fd729a9d0cff8ef4c59b34e15dcaaa8a0f9a0<br>prev 873087614579c3c737bc1f077cf8d40f346c980158006f02dced6b3510037db9</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#112</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;allowed_payees&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;allowed_payees&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;allowed&quot;: [
@@ -1006,9 +1006,9 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash fe1fdf95f863ca6ff06ecc2542e466fa7d44592853564a1b53f18c66eeb43369<br>prev d5a183d0916ca2cc8f2f40eef047832a8f0e3ab8c4998b94339b85566c859a54</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#113</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;amount_range&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 6b5d9a4a2778831fa4a83dc0b456bd7a18df0e0a3adb10f13a4948b8e519f187<br>prev 7ac5fa75e1ed3517384a3c649b2fd729a9d0cff8ef4c59b34e15dcaaa8a0f9a0</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#113</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;amount_range&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;amount_range&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;amount&quot;: 69900,
@@ -1017,9 +1017,9 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 9fd194b73cc45058850e89c750196c4b47a47435e8008caf667954824beddcbf<br>prev fe1fdf95f863ca6ff06ecc2542e466fa7d44592853564a1b53f18c66eeb43369</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#114</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;budget&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 108d6508fbfef2f8aa59747faed192a30b30ac5444044b0420dbe972d9794927<br>prev 6b5d9a4a2778831fa4a83dc0b456bd7a18df0e0a3adb10f13a4948b8e519f187</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#114</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;budget&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;budget&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;already_spent&quot;: 339700,
@@ -1030,43 +1030,43 @@ chain — not written by hand.</p>
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 682fceb3419e78e76533c02d9832343fbf10d26d4493b51ec0781ea258dc4ddb<br>prev 9fd194b73cc45058850e89c750196c4b47a47435e8008caf667954824beddcbf</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#115</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;execution_date&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 07f7a4a89cef8558422813f7fa224d8370fa0f48ac3a00967ac8436f852f22ae<br>prev 108d6508fbfef2f8aa59747faed192a30b30ac5444044b0420dbe972d9794927</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#115</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;execution_date&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;execution_date&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;constrained&quot;: true,
-    &quot;execution_date&quot;: &quot;2026-09-05T06:20:51+00:00&quot;
+    &quot;execution_date&quot;: &quot;2026-09-05T06:23:26+00:00&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 32ee9bf27a6b050250a15b250b7439b9f73325bee2bd9495ea1b4fb37138ab1c<br>prev 682fceb3419e78e76533c02d9832343fbf10d26d4493b51ec0781ea258dc4ddb</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#116</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;checkout_reference&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 914055c0f6c43944a9c5076ca86dedfb8d6019f09bf6221b80814605869411ab<br>prev 07f7a4a89cef8558422813f7fa224d8370fa0f48ac3a00967ac8436f852f22ae</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#116</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;checkout_reference&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;checkout_reference&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
-    &quot;checkout_hash&quot;: &quot;a77d82d9d23c942b90db99eb3b9a7ea66eaef8f4169043e5c99f2cd74521035b&quot;,
+    &quot;checkout_hash&quot;: &quot;73bd387094f1063c37cab6d0e453198afc984b7af54113f89b473f198d928cd3&quot;,
     &quot;pinned&quot;: false
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 9dcd92b369b43b966cf3394f5ec4b03c87dad25b07e475485c8548c39d40b2a1<br>prev 32ee9bf27a6b050250a15b250b7439b9f73325bee2bd9495ea1b4fb37138ab1c</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#117</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;nonce&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash fa078087793f9a605601d126d95d4bcd86670aaee3e766a3e24949af186540f5<br>prev 914055c0f6c43944a9c5076ca86dedfb8d6019f09bf6221b80814605869411ab</div></details></div></li><li class="row" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#117</div><div class="body"><span class="ev">verifier.check</span><span class="who">verifier</span><div class="why">Check &#x27;nonce&#x27; passed.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;check&quot;: &quot;nonce&quot;,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;detail&quot;: {
     &quot;first_use&quot;: true,
-    &quot;nonce&quot;: &quot;a1bc9c3b662f4f4b8b2e3756d5185c1a&quot;
+    &quot;nonce&quot;: &quot;8f4588352d994ef598752378e0efd039&quot;
   },
   &quot;human_reason&quot;: null,
   &quot;passed&quot;: true
-}</pre><div class="hash">hash 47db0b8513795331d5895b1c8d678dea3dd06a823e7b606c490ffe4155815629<br>prev 9dcd92b369b43b966cf3394f5ec4b03c87dad25b07e475485c8548c39d40b2a1</div></details></div></li><li class="row pivotal" style="--dot:#0b7a3d"><div class="when">06:20:51<br>#118</div><div class="body"><span class="ev">verifier.decision</span><span class="who">verifier</span><div class="why">Approved ₹699.00 to PixelByte Electronics: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 8c69eabdc02d884c667f5d718f6038504f98d4c837341912f07f7497c02c0ed9<br>prev fa078087793f9a605601d126d95d4bcd86670aaee3e766a3e24949af186540f5</div></details></div></li><li class="row pivotal" style="--dot:#0b7a3d"><div class="when">06:23:26<br>#118</div><div class="body"><span class="ev">verifier.decision</span><span class="who">verifier</span><div class="why">Approved ₹699.00 to PixelByte Electronics: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 69900,
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;code&quot;: &quot;ok&quot;,
   &quot;outcome&quot;: &quot;ALLOW&quot;,
   &quot;reason&quot;: &quot;Approved ₹699.00 to PixelByte Electronics: signed by the delegated agent key, within the per-purchase limit and the remaining daily budget, bound to this checkout, first use of this token.&quot;
-}</pre><div class="hash">hash 5102889a88a7dc8927a7884d25a616cd59587be976819715f5b249809ca480f0<br>prev 47db0b8513795331d5895b1c8d678dea3dd06a823e7b606c490ffe4155815629</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#119</div><div class="body"><span class="ev">recovery.started</span><span class="who">processor</span><div class="why">Paying ₹699.00 with at most 3 attempt(s), trying upi then payment_link then card.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash fb1b589f5789fc801f4fe3cd5af363c386d2b87f83269a068876e69520a16392<br>prev 8c69eabdc02d884c667f5d718f6038504f98d4c837341912f07f7497c02c0ed9</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#119</div><div class="body"><span class="ev">recovery.started</span><span class="who">processor</span><div class="why">Paying ₹699.00 with at most 3 attempt(s), trying upi then payment_link then card.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 69900,
   &quot;breaker&quot;: {
     &quot;consecutive_failures&quot;: 0,
@@ -1079,91 +1079,91 @@ chain — not written by hand.</p>
     &quot;card&quot;
   ],
   &quot;max_attempts&quot;: 3,
-  &quot;payment_mandate_id&quot;: &quot;pm_763dd9f0914d47ce&quot;
-}</pre><div class="hash">hash 82c6bf02e12e043fe183dbda4f6d7a94c853f25960d4f821d7ce6d7a663a8ba3<br>prev 5102889a88a7dc8927a7884d25a616cd59587be976819715f5b249809ca480f0</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#120</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹699.00 order on the fake rail for m_pixelbyte, to be paid by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;payment_mandate_id&quot;: &quot;pm_2d45307f624e465d&quot;
+}</pre><div class="hash">hash af0f81992de8cd7f2a45db214938229c5f99d843e430245bd20f876de7775886<br>prev fb1b589f5789fc801f4fe3cd5af363c386d2b87f83269a068876e69520a16392</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#120</div><div class="body"><span class="ev">mpp.order_created</span><span class="who">processor</span><div class="why">Created a ₹699.00 order on the fake rail for m_pixelbyte, to be paid by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 69900,
-  &quot;cart_id&quot;: &quot;cart_1fe52397606741e9&quot;,
+  &quot;cart_id&quot;: &quot;cart_e7604f5e202c482e&quot;,
   &quot;currency&quot;: &quot;INR&quot;,
-  &quot;idempotency_key&quot;: &quot;6cd68752bc9efc441785516d01d708279b9ee59334f4ceafea8459d32b25cc9b&quot;,
+  &quot;idempotency_key&quot;: &quot;b8799d7882b51fb2d9314456c25de3f0049f37a14490b597ffdde505ede9e15a&quot;,
   &quot;merchant&quot;: &quot;PixelByte Electronics&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000005&quot;,
   &quot;rail&quot;: &quot;fake&quot;
-}</pre><div class="hash">hash ba8a12671e8fd4d1028cedfb7782230389e326e2412aaf0857cad55b3f79f291<br>prev 82c6bf02e12e043fe183dbda4f6d7a94c853f25960d4f821d7ce6d7a663a8ba3</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#121</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 1 on order_fake_000005 using upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 0801bce3eac11bab97536035a888e6b2a5e539af82d02180d41b121f156e1c3f<br>prev af0f81992de8cd7f2a45db214938229c5f99d843e430245bd20f876de7775886</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#121</div><div class="body"><span class="ev">mpp.payment_attempt</span><span class="who">processor</span><div class="why">Attempt 1 on order_fake_000005 using upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;attempt&quot;: 1,
-  &quot;idempotency_key&quot;: &quot;6cd68752bc9efc441785516d01d708279b9ee59334f4ceafea8459d32b25cc9b&quot;,
+  &quot;idempotency_key&quot;: &quot;b8799d7882b51fb2d9314456c25de3f0049f37a14490b597ffdde505ede9e15a&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000005&quot;
-}</pre><div class="hash">hash b446341f1dfb2152fb89a24f7f16570eac52ebdd35deade8a1e8e96696b2fae9<br>prev ba8a12671e8fd4d1028cedfb7782230389e326e2412aaf0857cad55b3f79f291</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#122</div><div class="body"><span class="ev">mpp.payment_captured</span><span class="who">processor</span><div class="why">Captured ₹699.00 for PixelByte Electronics (pay_fake_000005) by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 7611f880fcb7a56ac441f148cd41e03c88dcf1b55efc84b5a85e6be035f90d4d<br>prev 0801bce3eac11bab97536035a888e6b2a5e539af82d02180d41b121f156e1c3f</div></details></div></li><li class="row pivotal" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#122</div><div class="body"><span class="ev">mpp.payment_captured</span><span class="who">processor</span><div class="why">Captured ₹699.00 for PixelByte Electronics (pay_fake_000005) by upi.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 69900,
-  &quot;cart_id&quot;: &quot;cart_1fe52397606741e9&quot;,
+  &quot;cart_id&quot;: &quot;cart_e7604f5e202c482e&quot;,
   &quot;currency&quot;: &quot;INR&quot;,
-  &quot;idempotency_key&quot;: &quot;6cd68752bc9efc441785516d01d708279b9ee59334f4ceafea8459d32b25cc9b&quot;,
+  &quot;idempotency_key&quot;: &quot;b8799d7882b51fb2d9314456c25de3f0049f37a14490b597ffdde505ede9e15a&quot;,
   &quot;method&quot;: &quot;upi&quot;,
   &quot;order_id&quot;: &quot;order_fake_000005&quot;,
   &quot;payment_id&quot;: &quot;pay_fake_000005&quot;
-}</pre><div class="hash">hash 2065546392a478a1babede02fc9b0ae74420e01674915e1e32575af00fe5b977<br>prev b446341f1dfb2152fb89a24f7f16570eac52ebdd35deade8a1e8e96696b2fae9</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:20:51<br>#123</div><div class="body"><span class="ev">mpp.payment_receipt_issued</span><span class="who">processor</span><div class="why">Issued a signed receipt: ₹699.00 captured after 1 attempt(s).</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 1f552e736e6479444e5bb8e4ba595ba4b1519ff32f2b9c703b12161ae2770246<br>prev 7611f880fcb7a56ac441f148cd41e03c88dcf1b55efc84b5a85e6be035f90d4d</div></details></div></li><li class="row" style="--dot:#1d4ed8"><div class="when">06:23:26<br>#123</div><div class="body"><span class="ev">mpp.payment_receipt_issued</span><span class="who">processor</span><div class="why">Issued a signed receipt: ₹699.00 captured after 1 attempt(s).</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 69900,
   &quot;attempts&quot;: 1,
   &quot;failure_code&quot;: null,
-  &quot;idempotency_key&quot;: &quot;6cd68752bc9efc441785516d01d708279b9ee59334f4ceafea8459d32b25cc9b&quot;,
+  &quot;idempotency_key&quot;: &quot;b8799d7882b51fb2d9314456c25de3f0049f37a14490b597ffdde505ede9e15a&quot;,
   &quot;order_id&quot;: &quot;order_fake_000005&quot;,
   &quot;payment_id&quot;: &quot;pay_fake_000005&quot;,
-  &quot;receipt_id&quot;: &quot;rcpt_f75617d6210b4277&quot;,
+  &quot;receipt_id&quot;: &quot;rcpt_c6b9dcc1a10f44c6&quot;,
   &quot;status&quot;: &quot;captured&quot;
-}</pre><div class="hash">hash 4a04ffb0bb87e0ee346cb80f0530c36fda96c5762f368e63fb577b1364a97b04<br>prev 2065546392a478a1babede02fc9b0ae74420e01674915e1e32575af00fe5b977</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#124</div><div class="body"><span class="ev">merchant.stock_decremented</span><span class="who">merchant</span><div class="why">Reduced stock after payment cleared: PB-MOB-003=33</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_32147285e7d6456c&quot;,
+}</pre><div class="hash">hash 7ca9747600a8d33e5e484ec624c774882ca75c323dc79770d723a4a696ad6550<br>prev 1f552e736e6479444e5bb8e4ba595ba4b1519ff32f2b9c703b12161ae2770246</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#124</div><div class="body"><span class="ev">merchant.stock_decremented</span><span class="who">merchant</span><div class="why">Reduced stock after payment cleared: PB-MOB-003=33</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_d646fd606be54efb&quot;,
   &quot;detail&quot;: &quot;PB-MOB-003=33&quot;,
   &quot;remaining_stock&quot;: {
     &quot;PB-MOB-003&quot;: 33
   }
-}</pre><div class="hash">hash 030e7223f301a2ae8b1853cc899cfd43b223a4ed7dc4f5f502100971258fb7ea<br>prev 4a04ffb0bb87e0ee346cb80f0530c36fda96c5762f368e63fb577b1364a97b04</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#125</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: a reflective running cap</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash d80757c0284744b2dae85ac2e0324809ef3b20aeaa22f1d3382f91d0d7816cac<br>prev 7ca9747600a8d33e5e484ec624c774882ca75c323dc79770d723a4a696ad6550</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#125</div><div class="body"><span class="ev">agent.plan</span><span class="who">agent</span><div class="why">The agent is looking for: a reflective running cap</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;filters&quot;: {
     &quot;category&quot;: &quot;accessories&quot;
   },
   &quot;goal&quot;: &quot;a reflective running cap&quot;,
   &quot;query&quot;: &quot;reflective cap&quot;
-}</pre><div class="hash">hash 2d75b96e36cc5aec7d58781cca90ee5b680f8ddfad7ea2c555dd115c53df30e0<br>prev 030e7223f301a2ae8b1853cc899cfd43b223a4ed7dc4f5f502100971258fb7ea</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#126</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from StrideFit Sportswear for ₹499.00.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_85b740045fce43ec&quot;,
+}</pre><div class="hash">hash 46190a72a46f632fbac2f5dc0479730ede86ce53160861d3ac090c11eca3ed45<br>prev d80757c0284744b2dae85ac2e0324809ef3b20aeaa22f1d3382f91d0d7816cac</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#126</div><div class="body"><span class="ev">merchant.cart_assembled</span><span class="who">merchant</span><div class="why">Assembled a cart of 1 item(s) from StrideFit Sportswear for ₹499.00.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_363368e5b494468a&quot;,
   &quot;item_count&quot;: 1,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;ship_to_pincode&quot;: &quot;560001&quot;,
   &quot;total&quot;: 49900
-}</pre><div class="hash">hash 2a491fc40bf19619783e520bf44905726f79fde449daf9a23e1d0c296b16a537<br>prev 2d75b96e36cc5aec7d58781cca90ee5b680f8ddfad7ea2c555dd115c53df30e0</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#127</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹499.00 at StrideFit Sportswear, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;cart_id&quot;: &quot;cart_85b740045fce43ec&quot;,
-  &quot;checkout_hash&quot;: &quot;fff11cd1fe7309d4&quot;,
-  &quot;checkout_id&quot;: &quot;chk_63340607683241b8&quot;,
+}</pre><div class="hash">hash 784746deb461380aeab87760d9b6fe37be6fb3d994b975952f0a4a7ab73e209f<br>prev 46190a72a46f632fbac2f5dc0479730ede86ce53160861d3ac090c11eca3ed45</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#127</div><div class="body"><span class="ev">merchant.checkout_created</span><span class="who">merchant</span><div class="why">Signed a checkout for ₹499.00 at StrideFit Sportswear, guaranteed at that price for 15 minutes.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;cart_id&quot;: &quot;cart_363368e5b494468a&quot;,
+  &quot;checkout_hash&quot;: &quot;1b058d5ae33d165f&quot;,
+  &quot;checkout_id&quot;: &quot;chk_7ec46e4a3e8c411c&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
   &quot;total&quot;: 49900,
   &quot;ttl_minutes&quot;: 15
-}</pre><div class="hash">hash 9c4a92a6b1808f18922f28f16766fd843bda73904756f1071437b93495b677be<br>prev 2a491fc40bf19619783e520bf44905726f79fde449daf9a23e1d0c296b16a537</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#128</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹499.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_63340607683241b8&quot;,
-  &quot;mandate_id&quot;: &quot;cmo_0779db6e7ccd4554&quot;,
+}</pre><div class="hash">hash 80df2e7f14d546fe17980ac26e75f5a148d910cd3566ae334177a237f0e65939<br>prev 784746deb461380aeab87760d9b6fe37be6fb3d994b975952f0a4a7ab73e209f</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#128</div><div class="body"><span class="ev">merchant.checkout_mandate_received</span><span class="who">merchant</span><div class="why">The agent presented the buyer&#x27;s standing checkout authorisation for a ₹499.00 cart.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_7ec46e4a3e8c411c&quot;,
+  &quot;mandate_id&quot;: &quot;cmo_3f3a269204004875&quot;,
   &quot;total&quot;: 49900,
   &quot;vct&quot;: &quot;mandate.checkout.open.1&quot;
-}</pre><div class="hash">hash 6c8b59a45800f8a79ee23058f013cbfab2b66fc99000abbc1f7921d09870a464<br>prev 9c4a92a6b1808f18922f28f16766fd843bda73904756f1071437b93495b677be</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#129</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹499.00 at StrideFit Sportswear.</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_63340607683241b8&quot;,
+}</pre><div class="hash">hash dfbb3d458e233775405179d218e0b107141c16031f199beb87e2481bb92e384b<br>prev 80df2e7f14d546fe17980ac26e75f5a148d910cd3566ae334177a237f0e65939</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#129</div><div class="body"><span class="ev">merchant.checkout_receipt_issued</span><span class="who">merchant</span><div class="why">Checkout confirmed for ₹499.00 at StrideFit Sportswear.</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_7ec46e4a3e8c411c&quot;,
   &quot;merchant&quot;: &quot;StrideFit Sportswear&quot;,
-  &quot;receipt_id&quot;: &quot;crcpt_ed111156039c40c7&quot;,
+  &quot;receipt_id&quot;: &quot;crcpt_0da0b6b5b7734c3a&quot;,
   &quot;total&quot;: 49900
-}</pre><div class="hash">hash cffa6dfd4c05d2428834c597d31ed942a1a06c10c171e72468d77fea7c4999ea<br>prev 6c8b59a45800f8a79ee23058f013cbfab2b66fc99000abbc1f7921d09870a464</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:20:51<br>#130</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹499.00 to m_stridefit, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 57d347e6a3434f4f1f429c6d9bdc56e3ce4757e50288841a52179879498edc2c<br>prev dfbb3d458e233775405179d218e0b107141c16031f199beb87e2481bb92e384b</div></details></div></li><li class="row" style="--dot:#7c3aed"><div class="when">06:23:26<br>#130</div><div class="body"><span class="ev">merchant.payment_mandate_received</span><span class="who">merchant</span><div class="why">Received a payment mandate for ₹499.00 to m_stridefit, signed by the buyer&#x27;s agent.</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;amount&quot;: 49900,
-  &quot;checkout_id&quot;: &quot;chk_63340607683241b8&quot;,
+  &quot;checkout_id&quot;: &quot;chk_7ec46e4a3e8c411c&quot;,
   &quot;payee&quot;: &quot;m_stridefit&quot;,
-  &quot;payment_mandate_id&quot;: &quot;pm_84d8e519cc4a45e0&quot;,
+  &quot;payment_mandate_id&quot;: &quot;pm_b330cbabe8f34558&quot;,
   &quot;vct&quot;: &quot;mandate.payment.1&quot;
-}</pre><div class="hash">hash 6e1f200f3a69e326da70b16cabf32c577ba2c58672f2044bf1fefcb12c29627b<br>prev cffa6dfd4c05d2428834c597d31ed942a1a06c10c171e72468d77fea7c4999ea</div></details></div></li><li class="row pivotal" style="--dot:#7c3aed"><div class="when">06:20:51<br>#131</div><div class="body"><span class="ev">merchant.stock_recheck_failed</span><span class="who">merchant</span><div class="why">Stopped before charging: Reflective Running Cap (SF-ACC-001) is down to 0 in stock; the cart needs 1</div><details><summary>payload &amp; chain link</summary><pre>{
+}</pre><div class="hash">hash 5174f9990fbe9afdf29583219bf9f1ec5aaf0675b2154848b15aaf5ba02c366f<br>prev 57d347e6a3434f4f1f429c6d9bdc56e3ce4757e50288841a52179879498edc2c</div></details></div></li><li class="row pivotal" style="--dot:#7c3aed"><div class="when">06:23:26<br>#131</div><div class="body"><span class="ev">merchant.stock_recheck_failed</span><span class="who">merchant</span><div class="why">Stopped before charging: Reflective Running Cap (SF-ACC-001) is down to 0 in stock; the cart needs 1</div><details><summary>payload &amp; chain link</summary><pre>{
   &quot;charged&quot;: false,
-  &quot;checkout_id&quot;: &quot;chk_63340607683241b8&quot;,
-  &quot;payment_mandate_id&quot;: &quot;pm_84d8e519cc4a45e0&quot;,
+  &quot;checkout_id&quot;: &quot;chk_7ec46e4a3e8c411c&quot;,
+  &quot;payment_mandate_id&quot;: &quot;pm_b330cbabe8f34558&quot;,
   &quot;reason&quot;: &quot;Reflective Running Cap (SF-ACC-001) is down to 0 in stock; the cart needs 1&quot;
-}</pre><div class="hash">hash e6c0db332b966eed5aaa122e5ebd37ae4e9b4b8ccf23cf4b9faf47ba740e5c67<br>prev 6e1f200f3a69e326da70b16cabf32c577ba2c58672f2044bf1fefcb12c29627b</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:20:51<br>#132</div><div class="body"><span class="ev">agent.gave_up</span><span class="who">agent</span><div class="why">The agent abandoned this purchase: Reflective Running Cap (SF-ACC-001) is down to 0 in stock; the cart needs 1</div><details><summary>payload &amp; chain link</summary><pre>{
-  &quot;checkout_id&quot;: &quot;chk_63340607683241b8&quot;,
+}</pre><div class="hash">hash 34b83e9b366c127cbb04cdf52fa53642ebe853f801368bb8eb574a7a4d121a82<br>prev 5174f9990fbe9afdf29583219bf9f1ec5aaf0675b2154848b15aaf5ba02c366f</div></details></div></li><li class="row" style="--dot:#0891b2"><div class="when">06:23:26<br>#132</div><div class="body"><span class="ev">agent.gave_up</span><span class="who">agent</span><div class="why">The agent abandoned this purchase: Reflective Running Cap (SF-ACC-001) is down to 0 in stock; the cart needs 1</div><details><summary>payload &amp; chain link</summary><pre>{
+  &quot;checkout_id&quot;: &quot;chk_7ec46e4a3e8c411c&quot;,
   &quot;reason&quot;: &quot;Reflective Running Cap (SF-ACC-001) is down to 0 in stock; the cart needs 1&quot;
-}</pre><div class="hash">hash cfe5577ec62a2a51e8430f1f10f034f1114707d16ce2c958e52845a4b07bed4d<br>prev e6c0db332b966eed5aaa122e5ebd37ae4e9b4b8ccf23cf4b9faf47ba740e5c67</div></details></div></li></ol>
+}</pre><div class="hash">hash b6c4a2aa867fb5ebac105d2d6ed3dfc48ace59c0d4460311e6887069542d3f9f<br>prev 34b83e9b366c127cbb04cdf52fa53642ebe853f801368bb8eb574a7a4d121a82</div></details></div></li></ol>
 
 <footer>
-<p><b>Chain tip</b> <code>cfe5577ec62a2a51e8430f1f10f034f1114707d16ce2c958e52845a4b07bed4d</code></p>
+<p><b>Chain tip</b> <code>b6c4a2aa867fb5ebac105d2d6ed3dfc48ace59c0d4460311e6887069542d3f9f</code></p>
 <p>Each row commits to its predecessor:
 <code>sha256(prev_hash + canonical(actor, event, payload, ts, human_reason))</code>.
 Editing any row invalidates every row after it, and the explanation is inside the
