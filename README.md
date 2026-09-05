@@ -312,6 +312,13 @@ tests/          21 files, 570 tests; every failure mode asserts an outcome
 
 ## Safety and compliance
 
+**Strictly defensive.** `redteam/` contains 21 attacks, and every one of them
+targets *this gateway, in this process*, over an in-memory transport with no
+network access — it is a self-test that proves the verifier refuses what it should
+refuse, and `make redteam` exits non-zero if any attack succeeds. There is nothing
+in this repository that could be pointed at a third party, and nothing that
+evades, defrauds or attacks anything.
+
 Test mode only. `PAYMENT_RAIL=fake` is the default, and `RazorpayRail` refuses in
 code to construct with a key id that is not `rzp_test_`. No live keys, no real money,
 no secrets in the repository, no scraping, no personal data. The catalogue is
