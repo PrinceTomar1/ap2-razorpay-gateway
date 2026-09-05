@@ -50,9 +50,10 @@ Three more commands, each a gate that exits non-zero rather than a document:
 | `make bench` | 500 mandates through the verifier | **0 false accepts, p99 0.67 ms, ~3,400/sec** → [BENCHMARK.md](BENCHMARK.md) |
 | `make interop` | an AP2 agent that imports none of this code | **purchase completed** → [transcript](scenarios/ap2_reference/transcript.md) |
 
-If you only read one file: [CONFORMANCE.md](CONFORMANCE.md) — every AP2
-requirement mapped to code and test, including the eleven that are PARTIAL or
-NOT IMPLEMENTED and why.
+If you only read one file: [WHAT_BROKE.md](WHAT_BROKE.md) — fifteen real defects
+found during development, what each would have cost, and how each was fixed.
+Then [CONFORMANCE.md](CONFORMANCE.md) — every AP2 requirement mapped to code and
+test, including the eleven that are PARTIAL or NOT IMPLEMENTED and why.
 
 ---
 
@@ -273,6 +274,9 @@ tests/          21 files, 570 tests; every failure mode asserts an outcome
 
 ## Documentation
 
+- [WHAT_BROKE.md](WHAT_BROKE.md) — **fifteen real defects found during development,
+  what each would have cost, and how it was fixed.** Three of them were mistakes in
+  my own tests.
 - [ARCHITECTURE.md](ARCHITECTURE.md) — roles, the full request lifecycle, the trust
   model, and *where we deliberately do not use an LLM*
 - [CONFORMANCE.md](CONFORMANCE.md) — every AP2 requirement → code → test → PASS /
