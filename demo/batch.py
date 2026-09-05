@@ -157,7 +157,7 @@ class Report:
         """The one line the video reads out."""
         return (
             f"{self.attempts} attempts · {self.paid} paid · {self.human_denied} human-denied · "
-            f"{self.recovered} recovered · Rs {self.unauthorised_spend} unauthorised · "
+            f"{self.recovered} recovered · ₹{self.unauthorised_spend} unauthorised · "
             f"{self.actions_explained} explained"
         )
 

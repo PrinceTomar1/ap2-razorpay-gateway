@@ -13,7 +13,7 @@ this report is a gate, not a claim.
 
 ```
 $ make redteam
-21/21 blocked · Rs 0 unauthorised · 0 orders created
+21/21 blocked · ₹0 unauthorised · 0 orders created
 ```
 
 ## Signature

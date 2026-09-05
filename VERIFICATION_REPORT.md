@@ -199,10 +199,10 @@ and no `-k`.
 
 ```
 $ make demo | grep -E "^[0-9]+ attempts"
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 
 $ make demo | grep -E "^[0-9]+ attempts"
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```
 
 Asserted at the CLI level by
@@ -248,7 +248,7 @@ setup complete — Python 3.13.5
       human decisions       1
       budget remaining      ₹904.00
 
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 
 ✓ fresh clone produced the expected report line
 ✓ demo/report.json written

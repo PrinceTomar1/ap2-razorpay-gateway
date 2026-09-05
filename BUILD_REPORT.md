@@ -13,7 +13,7 @@ network, no API key and no Razorpay account.
 > [VERIFICATION_REPORT.md](VERIFICATION_REPORT.md) for the current state.
 
 ```
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```
 
 ---
@@ -102,7 +102,7 @@ both on the narration path.
 
 ```
 $ make demo | tail -1
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```
 
 Full run in §4.
@@ -322,7 +322,7 @@ setup complete — Python 3.13.5
       human decisions       1
       budget remaining      ₹904.00
 
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 
 ✓ fresh clone produced the expected report line
 ✓ demo/report.json written
@@ -490,7 +490,7 @@ Two orders. One capture. One receipt.
       human decisions       1
       budget remaining      ₹904.00
 
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```
 
 ## 5. Things that went beyond the brief

@@ -38,7 +38,7 @@ DOCS = [
 ]
 
 EXPECTED_LINE = (
-    "6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained"
+    "6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained"
 )
 
 

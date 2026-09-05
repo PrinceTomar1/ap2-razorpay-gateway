@@ -76,10 +76,10 @@ two pre-existing `type: ignore`s were removed by typing the code properly.
 
 ```
 $ make demo | grep -E "^[0-9]+ attempts"
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 
 $ make demo | grep -E "^[0-9]+ attempts"
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```
 
 Asserted at the CLI level by `test_running_the_cli_twice_produces_an_identical_report`,
@@ -107,7 +107,7 @@ $ cp .env.example .env
 $ make setup
 setup complete — Python 3.13.5
 $ make demo
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
   timeline → demo/audit_chain.html
   audit_chain.html: 112466 bytes
 ```
@@ -320,7 +320,7 @@ each docstring quotes the evaluation algorithm it implements.
 
 ```
 $ make redteam
-21/21 blocked · Rs 0 unauthorised · 0 orders created
+21/21 blocked · ₹0 unauthorised · 0 orders created
 
 $ make bench
 FALSE ACCEPTS: 0

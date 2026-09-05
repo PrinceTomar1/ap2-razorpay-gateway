@@ -39,7 +39,7 @@ succeeds, and a test plants a fake breach to prove the report is capable of
 failing.
 
 ```
-21/21 blocked · Rs 0 unauthorised · 0 orders created
+21/21 blocked · ₹0 unauthorised · 0 orders created
 ```
 
 **Proof:** `REDTEAM.md`, `redteam/attacks.py`, `tests/test_standout.py::test_the_red_team_would_report_a_breach`

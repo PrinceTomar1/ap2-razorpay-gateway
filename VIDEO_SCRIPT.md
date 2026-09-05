@@ -203,7 +203,7 @@ make bench
 *(This is on screen. Read it exactly as printed.)*
 
 ```
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```
 
 > **Six attempts. Four paid. One human-denied. One recovered. Zero rupees

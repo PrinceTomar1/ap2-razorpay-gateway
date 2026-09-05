@@ -8,7 +8,7 @@ mandates, deterministic verification, a human gate, bounded recovery, and a
 tamper-evident audit trail.
 
 ```
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```
 
 That line is printed by `make demo`. Every number in it is measured, not written —
@@ -32,7 +32,7 @@ No API key, no Razorpay account, no internet after `make setup`. Prints the line
 below and writes `demo/audit_chain.html` — open it, that is the whole run.
 
 ```
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```
 
 Three more commands, each a gate that exits non-zero rather than a document:

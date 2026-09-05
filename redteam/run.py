@@ -38,7 +38,7 @@ def render(results: list[Attempt]) -> str:
         "",
         "```",
         "$ make redteam",
-        f"{len(blocked)}/{len(results)} blocked · Rs 0 unauthorised · 0 orders created",
+        f"{len(blocked)}/{len(results)} blocked · ₹0 unauthorised · 0 orders created",
         "```",
         "",
     ]
@@ -112,7 +112,7 @@ def main() -> None:
     total_orders = sum(r.orders for r in results)
     print(
         f"\n  \033[1m{blocked}/{len(results)} blocked · "
-        f"Rs {total_charged // 100} unauthorised · {total_orders} orders created\033[0m"
+        f"₹{total_charged // 100} unauthorised · {total_orders} orders created\033[0m"
     )
     print(f"  wrote {REPORT.name}\n")
     sys.exit(0 if blocked == len(results) else 1)

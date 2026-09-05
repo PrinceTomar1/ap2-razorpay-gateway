@@ -7,7 +7,7 @@ make demo
 Zero network. No API key. No Razorpay account. Runs in about a second.
 
 ```
-6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained
+6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```
 
 ---
@@ -181,7 +181,7 @@ The run ends with a reconciliation block:
   "recovered": 1,
   "unauthorised_spend": 0,
   "actions_explained": "6/6",
-  "line": "6 attempts · 4 paid · 1 human-denied · 1 recovered · Rs 0 unauthorised · 6/6 explained",
+  "line": "6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained",
   "rail": "fake",
   "audit_rows": 132,
   "audit_chain_intact": true,
