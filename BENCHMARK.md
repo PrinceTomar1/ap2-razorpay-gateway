@@ -1,6 +1,6 @@
 # Benchmark
 
-**FALSE ACCEPTS: 0**  ·  **p50 0.319 ms · p95 0.391 ms · p99 0.703 ms**  ·  **3,464 verifications/sec**
+**FALSE ACCEPTS: 0**  ·  **p50 0.268 ms · p95 0.290 ms · p99 0.335 ms**  ·  **4,252 verifications/sec**
 
 500 synthetic Payment Mandates through the real verifier, each generated
 with a known expected outcome so that correctness is countable rather than
@@ -23,13 +23,13 @@ it is ever above zero.
 
 | Percentile | Time |
 |---|---|
-| p50 | 0.319 ms |
-| p95 | 0.391 ms |
-| p99 | 0.703 ms |
-| mean | 0.288 ms |
-| max | 0.847 ms |
+| p50 | 0.268 ms |
+| p95 | 0.290 ms |
+| p99 | 0.335 ms |
+| mean | 0.234 ms |
+| max | 0.404 ms |
 
-Single-threaded throughput: **3,464 verifications/sec** (0.14s wall for 500).
+Single-threaded throughput: **4,252 verifications/sec** (0.12s wall for 500).
 
 Each verification does an ES256 signature check on the closed mandate, a second
 on the embedded open mandate, a P-256 key-binding comparison, and eleven further
@@ -39,7 +39,7 @@ and string comparison.
 **Why this matters for the design.** ARCHITECTURE.md argues that deterministic
 verification is not merely safer than asking a model — it is *cheaper*. A model
 call on this path would be 300–800 ms and a network dependency. The measured p99
-here is 0.703 ms with no network at all. That is a difference of roughly
+here is 0.335 ms with no network at all. That is a difference of roughly
 four orders of magnitude, on the one path that must never be slow or unavailable.
 
 ## Decisions by outcome

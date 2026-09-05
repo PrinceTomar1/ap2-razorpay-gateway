@@ -6,7 +6,8 @@ keys/
 
 # Databases / runtime state
 *.db
-*.db-journal
+keystore.json
+run/keystore.json
 *.sqlite
 *.sqlite3
 demo/report.json

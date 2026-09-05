@@ -571,3 +571,69 @@ the gateway.
 
 `public_jwk` accepted only a private key — fine until binding to a third party,
 which is exactly what interop needed.
+
+---
+
+# Bug hunt
+
+Three bugs found by probing the running system rather than reading it. All three
+were invisible to 542 passing tests, because the tests exercised the paths the
+code was written for.
+
+## A receipt did not survive a restart
+
+`test_receipts_are_long_lived` asserts a receipt is valid for over 300 days, and
+the whole evidential claim of the project is that a third party can check one
+months later. But keys were generated fresh on every boot, so a receipt issued
+before a restart could not be verified after one. The signature was sound; the
+public half that would prove it no longer existed.
+
+**Fixed** with an opt-in `GATEWAY_KEYSTORE`. Ephemeral stays the default — a test
+run or an offline demo has nothing to be evidence for, and writing key material
+during either would be worse than useless — and `make serve` sets one. The file
+is created 0600 and the gateway refuses to start if it is readable by anyone
+else. It is not a KMS, and LIMITATIONS.md says so.
+
+A corrupt keystore is refused rather than silently regenerated, because
+regenerating would quietly invalidate every receipt already issued.
+
+## Settlement crashed *after* the money moved
+
+Under concurrency, several checkouts each passed the pre-payment stock re-check
+while stock was still positive, then all captured. `commit_stock` then called
+`Catalog.decrement`, which raises — so the buyer was charged, the merchant's code
+was in a traceback, and the agent held no receipt. The worst possible ordering.
+
+**Fixed** by splitting the primitive in two, which is the real lesson:
+
+- `decrement()` raises, and runs **before** money moves, where refusing is correct.
+- `take()` clamps and reports a shortfall, and runs **after**, where refusing is
+  not an available answer.
+
+An oversell is a *fulfilment* problem — a backorder or a refund. The payment was
+authorised, verified and captured; that part was right. So it is recorded as a
+`merchant.stock_oversold` audit row naming the receipt, and the buyer still gets
+their receipt. Clamping silently would have hidden a real inventory problem.
+
+The window cannot be closed without holding a lock across the rail round trip,
+which would be worse. So it is detected and reported rather than pretended away.
+
+## One checkout could be paid twice
+
+The worst of the three. Mandate-level idempotency keys on `sha256(mandate.id)`,
+so it only recognises the *same* mandate. A second, freshly signed mandate for an
+already-paid checkout has a different id and a different nonce, passes every
+verifier check — same payee, same amount, within budget, correct checkout hash —
+and charged the buyer a second time for one basket.
+
+Reachable by a well-behaved agent that simply retries with a new mandate.
+
+**Fixed** with a checkout-level guard that sits *after* mandate idempotency, so
+re-presenting the original mandate still returns its receipt, and *before* the
+verifier, so nothing reaches the rail. The refusal names the mandate that settled
+the checkout, because "already paid" is not actionable and "paid by pm_x" is.
+
+Placing it correctly mattered more than writing it: a guard one step earlier
+would have broken idempotent replay, and one step later would have created the
+order before refusing. `test_a_deferred_payment_can_still_be_completed` is the
+regression that pins the difference.

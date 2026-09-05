@@ -508,6 +508,42 @@ class MerchantService:
                 ),
             }
 
+        # --- 2b. The CHECKOUT itself is already settled --------------------
+        # Mandate-level idempotency (step 2) only catches the *same* mandate. A
+        # second, freshly signed mandate for an already-paid checkout is a
+        # different key, passes every verifier check — same payee, same amount,
+        # within budget, correct checkout hash, fresh nonce — and would charge the
+        # buyer twice for one basket.
+        #
+        # A checkout is a single purchase. It is paid once. This guard is what
+        # makes that true, and it has to sit AFTER step 2 so that re-presenting
+        # the original mandate still returns its receipt.
+        if record.stock_committed:
+            already: dict[str, Any] = {
+                "checkout_id": checkout_id,
+                "payment_mandate_id": presented.mandate_id,
+                "settled_by": record.settled_payment_mandate_id,
+            }
+            self.audit.append(
+                ROLE_MERCHANT,
+                Event.CHECKOUT_ALREADY_SETTLED,
+                already,
+                f"Checkout {checkout_id} has already been paid. A second payment "
+                "mandate was presented for it and was refused before reaching the "
+                "rail — one checkout is one purchase.",
+            )
+            return {
+                "error": "checkout.already_settled",
+                "message": (
+                    f"Checkout {checkout_id} has already been paid. Present the "
+                    "original payment mandate to retrieve its receipt, or create a "
+                    "new checkout to buy again."
+                ),
+                "checkout_id": checkout_id,
+                "settled_by": record.settled_payment_mandate_id,
+                "charged": False,
+            }
+
         # --- 3. Stock, before the verifier ---------------------------------
         available, stock_reason = self.store.recheck(cart)
         if not available:
@@ -611,11 +647,16 @@ class MerchantService:
 
         assert result.outcome is not None
         if result.captured:
-            remaining = self.store.commit_stock(checkout_id)
+            # Past this line the money has moved, so nothing here may raise. A
+            # shortfall is recorded loudly and the receipt is still returned:
+            # the buyer paid, and they are owed proof of it either way.
+            commit = self.store.commit_stock(checkout_id, payment_mandate_id=presented.mandate_id)
             decremented: dict[str, Any] = {
                 "checkout_id": checkout_id,
-                "remaining_stock": remaining,
-                "detail": ", ".join(f"{sku}={qty}" for sku, qty in sorted(remaining.items())),
+                "remaining_stock": commit.remaining,
+                "detail": ", ".join(
+                    f"{sku}={qty}" for sku, qty in sorted(commit.remaining.items())
+                ),
             }
             self.audit.append(
                 ROLE_MERCHANT,
@@ -623,6 +664,27 @@ class MerchantService:
                 decremented,
                 self.reasons.reason(Event.STOCK_DECREMENTED, decremented),
             )
+            if commit.oversold:
+                # Concurrent checkouts each passed the pre-payment re-check while
+                # stock was still positive, then all captured. The payments were
+                # correctly authorised; the inventory was not there. That is a
+                # fulfilment problem — a backorder or a refund — and it needs to
+                # be visible to a human rather than silently clamped.
+                oversold: dict[str, Any] = {
+                    "checkout_id": checkout_id,
+                    "shortfall": commit.shortfall,
+                    "amount": result.outcome.receipt.amount,
+                    "receipt_id": result.outcome.receipt.receipt_id,
+                }
+                self.audit.append(
+                    ROLE_MERCHANT,
+                    Event.STOCK_OVERSOLD,
+                    oversold,
+                    "Payment captured but stock ran out between the re-check and "
+                    f"settlement ({', '.join(f'{k} short by {v}' for k, v in commit.shortfall.items())}). "
+                    "The buyer has been charged and holds a valid receipt; this order "
+                    "needs a backorder or a refund.",
+                )
 
         return {
             "payment_receipt": result.outcome.receipt.model_dump(mode="json"),

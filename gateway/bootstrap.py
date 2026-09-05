@@ -33,8 +33,9 @@ from ap2_min.roles import (
     ROLE_USER,
 )
 from gateway.audit import AuditLog
-from gateway.config import load_dotenv
+from gateway.config import ConfigurationError, load_dotenv
 from gateway.db import MEMORY, Database
+from gateway.keystore import Keystore
 from gateway.ledger import Ledger
 from gateway.mandates import KeyRing, Signer, generate_keypair, utcnow
 from gateway.payments import PaymentProcessor
@@ -48,7 +49,16 @@ from merchant.checkout import Catalog, CheckoutStore
 from merchant.service import MerchantService
 
 
-def _signer(kid: str, role: str) -> Signer:
+def _signer(kid: str, role: str, keystore: Keystore | None = None) -> Signer:
+    """Build a signer, from the keystore when one is configured.
+
+    Without a keystore the key is ephemeral, which is right for tests and for
+    `make demo` — an in-memory run has nothing to be evidence for. With one, the
+    same key comes back after a restart, so a receipt issued yesterday still
+    verifies today. See gateway/keystore.py for why that gap mattered.
+    """
+    if keystore is not None:
+        return Signer(kid=kid, role=role, private_key=keystore.key_for(kid))
     private_key, _ = generate_keypair()
     return Signer(kid=kid, role=role, private_key=private_key)
 
@@ -150,6 +160,7 @@ def build_gateway(
     use_llm: bool | None = None,
     public_url: str | None = None,
     sleep: Callable[[float], None] | None = None,
+    keystore: str | Path | None = None,
 ) -> Gateway:
     """Build the whole system.
 
@@ -166,10 +177,22 @@ def build_gateway(
     audit = AuditLog(database)
     ledger = Ledger(database)
 
-    user = _signer("key_user_buyer", ROLE_USER)
-    agent = _signer("key_agent_shopper", ROLE_SHOPPING_AGENT)
-    merchant_signer = _signer("key_merchant_gateway", ROLE_MERCHANT)
-    mpp = _signer("key_mpp_razorpay", ROLE_MPP)
+    # A keystore is opt-in. Ephemeral keys stay the default because a test run
+    # or an offline demo has nothing to be evidence for, and writing key material
+    # during either would be worse than useless.
+    keystore_path = keystore or os.environ.get("GATEWAY_KEYSTORE") or ""
+    key_source = Keystore(keystore_path) if keystore_path else None
+    if key_source is not None and key_source.insecure_permissions():
+        raise ConfigurationError(
+            f"{key_source.path} is readable by somebody other than its owner. "
+            "It holds private signing keys. Fix with: chmod 600 "
+            f"{key_source.path}"
+        )
+
+    user = _signer("key_user_buyer", ROLE_USER, key_source)
+    agent = _signer("key_agent_shopper", ROLE_SHOPPING_AGENT, key_source)
+    merchant_signer = _signer("key_merchant_gateway", ROLE_MERCHANT, key_source)
+    mpp = _signer("key_mpp_razorpay", ROLE_MPP, key_source)
 
     keyring = KeyRing()
     for signer in (user, agent, merchant_signer, mpp):

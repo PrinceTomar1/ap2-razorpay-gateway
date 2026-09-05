@@ -219,8 +219,8 @@ class Catalog:
     def decrement(self, sku: str, qty: int) -> int:
         """Take ``qty`` off the shelf. Raises if there is not enough.
 
-        Called on capture only. The check and the decrement are under one lock, so
-        two captures cannot both see the last unit.
+        For paths that run **before** money moves, where refusing is the correct
+        answer. After a capture use :meth:`take`, which cannot raise.
         """
         with self._lock:
             available = self._stock.get(sku, 0)
@@ -230,6 +230,31 @@ class Catalog:
                 )
             self._stock[sku] = available - qty
             return self._stock[sku]
+
+    def take(self, sku: str, qty: int) -> tuple[int, int]:
+        """Take up to ``qty`` off the shelf. Returns ``(remaining, shortfall)``.
+
+        **This never raises, and that is the whole point.** It is called only
+        after a payment has captured, and by then the money has already moved.
+        Raising there would leave the buyer charged, the merchant's code in a
+        traceback, and the agent holding no receipt — the worst of all possible
+        orderings, and a real crash this replaced.
+
+        Stock is clamped at zero rather than going negative, and the shortfall is
+        returned so the caller can record it loudly. An oversell is a
+        *fulfilment* problem — a backorder or a refund — not a payment problem.
+        The payment was authorised, verified and captured; that part was correct.
+
+        Concurrency: several checkouts can each pass the pre-payment re-check
+        while stock is still positive, then all capture. That window is real and
+        cannot be closed without holding a lock across the rail round trip, which
+        would be worse. So it is detected and reported instead of pretended away.
+        """
+        with self._lock:
+            available = self._stock.get(sku, 0)
+            taken = min(available, max(0, qty))
+            self._stock[sku] = available - taken
+            return self._stock[sku], qty - taken
 
     def set_stock(self, sku: str, quantity: int) -> None:
         """Set stock directly.
@@ -257,6 +282,28 @@ class CheckoutRecord:
     open_checkout_mandate_hash: str | None = None
     created_ts: str = field(default_factory=lambda: utcnow().isoformat())
     stock_committed: bool = False
+    #: Which payment mandate settled this checkout. Set with `stock_committed`,
+    #: and used to explain a `checkout.already_settled` refusal — "paid by pm_x"
+    #: is actionable in a way that "already paid" is not.
+    settled_payment_mandate_id: str | None = None
+
+
+@dataclass(frozen=True)
+class StockCommit:
+    """What taking a captured checkout's stock off the shelf actually did.
+
+    ``shortfall`` is non-empty only when concurrent checkouts oversold a SKU. It
+    is carried rather than raised because the money has already moved by the time
+    this is computed — see :meth:`Catalog.take`.
+    """
+
+    remaining: dict[str, int]
+    shortfall: dict[str, int]
+    already_committed: bool = False
+
+    @property
+    def oversold(self) -> bool:
+        return bool(self.shortfall)
 
 
 class CheckoutStore:
@@ -406,20 +453,31 @@ class CheckoutStore:
                 )
         return True, "every line is in stock at the signed price"
 
-    def commit_stock(self, checkout_id: str) -> dict[str, int]:
-        """Decrement stock for a captured checkout. Idempotent per checkout.
+    def commit_stock(
+        self, checkout_id: str, *, payment_mandate_id: str | None = None
+    ) -> StockCommit:
+        """Decrement stock for a captured checkout. Idempotent, and never raises.
 
         Guarded by ``stock_committed`` so a duplicate receipt — which is a normal
         outcome of the idempotency store — cannot take the same units off the
         shelf twice.
+
+        Uses :meth:`Catalog.take` rather than :meth:`Catalog.decrement`: this runs
+        *after* the money moved, so refusing is no longer an available answer. Any
+        shortfall is reported for the caller to audit.
         """
         record = self.checkout(checkout_id)
         with self._lock:
             if record.stock_committed:
-                return {}
-            remaining = {
-                line.sku: self.catalog.decrement(line.sku, line.qty) for line in record.cart.items
-            }
+                return StockCommit(remaining={}, shortfall={}, already_committed=True)
+            remaining: dict[str, int] = {}
+            shortfall: dict[str, int] = {}
+            for line in record.cart.items:
+                left, short = self.catalog.take(line.sku, line.qty)
+                remaining[line.sku] = left
+                if short:
+                    shortfall[line.sku] = short
             record.stock_committed = True
             record.status = "paid"
-            return remaining
+            record.settled_payment_mandate_id = payment_mandate_id
+            return StockCommit(remaining=remaining, shortfall=shortfall)

@@ -86,7 +86,7 @@ payments with NPCI and OpenAI. This is that missing piece, built to the spec.
 
 ```bash
 make setup     # venv + pinned deps + .env from .env.example
-make test      # 516 tests, all offline
+make test      # 570 tests, all offline
 make demo      # the six-attempt batch, zero network
 ```
 
@@ -260,7 +260,7 @@ merchant/       catalogue, carts, stock re-check, service, the 7-tool MCP server
 llm/            the only door a model gets: narration + product selection
 shopping_agent/ the agent, its MCP client, and the human gate it cannot cross
 demo/           the six-attempt batch and its measured report
-tests/          18 files, 516 tests; every failure mode asserts an outcome
+tests/          21 files, 570 tests; every failure mode asserts an outcome
                 AND the audit row that records it
 ```
 

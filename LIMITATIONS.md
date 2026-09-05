@@ -213,6 +213,20 @@ The webhook route is protected by signature verification; the approval page is n
 protected at all. In production the approval page is behind the buyer's own
 authenticated session, and the `hold_id` is not a capability.
 
+### The keystore is a file, not a KMS
+
+`GATEWAY_KEYSTORE` makes signing keys survive a restart, which is what lets a
+receipt be evidence months later. It is a JSON file of PEMs at 0600, and the
+gateway refuses to start if it is readable by anyone else. That is the right
+shape for a single-process gateway holding test-mode credentials and the wrong
+shape for production, which wants a KMS, key rotation, revocation, and a
+published JWKS so agents can verify receipts without asking us. None of those
+exist. The seam is `gateway/keystore.py`; replacing it is the whole change.
+
+Without a keystore the keys are ephemeral and a receipt stops verifying after a
+restart. That is the default for tests and `make demo` — neither has anything to
+be evidence for — and `make serve` sets one.
+
 ### Ephemeral keys
 
 Generated in memory at startup. No JWKS endpoint, no rotation, no revocation. The

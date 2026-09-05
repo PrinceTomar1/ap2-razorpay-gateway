@@ -64,7 +64,7 @@ mcp:
 	@$(PY) -m merchant.mcp_server
 
 serve:
-	@$(PY) -m gateway.app
+	@GATEWAY_KEYSTORE=$${GATEWAY_KEYSTORE:-run/keystore.json} $(PY) -m gateway.app
 
 redteam:
 	@$(PY) -m redteam.run

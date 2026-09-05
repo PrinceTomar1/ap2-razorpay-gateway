@@ -148,6 +148,8 @@ class Event:
     PRODUCT_NOT_FOUND = "merchant.product_not_found"
     STOCK_RECHECK_FAILED = "merchant.stock_recheck_failed"
     STOCK_DECREMENTED = "merchant.stock_decremented"
+    STOCK_OVERSOLD = "merchant.stock_oversold"
+    CHECKOUT_ALREADY_SETTLED = "merchant.checkout_already_settled"
 
     # Verifier
     PAYMENT_MANDATE_RECEIVED = "merchant.payment_mandate_received"
