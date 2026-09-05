@@ -52,7 +52,7 @@ def narrate() -> list[tuple[str, float]]:
 
 def build(durations: list[tuple[str, float]]) -> None:
     clips = []
-    for index, (name, seconds) in enumerate(durations, start=1):
+    for index, (name, seconds) in enumerate(durations):
         clip = HERE / f"clip_{index:02d}.mp4"
         subprocess.run(
             [

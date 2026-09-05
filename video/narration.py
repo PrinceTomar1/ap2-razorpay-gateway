@@ -1,6 +1,12 @@
 """The narration, one entry per slide. Written to be spoken, not read."""
 
 SCRIPT = [
+ ("00_intro", """
+Hi, I'm Prince Tomar, a third year B.Tech Computer Science student at Bennett
+University, Greater Noida. This is my submission for Track One of the Razorpay
+A.I. Buildathon: an implementation of Google's Agent Payments Protocol for
+Razorpay.
+"""),
     (
         "01_problem",
         """
@@ -30,8 +36,8 @@ So the agent can shop, and it cannot pay. It holds a keypair and no money.
 Here is the shape. The agent talks to the merchant over M.C.P. The merchant signs the
 cart. Then the verifier runs fourteen checks before anything reaches Razorpay.
 Signature. Exact V.C.T. claim. Key binding, so a leaked mandate isn't bearer authority.
-Payee on the allow list. Amount in range. Running spend within budget. Bound to this
-checkout by hash. Nonce not seen before.
+Payee on the allow list. Amount in range. Spend within budget. Bound to this checkout by
+hash. Nonce not seen before.
 Three outcomes. Allow: funds may move, once. Deny: a bound was violated. And
 unresolved constraint, which routes to a human.
 That third one is the design. An agent that asks gets a human. An agent that forces
@@ -80,12 +86,12 @@ buyer twice.
     (
         "07_audit",
         """
-Every money action writes one audit row, with a sentence a person can read.
-The rows are hash chained. Each commits to its predecessor, and the explanation is
-inside the hash, not beside it. An audit trail where the numbers are tamper evident but
-the prose is freely editable is not much of an audit trail.
+Every money action writes one audit row, with a sentence a person can read. The rows are
+hash chained, and the explanation is inside the hash, not beside it. An audit trail where
+the numbers are tamper evident but the prose is freely editable is not much of an audit
+trail.
 The tests break that chain six ways, and all six are caught with the damaged row named.
-They drop the database triggers first, because a tamper evidence claim you have not
+They drop the database triggers first — because a tamper evidence claim you have not
 tried to break is a hope, not a property.
 """,
     ),
