@@ -1,27 +1,35 @@
 # The pitch video
 
-`ap2-razorpay-pitch.mp4` — 4 minutes 49 seconds, 1920×1080, from the nine slides
-in `../slides/` with narration over each.
+Two builds of the same recording:
 
-**The voice is synthetic** (macOS `Aman`, en-IN). Said here plainly so nobody has
-to wonder.
+| File | Length | |
+|---|---|---|
+| `ap2-razorpay-pitch.mp4` | **4:56** | 1.20× pace, fits the five-minute bar |
+| `ap2-razorpay-pitch-natural.mp4` | 5:54 | unaltered pace |
 
-## Regenerating it
+Both use Prince Tomar's own narration from `voice/`. The pace change is `atempo`,
+which shortens speech without shifting pitch — the voice is unchanged, it just
+moves along.
 
-Everything is scripted, so the video is reproducible rather than hand-assembled:
+## Rebuilding
 
 ```bash
 cd video
-python3 build.py          # narration → audio → per-slide clips → concat
+python3 build.py                 # natural pace
+python3 build.py --tempo 1.20    # fits five minutes
 ```
 
-- `narration.py` — the spoken script, one entry per slide. Edit this to change
-  what is said; word counts drive the runtime.
-- `slides/*.png` — frames captured from `../slides/index.html?clean` with headless
-  Chrome at 1920×1080. `?clean` hides the deck's own nav chrome.
-- `audio/*.aiff` — one narration track per slide, `say -v Aman -r 172`.
-- `build.py` — measures each track, holds its slide for exactly that long plus a
-  half-second beat, cross-fades, and concatenates.
+`build.py` prefers the recordings in `voice/` and falls back to a synthetic voice
+only when the set is incomplete — so a half-finished recording session cannot
+silently ship a video that is half one voice and half another.
 
-Runtime is a function of the script: roughly `words / 172 × 60 + 4.5` seconds.
-The current script is 796 words.
+Each slide is held for exactly as long as its own audio, so re-recording one clip
+changes that slide's timing and nothing else.
+
+- `narration.py` — the script, one entry per slide. The words a person reads aloud
+  (`../SPEAKING_SCRIPT.md`) are generated from this, so the two cannot drift.
+- `voice/00.mp3` … `09.mp3` — the recordings.
+- `slides/00.png` … `09.png` — frames from `../slides/index.html?clean`, captured
+  with headless Chrome at 1920×1080. `?clean` hides the deck's nav chrome.
+- Audio is loudness-normalised per clip (`loudnorm I=-16`), which evens out level
+  between takes recorded at slightly different distances from the mic.

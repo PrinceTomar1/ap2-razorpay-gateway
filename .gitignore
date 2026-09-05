@@ -43,3 +43,4 @@ htmlcov/
 video/clip_*.mp4
 video/concat.txt
 video/durations.json
+video/voice/.DS_Store
