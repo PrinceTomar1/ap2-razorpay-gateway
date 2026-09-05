@@ -637,3 +637,33 @@ Placing it correctly mattered more than writing it: a guard one step earlier
 would have broken idempotent replay, and one step later would have created the
 order before refusing. `test_a_deferred_payment_can_still_be_completed` is the
 regression that pins the difference.
+
+---
+
+# Final pass, under a two-hour deadline
+
+**The report line now uses `₹0`, not `Rs 0`.** The original brief specified
+`Rs 0`; the final one specified `₹0`. The later instruction wins. It is one
+character, but the line is read aloud off the screen in the video and
+`tests/test_docs.py` pins it byte-for-byte across four documents — so a mismatch
+here is drift by definition, not a cosmetic difference. Changed at the single
+source (`Report.line()`) and propagated everywhere, including the red-team
+summary for visual consistency.
+
+**Nothing was cut.** The rule was "if a feature cannot be made reliable fast, cut
+it". Nothing needed cutting: `make test`, `ruff`, `mypy`, `make demo`, `make mcp`
+and `make serve` were all already green at triage. The red-team, benchmark and
+interop layers already existed, were tested and passing, so deleting them under
+time pressure would have removed working, proved functionality for no gain.
+
+**The video script was retimed** to the beats the final brief specified — problem
+at 0:00, diagram and "no LLM here" at 0:40, live demo at 1:30, report line at
+3:30, wrap at 4:00, stop at 4:45. The 2:30 beat was compressed from 43 lines to
+30 seconds of three commands, with an explicit instruction to cut it entirely if
+running long. A five-minute video that overruns is worse than one that omits a
+nice-to-have.
+
+**README and LIMITATIONS now say "verified in `--fake` mode" in plain sight.**
+The live Razorpay path has never been run against a sandbox by the author. That
+was already in VERIFICATION_REPORT.md §5, but it belonged somewhere a reviewer
+reads first rather than somewhere they might reach.

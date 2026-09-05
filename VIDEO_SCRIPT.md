@@ -140,47 +140,28 @@ make demo
 
 ---
 
-## 2:30 — Interop, red team, benchmark
+## 2:30 — Three commands, thirty seconds
 
-*(Terminal.)*
-
-```bash
-make interop
-```
-
-> This is the one I would look at if I were judging. That agent imports *nothing*
-> from this project — not my models, not my signing code, not my client. It builds
-> its mandate claims by hand from the field names in the spec and signs them with
-> plain PyJWT.
->
-> It just bought a pair of shoes. Fourteen checks passed on a mandate my own code
-> never built. My agent working proves my code agrees with itself; this proves the
-> gateway implements AP2 for somebody who has never read my source.
+*(Terminal. Run them back to back — do not narrate the output line by line.)*
 
 ```bash
-make redteam
+make redteam    # 21/21 blocked · ₹0 unauthorised · 0 orders created
+make bench      # FALSE ACCEPTS: 0 · p99 under a millisecond
+make interop    # ✓ third-party AP2 agent purchase: COMPLETED
 ```
 
-> Twenty-one attacks. Forged signatures, `alg:none`, HMAC-with-the-public-key,
-> payee substitution, nonce replay, a model that returns "DROP TABLE audit_log".
+> Twenty-one attacks on the money path — forged signatures, `alg:none`,
+> HMAC-with-the-public-key, payee substitution, nonce replay. All blocked, and the
+> bar is zero rupees moved **and** zero orders created.
 >
-> Twenty-one blocked. And the bar is not "it returned an error" — it is zero
-> rupees moved **and** zero orders created, because an attack you refuse after
-> creating an order has already cost the merchant something. This exits non-zero
-> if any attack lands, and there is a test that plants a fake breach to prove the
-> report can come back red.
-
-```bash
-make bench
-```
-
-> And the number behind the whole design. Five hundred mandates, forty percent
-> adversarial, each with a known expected outcome. **Zero false accepts.** p99
-> under a millisecond.
+> Five hundred mandates through the verifier: zero false accepts, p99 under a
+> millisecond. A model call on that path would be three hundred milliseconds and a
+> network dependency — so "no LLM here" is the faster answer as well as the safe
+> one.
 >
-> A model call on this path is three hundred to eight hundred milliseconds and a
-> network dependency. That is four orders of magnitude — so "no LLM on the money
-> path" is not a preference, it is the faster answer as well as the safe one.
+> And that last one is an AP2 agent that imports *none* of my code. It builds its
+> mandates by hand from the spec and signs with plain PyJWT. It just bought a pair
+> of shoes.
 
 ---
 
@@ -217,7 +198,7 @@ make bench
 
 ---
 
-## 4:10 — Role mapping and what's next
+## 4:00 — What's next
 
 *(Screen: the AP2 role table in README.md.)*
 
@@ -237,7 +218,8 @@ make bench
 > in one command. CONFORMANCE.md scores every AP2 requirement honestly — twenty-four
 > pass, eleven do not, and each one says why.
 
-**Stop at 4:45.**
+**Stop at 4:45.** If you are running long, cut the 2:30 beat entirely — the
+demo and the report line are what matter.
 
 ---
 

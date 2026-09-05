@@ -31,6 +31,13 @@ git clone https://github.com/PrinceTomar1/ap2-razorpay-gateway.git \
 No API key, no Razorpay account, no internet after `make setup`. Prints the line
 below and writes `demo/audit_chain.html` — open it, that is the whole run.
 
+> **Verified in `--fake` mode.** Every claim on this page is proved against
+> `FakeRail`, a deterministic in-memory payment rail — that is what `make demo`,
+> `make test` and the three gates below all run against. The real Razorpay path
+> (`make demo LIVE=1`) is implemented and reviewed endpoint-by-endpoint against
+> the official API, but has **not** been run against a live sandbox by the author.
+> LIMITATIONS.md says so too.
+
 ```
 6 attempts · 4 paid · 1 human-denied · 1 recovered · ₹0 unauthorised · 6/6 explained
 ```

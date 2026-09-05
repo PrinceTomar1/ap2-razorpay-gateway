@@ -5,6 +5,18 @@ harder to trust about the parts it gets right.
 
 ---
 
+## Verified in fake mode only
+
+`make demo LIVE=1` against a real Razorpay sandbox has never been run by the
+author — no test credentials were available. The live path is correct-by-review
+(VERIFICATION_REPORT.md §5, endpoint by endpoint against the official API and the
+SDK's own resolved URLs) and not correct-by-observation. Everything else in this
+repository is proved against `FakeRail`.
+
+Nothing was cut to reach a green build: the suite was already green, and the only
+defect found in the final pass was the report line printing `Rs 0` where the
+specification says `₹0`.
+
 ## Protocol
 
 ### Plain compact JWS, not SD-JWT
