@@ -150,6 +150,7 @@ class Event:
     STOCK_DECREMENTED = "merchant.stock_decremented"
     STOCK_OVERSOLD = "merchant.stock_oversold"
     CHECKOUT_ALREADY_SETTLED = "merchant.checkout_already_settled"
+    MANDATE_WRONG_CHECKOUT = "merchant.mandate_spent_on_another_checkout"
 
     # Verifier
     PAYMENT_MANDATE_RECEIVED = "merchant.payment_mandate_received"

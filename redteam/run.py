@@ -64,7 +64,7 @@ def render(results: list[Attempt]) -> str:
             "|---|---|---|---|---|",
         ]
         for r in items:
-            mark = "✅" if r.blocked else "❌"
+            mark = "✓" if r.blocked else "✗"
             lines.append(f"| {mark} | `{r.name}` | {r.goal} | {r.refused_by} | `{r.code}` |")
         lines.append("")
         for r in items:

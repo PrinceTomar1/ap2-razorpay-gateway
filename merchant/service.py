@@ -498,6 +498,36 @@ class MerchantService:
         # --- 2. Idempotency, before the verifier ---------------------------
         settled = self.processor.existing_outcome(presented.mandate_id)
         if settled is not None:
+            # The stored receipt is only an answer to *this* request if it settled
+            # *this* checkout. Returning it blindly told an agent "captured" for a
+            # basket that was never paid — no double charge, but a false positive
+            # is worse in some ways: the merchant ships goods against a receipt
+            # belonging to a different order.
+            if settled.receipt.checkout_hash != checkout_hash(record.checkout_jws or ""):
+                mismatched: dict[str, Any] = {
+                    "checkout_id": checkout_id,
+                    "payment_mandate_id": presented.mandate_id,
+                    "settled_checkout_hash": settled.receipt.checkout_hash,
+                    "presented_checkout_hash": checkout_hash(record.checkout_jws or ""),
+                }
+                self.audit.append(
+                    ROLE_MERCHANT,
+                    Event.MANDATE_WRONG_CHECKOUT,
+                    mismatched,
+                    "This payment mandate has already been spent on a different "
+                    "checkout. Its receipt proves that order was paid and says "
+                    f"nothing about {checkout_id}, so it was refused rather than "
+                    "handed back as if it applied here.",
+                )
+                return {
+                    "error": "mandate.spent_on_another_checkout",
+                    "message": (
+                        "This payment mandate was already settled against a different "
+                        "checkout. Sign a new mandate bound to this one."
+                    ),
+                    "checkout_id": checkout_id,
+                    "charged": False,
+                }
             return {
                 "payment_receipt": settled.receipt.model_dump(mode="json"),
                 "payment_receipt_jws": settled.receipt_jws,

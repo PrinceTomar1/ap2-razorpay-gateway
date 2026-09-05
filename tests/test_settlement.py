@@ -301,3 +301,60 @@ def test_the_daily_budget_is_never_exceeded_across_many_purchases() -> None:
         assert gateway.rail.captured_total() == gateway.ledger.total_captured()
     finally:
         gateway.close()
+
+
+# ===========================================================================
+# A spent mandate answers for its own checkout and no other
+# ===========================================================================
+
+
+def test_a_spent_mandate_is_refused_against_a_different_checkout(
+    wired: Gateway, fake_rail: FakeRail
+) -> None:
+    """No double charge, but the old behaviour was arguably worse than one.
+
+    Presenting a mandate that settled checkout A against checkout B returned A's
+    receipt with `status: captured`. No money moved twice — but the agent was told
+    B was paid when it was not, and a merchant acting on that ships goods against
+    a receipt belonging to a different order. A false positive on "did this get
+    paid" is a real loss, quieter than a double charge and harder to notice.
+    """
+    first_id, mandate = _prepare(wired)
+    second_id, _ = _prepare(wired)
+    assert wired.merchant.initiate_payment(first_id, mandate)["status"] == "captured"
+
+    response = wired.merchant.initiate_payment(second_id, mandate)
+
+    assert response["error"] == "mandate.spent_on_another_checkout"
+    assert response["charged"] is False
+    assert "status" not in response, "it must not look like a capture"
+    assert not wired.store.checkout(second_id).stock_committed
+    assert fake_rail.captured_total() == inr(1299)
+
+
+def test_the_replay_path_still_works_for_the_mandates_own_checkout(
+    wired: Gateway,
+) -> None:
+    """The binding check must not break idempotent replay, which sits beside it."""
+    checkout_id, mandate = _prepare(wired)
+    first = wired.merchant.initiate_payment(checkout_id, mandate)
+    again = wired.merchant.initiate_payment(checkout_id, mandate)
+
+    assert again["replayed"] is True
+    assert again["payment_receipt"]["receipt_id"] == first["payment_receipt"]["receipt_id"]
+
+
+def test_the_mismatch_is_audited_with_both_hashes(wired: Gateway) -> None:
+    """An operator needs to see which two orders were confused."""
+    first_id, mandate = _prepare(wired)
+    second_id, _ = _prepare(wired)
+    wired.merchant.initiate_payment(first_id, mandate)
+    wired.merchant.initiate_payment(second_id, mandate)
+
+    rows = wired.audit.rows(event=Event.MANDATE_WRONG_CHECKOUT)
+    assert len(rows) == 1
+    payload = rows[0].payload
+    assert payload["settled_checkout_hash"] != payload["presented_checkout_hash"]
+    assert payload["checkout_id"] == second_id
+    assert "says nothing about" in (rows[0].human_reason or "")
+    assert wired.audit.verify_chain().ok

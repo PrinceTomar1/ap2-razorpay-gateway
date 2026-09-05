@@ -1,23 +1,23 @@
 # What broke, and how it was fixed
 
 The buildathon asks what broke during development and how it was resolved. This
-is that, honestly: **fifteen real defects**, what each would have cost, and how it
+is that, honestly: **sixteen real defects**, what each would have cost, and how it
 was found.
 
 The pattern worth naming up front: **the tests were green for every one of them.**
 A suite tells you the code does what you wrote it to do. It cannot tell you what
-you failed to imagine. Ten of these were found by *running the system in a shape
+you failed to imagine. Eleven of these were found by *running the system in a shape
 nobody had tried* — restarting it, hammering it with threads, handing it a second
 valid mandate — not by reading it and not by adding assertions to paths that
 already passed.
 
-Three of the fifteen are mistakes in my own tests. They are here because a
+Three of the sixteen are mistakes in my own tests. They are here because a
 write-up that only reports the code's failures and not the author's is not an
 honest one.
 
 ---
 
-## The three that would have taken real money
+## The four that would have taken real money — or faked it
 
 ### 1. One checkout could be paid twice
 
@@ -79,7 +79,28 @@ which would be worse. So it is detected and reported rather than pretended away.
 
 *Found by:* five threads on a `Barrier`, one unit of stock.
 
-### 3. Eight simultaneous submissions all charged
+### 3. A spent mandate answered for somebody else's checkout
+
+Present a mandate that settled checkout A against checkout B and it returned A's
+receipt, with `status: captured`. No money moved twice — but the agent was told B
+was paid when it wasn't, and a merchant acting on that ships goods against a
+receipt belonging to a different order.
+
+A false positive on *"did this get paid"* is a real loss, and a quieter one than a
+double charge: nothing reconciles wrong, so nobody notices until the customer
+does.
+
+**Fixed:** the idempotent-replay path now checks the stored receipt's
+`checkout_hash` against the checkout being presented. A mismatch is
+`mandate.spent_on_another_checkout` with both hashes in the audit row, so an
+operator can see which two orders were confused. Replay for the mandate's *own*
+checkout is untouched — a test pins that, because the two paths sit one line
+apart.
+
+*Found by:* the fifth verification pass, asking what happens if a mandate is
+pointed at the wrong basket.
+
+### 4. Eight simultaneous submissions all charged
 
 The stored receipt is what makes a duplicate submit safe — but at t=0 there is no
 stored receipt yet. Eight concurrent presentations of one mandate all read "not
@@ -94,7 +115,7 @@ runs the capture probe before creating anything.
 
 ## The two that would have cost a reviewer's trust
 
-### 4. `.env` was never read
+### 5. `.env` was never read
 
 Every document said to put Razorpay keys in `.env`. `make setup` created one. **No
 code ever loaded it.** A reviewer following the instructions would have hit:
@@ -114,7 +135,7 @@ myself made "never evaluates anything" testable rather than trusted —
 
 *Found by:* actually running `make demo LIVE=1` instead of assuming it worked.
 
-### 5. A receipt did not survive a restart
+### 6. A receipt did not survive a restart
 
 `test_receipts_are_long_lived` asserts a receipt is valid for over 300 days, and
 the entire evidential claim of this project is that a third party can verify one
@@ -141,7 +162,7 @@ regenerating would quietly invalidate every receipt already issued.
 
 ## The four correctness and protocol defects
 
-### 6. A refused mandate killed the whole checkout — a denial of service
+### 7. A refused mandate killed the whole checkout — a denial of service
 
 One malformed or over-limit presentation marked the checkout `declined`
 permanently. Anyone who could reach `initiate_payment` with a bad token could kill
@@ -149,13 +170,13 @@ a stranger's cart, and a legitimate agent that fixed its own mistake could not
 retry. **Fixed:** `status` describes the checkout, not the outcome of one
 presentation.
 
-### 7. A stock re-check failure did the same
+### 8. A stock re-check failure did the same
 
 The merchant's signed price guarantee still stood for its full window and the
 re-check runs again on every attempt — so killing the checkout lost a sale for no
 safety benefit at all.
 
-### 8. Recovery retried failures that could never succeed
+### 9. Recovery retried failures that could never succeed
 
 A rejected *request* — bad amount, order already paid, suspended account — cannot
 be fixed by a different instrument. The playbook walked the whole ladder anyway,
@@ -164,7 +185,7 @@ failing identically twice more and creating two orders for nothing. **Fixed:**
 failure that cannot succeed is not resilience, it is a slower way to reach the
 same answer while generating noise for whoever reads the audit trail.
 
-### 9. Webhook replay was not defended
+### 10. Webhook replay was not defended
 
 A valid signature proves a delivery came from Razorpay. It does not prove it has
 not arrived before — and Razorpay retries on any non-2xx, so duplicates are
@@ -177,7 +198,7 @@ event id to suppress the genuine webhook.
 
 ## The two AP2 fidelity drifts
 
-### 10. The open Checkout Mandate used ad-hoc fields
+### 11. The open Checkout Mandate used ad-hoc fields
 
 `docs/ap2/checkout_mandate.md` defines `checkout.allowed_merchants` as a *typed
 constraint* in a `constraints` array. The code carried loose `allowed_merchants` /
@@ -187,7 +208,7 @@ pincode — bounds a buyer needs and AP2 does not define. The spec permits new
 constraints provided each has a unique type, a schema and an evaluation algorithm;
 each has all three.
 
-### 11. `payment.allowed_payees` held bare strings
+### 12. `payment.allowed_payees` held bare strings
 
 The spec's `allowed` array holds merchant objects with a name and a website.
 **Fixed** to carry the spec's shape plus a required stable `id`, with matching
@@ -202,7 +223,7 @@ constraint carries a field the spec does not define.
 
 ## The one that was a design hole, not a bug
 
-### 12. The agent could reach the Trusted Surface
+### 13. The agent could reach the Trusted Surface
 
 A test I wrote to assert the boundary *failed*, and it was right to. The agent was
 handed the `SimulatedShopper` object directly, which put `.surface` — and through
@@ -219,7 +240,7 @@ only by a form POST.
 
 ## The three that were my own mistakes
 
-### 13. mypy was not strict, and was being actively blinded
+### 14. mypy was not strict, and was being actively blinded
 
 A `follow_imports = "skip"` override covered pyjwt, fastmcp, anthropic and mcp —
 **all four of which ship `py.typed`**. It silently turned their return values into
@@ -230,7 +251,7 @@ including genuinely unreachable code in `merchant/service.py` carrying a
 Fixed at source. No `type: ignore` was added to get there; two pre-existing ones
 were removed by typing the code properly.
 
-### 14. A leak detector that fired on English prose
+### 15. A leak detector that fired on English prose
 
 A test meant to prove no audit row carries a compact JWS matched any string with
 two dots and 120 characters — so it fired on the verifier's own explanation
@@ -239,7 +260,7 @@ require the `eyJ` header prefix and no whitespace, **plus a test of the detector
 itself**, because an assertion nobody has checked against a real positive is not
 an assertion.
 
-### 15. The secret scanner's bait leaked into git history
+### 16. The secret scanner's bait leaked into git history
 
 I wrote a fake credential as a literal to prove the scanner catches one. That put
 a credential-shaped string into git history, which the scanner then correctly
